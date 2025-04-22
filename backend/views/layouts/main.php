@@ -36,7 +36,7 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
-        ['label' => 'Gestor de Roles', 'url' => ['/role/index']], // Enlace al Gestor de Roles
+        ['label' => 'Panel de usuarios', 'url' => ['/user/manage']], // Enlace al Gestor de Roles
     ];
 
     if (Yii::$app->user->isGuest) {
