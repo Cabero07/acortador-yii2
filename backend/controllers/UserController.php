@@ -6,6 +6,7 @@ use Yii;
 use yii\web\Controller;
 use common\models\User;
 use yii\filters\AccessControl;
+use common\models\UserLog;
 
 /**
  * Controlador para gestionar usuarios en el backend.
@@ -40,6 +41,45 @@ class UserController extends Controller
     }
 
     /**
+     * Cambia el rol de un usuario.
+     * @param int $id ID del usuario.
+     * @param string $roleName Nuevo rol a asignar.
+     */
+    public function actionChangeRole($id, $roleName)
+    {
+        $auth = Yii::$app->authManager;
+        $user = User::findOne($id);
+
+        if (!$user) {
+            Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
+            return $this->redirect(['manage']);
+        }
+
+        $role = $auth->getRole($roleName);
+        if (!$role) {
+            Yii::$app->session->setFlash('error', "El rol '{$roleName}' no existe.");
+            return $this->redirect(['manage']);
+        }
+
+        // Eliminar todos los roles actuales y asignar el nuevo rol
+        $auth->revokeAll($user->id);
+        $auth->assign($role, $user->id);
+
+        // Registrar en el log
+        $log = new UserLog([
+            'user_id' => $user->id,
+            'action' => "Rol cambiado a '{$roleName}'",
+            'performed_by' => Yii::$app->user->id,
+        ]);
+        $log->save();
+
+        Yii::$app->session->setFlash('success', "Rol cambiado a '{$roleName}' con éxito.");
+        return $this->redirect(['manage']);
+    }
+
+
+
+    /**
      * Habilita o deshabilita un usuario.
      * @param int $id ID del usuario.
      * @param int $status Nuevo estado del usuario (1 = habilitado, 0 = deshabilitado).
@@ -50,19 +90,42 @@ class UserController extends Controller
 
         if (!$user) {
             Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
-            return $this->redirect(['index']);
+            return $this->redirect(['manage']);
         }
 
         $user->status = $status;
         if ($user->save()) {
             $statusText = $status ? 'habilitado' : 'deshabilitado';
+
+            // Registrar en el log
+            $log = new UserLog([
+                'user_id' => $user->id,
+                'action' => "Usuario {$statusText}",
+                'performed_by' => Yii::$app->user->id,
+            ]);
+            $log->save();
+
             Yii::$app->session->setFlash('success', "Usuario {$statusText} con éxito.");
         } else {
             Yii::$app->session->setFlash('error', 'No se pudo actualizar el estado del usuario.');
         }
 
-        return $this->redirect(['index']);
+        return $this->redirect(['manage']);
     }
+
+    public function actionLogs()
+    {
+        $logs = UserLog::find()
+            ->with(['user', 'performedBy']) // Incluye relaciones para evitar múltiples consultas
+            ->orderBy(['created_at' => SORT_DESC]) // Ordenar por fecha descendente
+            ->all();
+
+        return $this->render('logs', [
+            'logs' => $logs,
+        ]);
+    }
+
+
     public function actionManage()
     {
         $query = User::find();
