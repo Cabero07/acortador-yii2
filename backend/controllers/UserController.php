@@ -46,21 +46,22 @@ class UserController extends Controller
      * @param string $roleName Nuevo rol a asignar.
      */
     public function actionChangeRole($id, $roleName)
-    {
-        $auth = Yii::$app->authManager;
-        $user = User::findOne($id);
+{
+    $auth = Yii::$app->authManager;
+    $user = User::findOne($id);
 
-        if (!$user) {
-            Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
-            return $this->redirect(['manage']);
-        }
+    if (!$user) {
+        Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
+        return $this->redirect(['manage']);
+    }
 
-        $role = $auth->getRole($roleName);
-        if (!$role) {
-            Yii::$app->session->setFlash('error', "El rol '{$roleName}' no existe.");
-            return $this->redirect(['manage']);
-        }
+    $role = $auth->getRole($roleName);
+    if (!$role) {
+        Yii::$app->session->setFlash('error', "El rol '{$roleName}' no existe.");
+        return $this->redirect(['manage']);
+    }
 
+    try {
         // Eliminar todos los roles actuales y asignar el nuevo rol
         $auth->revokeAll($user->id);
         $auth->assign($role, $user->id);
@@ -74,8 +75,12 @@ class UserController extends Controller
         $log->save();
 
         Yii::$app->session->setFlash('success', "Rol cambiado a '{$roleName}' con éxito.");
-        return $this->redirect(['manage']);
+    } catch (\Exception $e) {
+        Yii::$app->session->setFlash('error', 'No se pudo cambiar el rol del usuario: ' . $e->getMessage());
     }
+
+    return $this->redirect(['manage']);
+}
 
 
 
