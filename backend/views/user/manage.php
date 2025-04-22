@@ -49,6 +49,8 @@ $this->params['breadcrumbs'][] = $this->title;
                             array_map(fn($role) => $role->name, $roles),
                             ['class' => 'form-control']
                         )
+                        
+
                         ?>
                         <?= Html::submitButton('Cambiar Rol', ['class' => 'btn btn-primary btn-sm mt-2']) ?>
                     </form>
