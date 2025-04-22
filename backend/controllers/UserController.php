@@ -4,11 +4,11 @@ namespace backend\controllers;
 
 use Yii;
 use yii\web\Controller;
-use common\models\User;
 use yii\filters\AccessControl;
+use common\models\User;
 
 /**
- * Controlador para gestionar usuarios en el backend.
+ * Controlador para gestionar usuarios y roles en el backend.
  */
 class UserController extends Controller
 {
@@ -31,16 +31,22 @@ class UserController extends Controller
     }
 
     /**
-     * Lista todos los usuarios.
+     * Lista y gestiona usuarios y roles.
      */
-    public function actionIndex()
+    public function actionManage()
     {
         $users = User::find()->all(); // Obtiene todos los usuarios
-        return $this->render('index', ['users' => $users]);
+        $auth = Yii::$app->authManager;
+        $roles = $auth->getRoles(); // Obtiene todos los roles disponibles
+
+        return $this->render('manage', [
+            'users' => $users,
+            'roles' => $roles,
+        ]);
     }
 
     /**
-     * Habilita o deshabilita un usuario.
+     * Cambia el estado (habilitar/deshabilitar) de un usuario.
      * @param int $id ID del usuario.
      * @param int $status Nuevo estado del usuario (1 = habilitado, 0 = deshabilitado).
      */
@@ -50,7 +56,7 @@ class UserController extends Controller
 
         if (!$user) {
             Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
-            return $this->redirect(['index']);
+            return $this->redirect(['manage']);
         }
 
         $user->status = $status;
@@ -61,6 +67,35 @@ class UserController extends Controller
             Yii::$app->session->setFlash('error', 'No se pudo actualizar el estado del usuario.');
         }
 
-        return $this->redirect(['index']);
+        return $this->redirect(['manage']);
+    }
+
+    /**
+     * Cambia el rol de un usuario.
+     * @param int $id ID del usuario.
+     * @param string $roleName Nuevo rol a asignar.
+     */
+    public function actionChangeRole($id, $roleName)
+    {
+        $auth = Yii::$app->authManager;
+        $user = User::findOne($id);
+
+        if (!$user) {
+            Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
+            return $this->redirect(['manage']);
+        }
+
+        $role = $auth->getRole($roleName);
+        if (!$role) {
+            Yii::$app->session->setFlash('error', "El rol '{$roleName}' no existe.");
+            return $this->redirect(['manage']);
+        }
+
+        // Eliminar todos los roles actuales y asignar el nuevo rol
+        $auth->revokeAll($user->id);
+        $auth->assign($role, $user->id);
+
+        Yii::$app->session->setFlash('success', "Rol cambiado a '{$roleName}' con éxito.");
+        return $this->redirect(['manage']);
     }
 }
