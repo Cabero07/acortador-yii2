@@ -3,11 +3,12 @@
 namespace backend\controllers;
 
 use Yii;
-use yii\filters\AccessControl;
 use yii\web\Controller;
 use common\models\User;
+use yii\filters\AccessControl;
+
 /**
- * Controlador para gestionar usuarios (solo accesible por administradores).
+ * Controlador para gestionar usuarios en el backend.
  */
 class UserController extends Controller
 {
@@ -22,7 +23,7 @@ class UserController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['admin'], // Solo usuarios con el rol 'admin' pueden acceder
+                        'roles' => ['admin'], // Solo los administradores tienen acceso
                     ],
                 ],
             ],
@@ -30,22 +31,34 @@ class UserController extends Controller
     }
 
     /**
-     * Acción para listar usuarios.
+     * Lista todos los usuarios.
      */
     public function actionIndex()
     {
-        // Código para listar usuarios
+        $users = User::find()->all(); // Obtiene todos los usuarios
+        return $this->render('index', ['users' => $users]);
     }
 
     /**
-     * Acción para deshabilitar un usuario.
+     * Habilita o deshabilita un usuario.
+     * @param int $id ID del usuario.
+     * @param int $status Nuevo estado del usuario (1 = habilitado, 0 = deshabilitado).
      */
-    public function actionDisable($id)
+    public function actionToggleStatus($id, $status)
     {
         $user = User::findOne($id);
-        if ($user) {
-            $user->status = -1; // Deshabilitar usuario
-            $user->save();
+
+        if (!$user) {
+            Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
+            return $this->redirect(['index']);
+        }
+
+        $user->status = $status;
+        if ($user->save()) {
+            $statusText = $status ? 'habilitado' : 'deshabilitado';
+            Yii::$app->session->setFlash('success', "Usuario {$statusText} con éxito.");
+        } else {
+            Yii::$app->session->setFlash('error', 'No se pudo actualizar el estado del usuario.');
         }
 
         return $this->redirect(['index']);
