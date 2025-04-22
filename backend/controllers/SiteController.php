@@ -19,24 +19,28 @@ class SiteController extends Controller
      */
     public function behaviors()
     {
+
         return [
             'access' => [
-                'class' => AccessControl::class,
+                'class' => \yii\filters\AccessControl::class,
                 'rules' => [
+                    // Permitir acceso a las acciones 'login' y 'error' a cualquier usuario
                     [
                         'actions' => ['login', 'error'],
                         'allow' => true,
                     ],
+                    // Permitir acceso a las acciones 'logout' y 'index' solo a usuarios con el rol 'admin'
                     [
                         'actions' => ['logout', 'index'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        'roles' => ['@'], // '@' indica que el usuario debe estar autenticado
                     ],
                 ],
             ],
             'verbs' => [
-                'class' => VerbFilter::class,
+                'class' => \yii\filters\VerbFilter::class,
                 'actions' => [
+                    // Restringir el método HTTP para la acción 'logout' a solo POST
                     'logout' => ['post'],
                 ],
             ],

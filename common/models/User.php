@@ -28,8 +28,6 @@ class User extends ActiveRecord implements IdentityInterface
     const STATUS_DELETED = 0;
     const STATUS_INACTIVE = 9;
     const STATUS_ACTIVE = 10;
-
-
     /**
      * {@inheritdoc}
      */
@@ -63,17 +61,31 @@ class User extends ActiveRecord implements IdentityInterface
      * {@inheritdoc}
      */
     public static function findIdentity($id)
-    {
-        return static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
-    }
+        {
+            $user = static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+    
+            // Verificar si el usuario tiene el rol de admin
+            if ($user && Yii::$app->authManager->checkAccess($user->id, 'admin')) {
+                return $user;
+            }
+    
+            return null; // No permitir la autenticación si no es admin
+        }
 
     /**
      * {@inheritdoc}
      */
     public static function findIdentityByAccessToken($token, $type = null)
-    {
-        throw new NotSupportedException('"findIdentityByAccessToken" is not implemented.');
-    }
+        {
+            $user = static::findOne(['access_token' => $token, 'status' => self::STATUS_ACTIVE]);
+    
+            // Verificar si el usuario tiene el rol de admin
+            if ($user && Yii::$app->authManager->checkAccess($user->id, 'admin')) {
+                return $user;
+            }
+    
+            return null; // No permitir la autenticación si no es admin
+        }
 
     /**
      * Finds user by username
