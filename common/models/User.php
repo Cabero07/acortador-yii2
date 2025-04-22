@@ -61,16 +61,20 @@ class User extends ActiveRecord implements IdentityInterface
      * {@inheritdoc}
      */
     public static function findIdentity($id)
-        {
-            $user = static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
-    
-            // Verificar si el usuario tiene el rol de admin
+    {
+        $user = static::findOne(['id' => $id, 'status' => self::STATUS_ACTIVE]);
+
+        // Si la aplicación actual es el backend, verificar el rol de admin
+        if (Yii::$app->id === 'app-backend') {
             if ($user && Yii::$app->authManager->checkAccess($user->id, 'admin')) {
                 return $user;
             }
-    
-            return null; // No permitir la autenticación si no es admin
+            return null; // No permitir la autenticación si no es admin en el backend
         }
+
+        // En el frontend, permitir cualquier usuario activo
+        return $user;
+    }
 
     /**
      * {@inheritdoc}
