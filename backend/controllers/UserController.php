@@ -85,33 +85,24 @@ class UserController extends Controller
      * @param int $status Nuevo estado del usuario (1 = habilitado, 0 = deshabilitado).
      */
     public function actionToggleStatus($id, $status)
-    {
-        $user = User::findOne($id);
+{
+    $user = User::findOne($id);
 
-        if (!$user) {
-            Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
-            return $this->redirect(['manage']);
-        }
-
-        $user->status = $status;
-        if ($user->save()) {
-            $statusText = $status ? 'habilitado' : 'deshabilitado';
-
-            // Registrar en el log
-            $log = new UserLog([
-                'user_id' => $user->id,
-                'action' => "Usuario {$statusText}",
-                'performed_by' => Yii::$app->user->id,
-            ]);
-            $log->save();
-
-            Yii::$app->session->setFlash('success', "Usuario {$statusText} con éxito.");
-        } else {
-            Yii::$app->session->setFlash('error', 'No se pudo actualizar el estado del usuario.');
-        }
-
+    if (!$user) {
+        Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
         return $this->redirect(['manage']);
     }
+
+    $user->status = $status;
+    if ($user->save(false)) { // Saltamos la validación para evitar conflictos
+        $statusText = $status ? 'habilitado' : 'deshabilitado';
+        Yii::$app->session->setFlash('success', "Usuario {$statusText} con éxito.");
+    } else {
+        Yii::$app->session->setFlash('error', 'No se pudo actualizar el estado del usuario.');
+    }
+
+    return $this->redirect(['manage']);
+}
 
     public function actionLogs()
     {
