@@ -81,9 +81,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     <form method="post" action="<?= Url::to(['change-role', 'id' => $user->id]) ?>">
                         <?= Html::hiddenInput(Yii::$app->request->csrfParam, Yii::$app->request->csrfToken) ?>
                         <?= Html::dropDownList(
-                            'roleName',
+                            'roleName', // Este debe ser el nombre del parámetro
                             Yii::$app->authManager->getRolesByUser($user->id) ? array_keys(Yii::$app->authManager->getRolesByUser($user->id))[0] : null,
-                            array_map(fn($role) => $role->name, $roles),
+                            array_map(fn($role) => $role->name, $roles), // Lista de roles disponibles
                             ['class' => 'form-control']
                         ) ?>
                         <?= Html::submitButton('Cambiar Rol', ['class' => 'btn btn-primary btn-sm mt-2']) ?>

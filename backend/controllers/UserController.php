@@ -45,42 +45,36 @@ class UserController extends Controller
      * @param int $id ID del usuario.
      * @param string $roleName Nuevo rol a asignar.
      */
-    public function actionChangeRole($id, $roleName)
-{
-    $auth = Yii::$app->authManager;
-    $user = User::findOne($id);
+    public function actionChangeRole($id)
+    {
+        $auth = Yii::$app->authManager;
+        $user = User::findOne($id);
 
-    if (!$user) {
-        Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
-        return $this->redirect(['manage']);
-    }
+        if (!$user) {
+            Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
+            return $this->redirect(['manage']);
+        }
 
-    $role = $auth->getRole($roleName);
-    if (!$role) {
-        Yii::$app->session->setFlash('error', "El rol '{$roleName}' no existe.");
-        return $this->redirect(['manage']);
-    }
+        $roleName = Yii::$app->request->post('roleName'); // Obtener el parámetro desde el POST
 
-    try {
-        // Eliminar todos los roles actuales y asignar el nuevo rol
+        if (!$roleName) {
+            Yii::$app->session->setFlash('error', 'No se envió el rol a asignar.');
+            return $this->redirect(['manage']);
+        }
+
+        $role = $auth->getRole($roleName);
+        if (!$role) {
+            Yii::$app->session->setFlash('error', "El rol '{$roleName}' no existe.");
+            return $this->redirect(['manage']);
+        }
+
+        // Cambiar el rol
         $auth->revokeAll($user->id);
         $auth->assign($role, $user->id);
 
-        // Registrar en el log
-        $log = new UserLog([
-            'user_id' => $user->id,
-            'action' => "Rol cambiado a '{$roleName}'",
-            'performed_by' => Yii::$app->user->id,
-        ]);
-        $log->save();
-
         Yii::$app->session->setFlash('success', "Rol cambiado a '{$roleName}' con éxito.");
-    } catch (\Exception $e) {
-        Yii::$app->session->setFlash('error', 'No se pudo cambiar el rol del usuario: ' . $e->getMessage());
+        return $this->redirect(['manage']);
     }
-
-    return $this->redirect(['manage']);
-}
 
 
 
@@ -90,24 +84,24 @@ class UserController extends Controller
      * @param int $status Nuevo estado del usuario (1 = habilitado, 0 = deshabilitado).
      */
     public function actionToggleStatus($id, $status)
-{
-    $user = User::findOne($id);
+    {
+        $user = User::findOne($id);
 
-    if (!$user) {
-        Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
+        if (!$user) {
+            Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
+            return $this->redirect(['manage']);
+        }
+
+        $user->status = $status;
+        if ($user->save(false)) { // Saltamos la validación para evitar conflictos
+            $statusText = $status ? 'habilitado' : 'deshabilitado';
+            Yii::$app->session->setFlash('success', "Usuario {$statusText} con éxito.");
+        } else {
+            Yii::$app->session->setFlash('error', 'No se pudo actualizar el estado del usuario.');
+        }
+
         return $this->redirect(['manage']);
     }
-
-    $user->status = $status;
-    if ($user->save(false)) { // Saltamos la validación para evitar conflictos
-        $statusText = $status ? 'habilitado' : 'deshabilitado';
-        Yii::$app->session->setFlash('success', "Usuario {$statusText} con éxito.");
-    } else {
-        Yii::$app->session->setFlash('error', 'No se pudo actualizar el estado del usuario.');
-    }
-
-    return $this->redirect(['manage']);
-}
 
     public function actionLogs()
     {
