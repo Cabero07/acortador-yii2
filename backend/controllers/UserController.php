@@ -4,11 +4,11 @@ namespace backend\controllers;
 
 use Yii;
 use yii\web\Controller;
-use yii\filters\AccessControl;
 use common\models\User;
+use yii\filters\AccessControl;
 
 /**
- * Controlador para gestionar usuarios y roles en el backend.
+ * Controlador para gestionar usuarios en el backend.
  */
 class UserController extends Controller
 {
@@ -31,22 +31,16 @@ class UserController extends Controller
     }
 
     /**
-     * Lista y gestiona usuarios y roles.
+     * Lista todos los usuarios.
      */
-    public function actionManage()
+    public function actionIndex()
     {
         $users = User::find()->all(); // Obtiene todos los usuarios
-        $auth = Yii::$app->authManager;
-        $roles = $auth->getRoles(); // Obtiene todos los roles disponibles
-
-        return $this->render('manage', [
-            'users' => $users,
-            'roles' => $roles,
-        ]);
+        return $this->render('index', ['users' => $users]);
     }
 
     /**
-     * Cambia el estado (habilitar/deshabilitar) de un usuario.
+     * Habilita o deshabilita un usuario.
      * @param int $id ID del usuario.
      * @param int $status Nuevo estado del usuario (1 = habilitado, 0 = deshabilitado).
      */
@@ -56,7 +50,7 @@ class UserController extends Controller
 
         if (!$user) {
             Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
-            return $this->redirect(['manage']);
+            return $this->redirect(['index']);
         }
 
         $user->status = $status;
@@ -67,35 +61,48 @@ class UserController extends Controller
             Yii::$app->session->setFlash('error', 'No se pudo actualizar el estado del usuario.');
         }
 
-        return $this->redirect(['manage']);
+        return $this->redirect(['index']);
     }
-
-    /**
-     * Cambia el rol de un usuario.
-     * @param int $id ID del usuario.
-     * @param string $roleName Nuevo rol a asignar.
-     */
-    public function actionChangeRole($id, $roleName)
+    public function actionManage()
     {
+        $query = User::find();
+
+        // Aplicar filtros de búsqueda
+        $search = Yii::$app->request->get('search', null);
+        $filterStatus = Yii::$app->request->get('status', null);
+        $filterRole = Yii::$app->request->get('role', null);
+
+        // Filtro de búsqueda por nombre o correo
+        if (!empty($search)) {
+            $query->andFilterWhere([
+                'or',
+                ['like', 'username', $search],
+                ['like', 'email', $search],
+            ]);
+        }
+
+        // Filtro por estado (habilitado/deshabilitado)
+        if ($filterStatus !== null && $filterStatus !== '') {
+            $query->andWhere(['status' => (int)$filterStatus]);
+        }
+
+        // Filtro por rol
+        if (!empty($filterRole)) {
+            $auth = Yii::$app->authManager;
+            $userIdsWithRole = $auth->getUserIdsByRole($filterRole);
+            $query->andWhere(['id' => $userIdsWithRole]);
+        }
+
+        $users = $query->all(); // Obtener usuarios según filtros
         $auth = Yii::$app->authManager;
-        $user = User::findOne($id);
+        $roles = $auth->getRoles(); // Obtener todos los roles disponibles
 
-        if (!$user) {
-            Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
-            return $this->redirect(['manage']);
-        }
-
-        $role = $auth->getRole($roleName);
-        if (!$role) {
-            Yii::$app->session->setFlash('error', "El rol '{$roleName}' no existe.");
-            return $this->redirect(['manage']);
-        }
-
-        // Eliminar todos los roles actuales y asignar el nuevo rol
-        $auth->revokeAll($user->id);
-        $auth->assign($role, $user->id);
-
-        Yii::$app->session->setFlash('success', "Rol cambiado a '{$roleName}' con éxito.");
-        return $this->redirect(['manage']);
+        return $this->render('manage', [
+            'users' => $users,
+            'roles' => $roles,
+            'search' => $search,
+            'filterStatus' => $filterStatus,
+            'filterRole' => $filterRole,
+        ]);
     }
 }
