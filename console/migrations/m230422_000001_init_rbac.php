@@ -4,58 +4,47 @@ use yii\db\Migration;
 
 /**
  * Class m230422_000001_init_rbac
- * Configura las reglas RBAC iniciales, incluyendo roles y permisos.
+ * Inicializa los roles y permisos RBAC.
  */
 class m230422_000001_init_rbac extends Migration
 {
+    /**
+     * {@inheritdoc}
+     */
     public function safeUp()
     {
         $auth = Yii::$app->authManager;
 
-        // Crear permisos
-        $manageBackend = $auth->createPermission('manageBackend');
-        $manageBackend->description = 'Acceso al backend';
-        $auth->add($manageBackend);
-
-        $manageUsers = $auth->createPermission('manageUsers');
-        $manageUsers->description = 'Gestionar usuarios (habilitar/deshabilitar)';
-        $auth->add($manageUsers);
-
-        $useAdvancedFeatures = $auth->createPermission('useAdvancedFeatures');
-        $useAdvancedFeatures->description = 'Acceso a características avanzadas';
-        $auth->add($useAdvancedFeatures);
-
-        $useBasicFeatures = $auth->createPermission('useBasicFeatures');
-        $useBasicFeatures->description = 'Acceso a características básicas';
-        $auth->add($useBasicFeatures);
+        // Permiso: Gestionar usuarios
+        $manageUsers = $auth->getPermission('manageUsers');
+        if ($manageUsers === null) {
+            $manageUsers = $auth->createPermission('manageUsers');
+            $manageUsers->description = 'Gestionar usuarios (habilitar/deshabilitar)';
+            $auth->add($manageUsers);
+        }
 
         // Crear roles
-        $admin = $auth->createRole('admin');
-        $admin->description = 'Administrador con acceso completo';
-        $auth->add($admin);
-        $auth->addChild($admin, $manageBackend);
-        $auth->addChild($admin, $manageUsers);
+        $adminRole = $auth->getRole('admin');
+        if ($adminRole === null) {
+            $adminRole = $auth->createRole('admin');
+            $adminRole->description = 'Administrador del sistema';
+            $auth->add($adminRole);
 
-        $userplus = $auth->createRole('userplus');
-        $userplus->description = 'Usuario con acceso a características avanzadas';
-        $auth->add($userplus);
-        $auth->addChild($userplus, $useAdvancedFeatures);
+            // Asignar permisos al rol admin
+            $auth->addChild($adminRole, $manageUsers);
+        }
 
-        $user = $auth->createRole('user');
-        $user->description = 'Usuario básico';
-        $auth->add($user);
-        $auth->addChild($user, $useBasicFeatures);
-
-        // Asignar permisos básicos a roles
-        $auth->addChild($admin, $userplus); // Admin tiene acceso a todo lo de userplus
-        $auth->addChild($userplus, $user); // userplus tiene acceso a todo lo de user
+        // Agregar más roles o permisos según sea necesario
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function safeDown()
     {
         $auth = Yii::$app->authManager;
 
-        // Eliminar roles y permisos
-        $auth->removeAll();
+        $auth->remove($auth->getPermission('manageUsers'));
+        $auth->remove($auth->getRole('admin'));
     }
 }
