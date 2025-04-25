@@ -4,7 +4,7 @@ use yii\helpers\Html;
 
 ?>
 <!-- Navbar -->
-<nav class="main-header navbar navbar-expand navbar-black">
+<nav class="main-header navbar navbar-expand navbar-black border-bottom-0">
     <!-- Left navbar links -->
     <ul class="navbar-nav">
         <li class="nav-item">
@@ -17,11 +17,19 @@ use yii\helpers\Html;
         <li class="nav-item">
             <?= Html::a('<i class="fas fa-sign-out-alt"></i>', ['/site/logout'], ['data-method' => 'post', 'class' => 'nav-link']) ?>
         </li>
-        <li class="nav-item">
+        
+    </ul>
+</nav>
+<!-- /.navbar -->
+
+
+<?php
+    /*
+    <li class="nav-item">
             <a class="nav-link" data-widget="control-sidebar" data-slide="true" href="#" role="button">
                 <i class="fas fa-th-large"></i>
             </a>
         </li>
-    </ul>
-</nav>
-<!-- /.navbar -->
+    */
+
+?>
