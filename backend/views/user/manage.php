@@ -67,7 +67,7 @@ $this->title = 'Gestión de Usuarios y Roles';
                     <?= $user->status ? 'Habilitado' : 'Deshabilitado' ?>
                     <?= Html::a(
                         $user->status ? 'Deshabilitar' : 'Habilitar',
-                        Url::to(['toggle-status', 'id' => $user->id, 'status' => $user->status ? 0 : 1]),
+                        Url::to(['toggle-status', 'id' => $user->id, 'status' => $user->status ? 0 : 10]),
                         [
                             'class' => $user->status ? 'btn btn-warning btn-sm' : 'btn btn-success btn-sm',
                             'data-confirm' => $user->status
