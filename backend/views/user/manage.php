@@ -11,7 +11,6 @@ use yii\widgets\ActiveForm;
 /** @var $filterRole string|null */
 
 $this->title = 'Gestión de Usuarios y Roles';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <h1><?= Html::encode($this->title) ?></h1>
