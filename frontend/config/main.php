@@ -16,9 +16,9 @@ return [
             'csrfParam' => '_csrf-frontend',
         ],
         'user' => [
-            'identityClass' => 'common\models\User',
-            'enableAutoLogin' => true,
-            'identityCookie' => ['name' => '_identity-frontend', 'httpOnly' => true],
+            'identityClass' => 'common\models\User', // Clase de usuario
+            'enableAutoLogin' => true, // Habilitar inicio de sesión automático
+            'loginUrl' => ['site/login'], // Página de inicio de sesión
         ],
         'session' => [
             // this is the name of the session cookie used for login on the frontend

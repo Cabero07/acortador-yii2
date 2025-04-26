@@ -30,15 +30,21 @@ class SiteController extends Controller
             'access' => [
                 'class' => \yii\filters\AccessControl::class,
                 'rules' => [
-                    // Permitir acceso solo a usuarios autenticados con el rol 'user'
+                    // Permitir acceso a las acciones 'login' y 'error' para usuarios no autenticados
                     [
                         'allow' => true,
-                        'roles' => ['@'], // Usuarios autenticados
-                        'matchCallback' => function ($rule, $action) {
-                            $auth = Yii::$app->authManager;
-                            $userId = Yii::$app->user->id;
-                            return $auth->checkAccess($userId, 'user'); // Verifica si el usuario tiene el rol 'user'
-                        },
+                        'actions' => ['login', 'error'],
+                        'roles' => ['?'], // '?' indica usuarios no autenticados
+                    ],
+                    // Permitir acceso a las acciones 'logout' para usuarios autenticados
+                    [
+                        'allow' => true,
+                        'actions' => ['logout'],
+                        'roles' => ['@'], // '@' indica usuarios autenticados
+                    ],
+                    // Bloquear todo lo demás por defecto
+                    [
+                        'allow' => false,
                     ],
                 ],
             ],
@@ -104,29 +110,6 @@ class SiteController extends Controller
         Yii::$app->user->logout();
 
         return $this->goHome();
-    }
-
-    /**
-     * Displays contact page.
-     *
-     * @return mixed
-     */
-    public function actionContact()
-    {
-        $model = new ContactForm();
-        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            if ($model->sendEmail(Yii::$app->params['adminEmail'])) {
-                Yii::$app->session->setFlash('success', 'Thank you for contacting us. We will respond to you as soon as possible.');
-            } else {
-                Yii::$app->session->setFlash('error', 'There was an error sending your message.');
-            }
-
-            return $this->refresh();
-        }
-
-        return $this->render('contact', [
-            'model' => $model,
-        ]);
     }
 
     /**
