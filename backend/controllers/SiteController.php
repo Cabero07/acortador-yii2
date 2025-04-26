@@ -31,7 +31,7 @@ class SiteController extends Controller
                     ],
                     // Permitir acceso a las acciones 'logout' y 'index' solo a usuarios con el rol 'admin'
                     [
-                        'actions' => ['logout', 'index'],
+                        'actions' => ['logout', 'index', 'settings'],
                         'allow' => true,
                         'roles' => ['@'], // '@' indica que el usuario debe estar autenticado
                     ],
