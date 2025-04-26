@@ -71,6 +71,15 @@ class UserController extends Controller
         // Cambiar el rol
         $auth->revokeAll($user->id);
         $auth->assign($role, $user->id);
+        $log = new UserLog([
+            'user_id' => $user->id,
+            'action' => "Rol cambiado a '{$roleName}'",
+            'performed_by' => Yii::$app->user->id,
+        ]);
+        
+        if (!$log->save()) {
+            Yii::error('Error al guardar el log: ' . json_encode($log->errors), __METHOD__);
+        }
 
         Yii::$app->session->setFlash('success', "Rol cambiado a '{$roleName}' con éxito.");
         return $this->redirect(['manage']);
@@ -99,7 +108,15 @@ class UserController extends Controller
         } else {
             Yii::$app->session->setFlash('error', 'No se pudo actualizar el estado del usuario.');
         }
-
+        $log = new UserLog([
+            'user_id' => $user->id,
+            'action' => $status ? 'Usuario habilitado' : 'Usuario deshabilitado',
+            'performed_by' => Yii::$app->user->id,
+        ]);
+        
+        if (!$log->save()) {
+            Yii::error('Error al guardar el log: ' . json_encode($log->errors), __METHOD__);
+        }
         return $this->redirect(['manage']);
     }
 

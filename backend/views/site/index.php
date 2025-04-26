@@ -2,52 +2,57 @@
 
 /** @var yii\web\View $this */
 
-$this->title = 'My Yii Application';
+use yii\helpers\Html;
+
+$this->title = 'Panel de Administración';
 ?>
 <div class="site-index">
 
     <div class="jumbotron text-center bg-transparent">
-        <h1 class="display-4">Congratulations!</h1>
-
-        <p class="lead">You have successfully created your Yii-powered application.</p>
-
-        <p><a class="btn btn-lg btn-success" href="https://www.yiiframework.com">Get started with Yii</a></p>
+        <h1 class="display-4">Bienvenido al Panel de Administración</h1>
+        <p class="lead">Utiliza las opciones a continuación para gestionar la aplicación.</p>
     </div>
 
     <div class="body-content">
-
         <div class="row">
+            <!-- Gestión de Usuarios -->
             <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
+                <div class="card">
+                    <div class="card-header bg-primary text-white">
+                        <h3 class="card-title">Gestión de Usuarios</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Administra los usuarios registrados, sus roles y estados (habilitado/deshabilitado).</p>
+                        <p><?= Html::a('Ir a Gestión de Usuarios', ['user/manage'], ['class' => 'btn btn-primary']) ?></p>
+                    </div>
+                </div>
             </div>
+
+            <!-- Historial de Logs -->
             <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
+                <div class="card">
+                    <div class="card-header bg-success text-white">
+                        <h3 class="card-title">Historial de Logs</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Consulta el historial de cambios realizados por los administradores.</p>
+                        <p><?= Html::a('Ver Logs', ['user/logs'], ['class' => 'btn btn-success']) ?></p>
+                    </div>
+                </div>
             </div>
+
+            <!-- Configuración del Sistema -->
             <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+                <div class="card">
+                    <div class="card-header bg-warning text-white">
+                        <h3 class="card-title">Configuración</h3>
+                    </div>
+                    <div class="card-body">
+                        <p>Ajusta la configuración general de la aplicación y otras opciones avanzadas.</p>
+                        <p><?= Html::a('Configurar', ['site/settings'], ['class' => 'btn btn-warning']) ?></p>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 </div>
