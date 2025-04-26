@@ -68,7 +68,25 @@ class SiteController extends Controller
     {
         return $this->render('index');
     }
+    /**
+     * Settings action.
+     * Permite a los administradores gestionar configuraciones generales de la aplicación.
+     *
+     * @return string|Response
+     */
+    public function actionSettings()
+    {
+        $model = new \backend\models\SettingsForm();
 
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Configuraciones guardadas correctamente.');
+            return $this->refresh();
+        }
+
+        return $this->render('settings', [
+            'model' => $model,
+        ]);
+    }
     /**
      * Login action.
      *
