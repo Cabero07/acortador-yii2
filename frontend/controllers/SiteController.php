@@ -30,21 +30,30 @@ class SiteController extends Controller
             'access' => [
                 'class' => \yii\filters\AccessControl::class,
                 'rules' => [
-                    // Permitir acceso a las acciones 'login' y 'error' para usuarios no autenticados
+                    // Permitir acceso a 'signup' y 'login' solo para usuarios no autenticados
                     [
                         'allow' => true,
-                        'actions' => ['login', 'error'],
+                        'actions' => ['signup', 'login'],
                         'roles' => ['?'], // '?' indica usuarios no autenticados
                     ],
-                    // Permitir acceso a las acciones 'logout' para usuarios autenticados
+                    // Permitir acceso a todo excepto 'signup' y 'login' para usuarios autenticados con rol 'user'
+                    [
+                        'allow' => true,
+                        'roles' => ['@'], // '@' indica usuarios autenticados
+                        'matchCallback' => function ($rule, $action) {
+                            $auth = Yii::$app->authManager;
+                            $userId = Yii::$app->user->id;
+                            return $auth->checkAccess($userId, 'user'); // Verifica que el usuario tenga el rol 'user'
+                        },
+                        'denyCallback' => function ($rule, $action) {
+                            throw new \yii\web\ForbiddenHttpException('No tienes permiso para realizar esta acción.');
+                        },
+                    ],
+                    // Permitir acceso a 'logout' solo para usuarios autenticados
                     [
                         'allow' => true,
                         'actions' => ['logout'],
-                        'roles' => ['@'], // '@' indica usuarios autenticados
-                    ],
-                    // Bloquear todo lo demás por defecto
-                    [
-                        'allow' => false,
+                        'roles' => ['@'],
                     ],
                 ],
             ],

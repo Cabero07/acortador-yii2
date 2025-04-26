@@ -7,34 +7,39 @@
 use yii\bootstrap5\Html;
 use yii\bootstrap5\ActiveForm;
 
-$this->title = 'Login';
-$this->params['breadcrumbs'][] = $this->title;
+$this->title = 'User Login';
 ?>
-<div class="site-login">
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>Please fill out the following fields to login:</p>
-
-    <div class="row">
-        <div class="col-lg-5">
+<div class="d-flex justify-content-center align-items-center vh-100 bg-light text-dark">
+    <div class="card border shadow-lg" style="width: 400px;">
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4"><?= Html::encode($this->title) ?></h2>
+            <p class="text-center text-muted">Welcome back! Please login to continue:</p>
+            
             <?php $form = ActiveForm::begin(['id' => 'login-form']); ?>
-
-                <?= $form->field($model, 'username')->textInput(['autofocus' => true]) ?>
-
-                <?= $form->field($model, 'password')->passwordInput() ?>
-
-                <?= $form->field($model, 'rememberMe')->checkbox() ?>
-
-                <div class="my-1 mx-0" style="color:#999;">
-                    If you forgot your password you can <?= Html::a('reset it', ['site/request-password-reset']) ?>.
-                    <br>
-                    Need new verification email? <?= Html::a('Resend', ['site/resend-verification-email']) ?>
+                <div class="mb-3">
+                    <?= $form->field($model, 'username')->textInput([
+                        'autofocus' => true, 
+                        'placeholder' => 'Username', 
+                        'class' => 'form-control'
+                    ])->label(false) ?>
                 </div>
-
-                <div class="form-group">
-                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary', 'name' => 'login-button']) ?>
+                <div class="mb-3">
+                    <?= $form->field($model, 'password')->passwordInput([
+                        'placeholder' => 'Password', 
+                        'class' => 'form-control'
+                    ])->label(false) ?>
                 </div>
-
+                <div class="mb-3 form-check">
+                    <?= $form->field($model, 'rememberMe')->checkbox(['class' => 'form-check-input']) ?>
+                </div>
+                <div class="d-grid">
+                    <?= Html::submitButton('Login', ['class' => 'btn btn-primary btn-block']) ?>
+                </div>
+                <div class="text-center mt-3">
+                    <p class="text-muted small">
+                        Don't have an account? <?= Html::a('Signup here', ['site/signup'], ['class' => 'text-primary']) ?>
+                    </p>
+                </div>
             <?php ActiveForm::end(); ?>
         </div>
     </div>
