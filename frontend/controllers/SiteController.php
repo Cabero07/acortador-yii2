@@ -28,25 +28,18 @@ class SiteController extends Controller
     {
         return [
             'access' => [
-                'class' => AccessControl::class,
-                'only' => ['logout', 'signup'],
+                'class' => \yii\filters\AccessControl::class,
                 'rules' => [
+                    // Permitir acceso solo a usuarios autenticados con el rol 'user'
                     [
-                        'actions' => ['signup'],
                         'allow' => true,
-                        'roles' => ['?'],
+                        'roles' => ['@'], // Usuarios autenticados
+                        'matchCallback' => function ($rule, $action) {
+                            $auth = Yii::$app->authManager;
+                            $userId = Yii::$app->user->id;
+                            return $auth->checkAccess($userId, 'user'); // Verifica si el usuario tiene el rol 'user'
+                        },
                     ],
-                    [
-                        'actions' => ['logout'],
-                        'allow' => true,
-                        'roles' => ['@'],
-                    ],
-                ],
-            ],
-            'verbs' => [
-                'class' => VerbFilter::class,
-                'actions' => [
-                    'logout' => ['post'],
                 ],
             ],
         ];

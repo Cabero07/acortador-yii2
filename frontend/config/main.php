@@ -36,6 +36,9 @@ return [
         'errorHandler' => [
             'errorAction' => 'site/error',
         ],
+        'authManager' => [
+            'class' => 'yii\rbac\DbManager', // Usa DbManager para manejar roles y permisos
+        ],
         /*
         'urlManager' => [
             'enablePrettyUrl' => true,
