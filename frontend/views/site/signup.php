@@ -7,13 +7,13 @@
 use yii\bootstrap5\Html;
 use yii\bootstrap5\ActiveForm;
 
-$this->title = 'Signup';
+$this->title = 'Creación de cuenta';
 ?>
 <div class="d-flex justify-content-center align-items-center vh-100 bg-light text-dark">
     <div class="card border shadow-lg" style="width: 400px;">
         <div class="card-body">
             <h2 class="card-title text-center mb-4"><?= Html::encode($this->title) ?></h2>
-            <p class="text-center text-muted">Create a new account to get started:</p>
+            <p class="text-center text-muted">Crea una cuenta para acceder:</p>
             
             <?php $form = ActiveForm::begin(['id' => 'form-signup']); ?>
                 <div class="mb-3">
@@ -36,11 +36,11 @@ $this->title = 'Signup';
                     ])->label(false) ?>
                 </div>
                 <div class="d-grid">
-                    <?= Html::submitButton('Signup', ['class' => 'btn btn-success btn-block']) ?>
+                    <?= Html::submitButton('Crear cuenta', ['class' => 'btn btn-success btn-block']) ?>
                 </div>
                 <div class="text-center mt-3">
                     <p class="text-muted small">
-                        Already have an account? <?= Html::a('Login here', ['site/login'], ['class' => 'text-primary']) ?>
+                        ¿Ya tienes cuenta? <?= Html::a('Entra aquí', ['site/login'], ['class' => 'text-primary']) ?>
                     </p>
                 </div>
             <?php ActiveForm::end(); ?>
