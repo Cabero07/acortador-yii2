@@ -18,13 +18,11 @@ class Link extends ActiveRecord
     public function rules()
     {
         return [
-            [['url', 'short_code'], 'required'],
-            [['url'], 'string'],
-            [['short_code'], 'string', 'max' => 50],
-            [['short_code'], 'unique'],
+            [['url'], 'required'],
+            [['url'], 'url', 'defaultScheme' => 'http'], // Permitir URLs sin esquema
+            [['short_code'], 'unique'], // Asegurar que el código sea único
         ];
     }
-
     public function getStats()
     {
         return $this->hasOne(LinkStats::class, ['link_id' => 'id']);

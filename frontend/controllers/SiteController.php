@@ -87,7 +87,11 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $model = new \common\models\Link(); // Inicializar el modelo de enlaces
+
+        return $this->render('index', [
+            'model' => $model, // Pasar el modelo a la vista
+        ]);
     }
 
     /**
@@ -238,7 +242,26 @@ class SiteController extends Controller
             'latestNews' => $latestNews,
         ]);
     }
+    public function actionShorten()
+    {
+        $model = new Link();
 
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            // Generar un código único
+            $model->short_code = Yii::$app->security->generateRandomString(6);
+
+            // Guardar el enlace en la base de datos
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', "¡Enlace acortado! Aquí está tu enlace: <a href='/link/redirect?shortCode={$model->short_code}' target='_blank'>localhost/{$model->short_code}</a>");
+            } else {
+                Yii::$app->session->setFlash('error', 'Hubo un problema al guardar tu enlace.');
+            }
+        } else {
+            Yii::$app->session->setFlash('error', 'Por favor, introduce una URL válida.');
+        }
+
+        return $this->redirect(['site/index']);
+    }
     /**
      * Resend verification email
      *
