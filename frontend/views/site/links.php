@@ -1,3 +1,4 @@
+<?php
 use yii\grid\GridView;
 use yii\helpers\Html;
 
@@ -21,7 +22,12 @@ $this->params['breadcrumbs'][] = $this->title;
                     return Html::a(Yii::$app->request->hostInfo . '/' . $model->short_code, Yii::$app->request->hostInfo . '/' . $model->short_code, ['target' => '_blank']);
                 },
             ],
-            'clicks', // Número de clics
+            [
+                'label' => 'Clics',
+                'value' => function ($model) {
+                    return $model->stats->clicks ?? 0; // Obtener clics desde la relación
+                },
+            ],
             'created_at:datetime', // Fecha de creación
 
             ['class' => 'yii\grid\ActionColumn'], // Columnas de acciones (editar/borrar)
