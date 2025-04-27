@@ -19,6 +19,7 @@ use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use yii\data\ActiveDataProvider; // Importar correctamente la clase
+use yii\web\NotFoundHttpException;
 
 /**
  * Site controller
@@ -201,7 +202,23 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+    public function actionDelete($id)
+    {
+        // Buscar el modelo del enlace
+        $model = Link::findOne($id);
 
+        // Verificar si el modelo existe y pertenece al usuario actual
+        if (!$model || $model->user_id !== Yii::$app->user->id) {
+            throw new NotFoundHttpException('El enlace no existe o no tienes permiso para eliminarlo.');
+        }
+
+        // Eliminar el enlace
+        $model->delete();
+
+        // Redirigir a la lista de enlaces con un mensaje de éxito
+        Yii::$app->session->setFlash('success', 'Enlace eliminado correctamente.');
+        return $this->redirect(['links']);
+    }
     /**
      * Verify email address
      *

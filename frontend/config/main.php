@@ -41,10 +41,9 @@ return [
         ],
         'urlManager' => [
             'enablePrettyUrl' => true, // Habilitar URLs amigables
-            'showScriptName' => true,  // Mostrar index.php en la URL
+            'showScriptName' => false, // Ocultar "index.php" en las URLs
             'rules' => [
                 '<shortCode:\w+>' => 'link/redirect', // Ruta para redirección de enlaces acortados
-                'site/<action:\w+>' => 'site/<action>', // Rutas para las acciones del controlador Site
             ],
         ],
     ],

@@ -53,22 +53,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 [
                     'class' => 'yii\grid\ActionColumn',
                     'header' => 'Acciones',
-                    'template' => '{view} {update} {delete}',
+                    'template' => '{delete}',
                     'buttons' => [
-                        'view' => function ($url, $model) {
-                            return Html::a('<i class="bi bi-eye"></i>', $url, [
-                                'title' => 'Ver',
-                                'class' => 'btn btn-sm btn-outline-info',
-                            ]);
-                        },
-                        'update' => function ($url, $model) {
-                            return Html::a('<i class="bi bi-pencil"></i>', $url, [
-                                'title' => 'Editar',
-                                'class' => 'btn btn-sm btn-outline-primary',
-                            ]);
-                        },
                         'delete' => function ($url, $model) {
-                            return Html::a('<i class="bi bi-trash"></i>', $url, [
+                            return Html::a('<i class="fa fa-trash"></i>', $url, [
                                 'title' => 'Eliminar',
                                 'class' => 'btn btn-sm btn-outline-danger',
                                 'data-confirm' => '¿Estás seguro de eliminar este enlace?',
