@@ -9,7 +9,7 @@ use yii\bootstrap5\ActiveForm;
 
 $this->title = 'Creación de cuenta';
 ?>
-<div class="d-flex justify-content-center align-items-center vh-100 bg-light text-dark">
+<div class="d-flex justify-content-center align-items-center vh-100 text-dark">
     <div class="card border shadow-lg" style="width: 400px;">
         <div class="card-body">
             <h2 class="card-title text-center mb-4"><?= Html::encode($this->title) ?></h2>
@@ -38,6 +38,7 @@ $this->title = 'Creación de cuenta';
                 <div class="d-grid">
                     <?= Html::submitButton('Crear cuenta', ['class' => 'btn btn-success btn-block']) ?>
                 </div>
+                
                 <div class="text-center mt-3">
                     <p class="text-muted small">
                         ¿Ya tienes cuenta? <?= Html::a('Entra aquí', ['site/login'], ['class' => 'text-primary']) ?>

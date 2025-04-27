@@ -9,7 +9,7 @@ use yii\bootstrap5\ActiveForm;
 
 $this->title = 'Acceder';
 ?>
-<div class="d-flex justify-content-center align-items-center vh-100 bg-light text-dark">
+<div class="d-flex justify-content-center align-items-center vh-100 text-dark">
     <div class="card border shadow-lg" style="width: 400px;">
         <div class="card-body">
             <h2 class="card-title text-center mb-4">¡Bienvenido! </h2>
