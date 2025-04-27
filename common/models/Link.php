@@ -14,7 +14,7 @@ class Link extends ActiveRecord
     {
         return '{{%links}}';
     }
-
+    
     public function rules()
     {
         return [

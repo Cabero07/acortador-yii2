@@ -242,6 +242,19 @@ class SiteController extends Controller
             'latestNews' => $latestNews,
         ]);
     }
+    public function actionLinks()
+    {
+        $dataProvider = new ActiveDataProvider([
+            'query' => Link::find(),
+            'pagination' => [
+                'pageSize' => 10, // Paginación con 10 elementos por página
+            ],
+        ]);
+
+        return $this->render('links', [
+            'dataProvider' => $dataProvider,
+        ]);
+    }
     public function actionShorten()
     {
         $model = new Link();

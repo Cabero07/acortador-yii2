@@ -34,6 +34,7 @@ AppAsset::register($this);
     ]);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
+        ['label' => 'Gestión de enlaces', 'url' => ['/site/links']],
         ['label' => 'Dashboard', 'url' => ['/site/dashboard']],
         ['label' => 'Contact', 'url' => ['/site/contact']],
     ];
