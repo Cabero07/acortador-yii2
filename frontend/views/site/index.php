@@ -10,7 +10,7 @@ $this->title = 'Acortador de Enlaces';
     <div class="p-5 mb-4 text-center">
         <div class="container py-5">
             <h1 class="display-5 fw-bold">
-                <i class="fas fa-link text-primary"></i> Bienvenido a <?= Html::encode(Yii::$app->name) ?>!
+                <i class="fas fa-link text-primary"></i> Bienvenido al <?= Html::encode($this->title) ?>!
             </h1>
             <p class="lead">Simplifica, comparte y rastrea tus enlaces con facilidad. Obtén estadísticas detalladas sobre las interacciones de tus enlaces.</p>
         </div>
