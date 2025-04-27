@@ -2,51 +2,48 @@
 
 /** @var yii\web\View $this */
 
-$this->title = 'My Yii Application';
+use yii\bootstrap5\Html;
+
+$this->title = 'Acortador de Enlaces';
 ?>
 <div class="site-index">
-    <div class="p-5 mb-4 bg-transparent rounded-3">
-        <div class="container-fluid py-5 text-center">
-            <h1 class="display-4">Congratulations!</h1>
-            <p class="fs-5 fw-light">You have successfully created your Yii-powered application.</p>
-            <p><a class="btn btn-lg btn-success" href="https://www.yiiframework.com">Get started with Yii</a></p>
+    <!-- Hero Section -->
+    <div class="p-5 mb-4 bg-light rounded-3 text-center shadow">
+        <div class="container py-5">
+            <h1 class="display-5 fw-bold">
+                <i class="fas fa-link text-primary"></i> Bienvenido a <?= Html::encode(Yii::$app->name) ?>!
+            </h1>
+            <p class="lead">Simplifica, comparte y rastrea tus enlaces con facilidad. Obtén estadísticas detalladas sobre las interacciones de tus enlaces.</p>
         </div>
     </div>
 
-    <div class="body-content">
-
-        <div class="row">
+    <!-- Features Section -->
+    <div class="container mt-5">
+        <div class="row text-center">
             <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/doc/">Yii Documentation &raquo;</a></p>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="fw-bold"><i class="fas fa-compress-arrows-alt text-success"></i> Acorta Enlaces</h3>
+                        <p>Convierte enlaces largos en URLs cortas y fáciles de recordar.</p>
+                    </div>
+                </div>
             </div>
             <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/forum/">Yii Forum &raquo;</a></p>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="fw-bold"><i class="fas fa-chart-line text-info"></i> Rastrea Clics</h3>
+                        <p>Obtén estadísticas detalladas sobre quién interactúa con tus enlaces.</p>
+                    </div>
+                </div>
             </div>
             <div class="col-lg-4">
-                <h2>Heading</h2>
-
-                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et
-                    dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip
-                    ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu
-                    fugiat nulla pariatur.</p>
-
-                <p><a class="btn btn-outline-secondary" href="https://www.yiiframework.com/extensions/">Yii Extensions &raquo;</a></p>
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="fw-bold"><i class="fas fa-share-alt text-warning"></i> Organiza y Comparte</h3>
+                        <p>Gestiona tus enlaces en un solo lugar y compártelos fácilmente.</p>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 </div>

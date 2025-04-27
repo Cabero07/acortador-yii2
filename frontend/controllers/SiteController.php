@@ -221,6 +221,20 @@ class SiteController extends Controller
         return $this->goHome();
     }
 
+    public function actionDashboard()
+    {
+        // Aquí puedes agregar lógica para recopilar datos dinámicos
+        $totalClicks = 123456; // Ejemplo: Total de clics (dato estático por ahora)
+        $totalEarnings = 4567.89; // Ejemplo: Ganancias totales (dato estático por ahora)
+        $latestNews = "Nueva funcionalidad añadida al sistema de enlaces acortados"; // Última noticia estática
+
+        return $this->render('dashboard', [
+            'totalClicks' => $totalClicks,
+            'totalEarnings' => $totalEarnings,
+            'latestNews' => $latestNews,
+        ]);
+    }
+    
     /**
      * Resend verification email
      *
