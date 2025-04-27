@@ -87,11 +87,7 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        $model = new \common\models\Link(); // Inicializar el modelo de enlaces
-
-        return $this->render('index', [
-            'model' => $model, // Pasar el modelo a la vista
-        ]);
+        return $this->render('index');
     }
 
     /**
@@ -274,6 +270,19 @@ class SiteController extends Controller
         }
 
         return $this->redirect(['site/index']);
+    }
+    public function actionCreateLink()
+    {
+        $model = new Link();
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            Yii::$app->session->setFlash('success', 'Enlace acortado creado exitosamente.');
+            return $this->redirect(['site/links']);
+        }
+
+        return $this->render('create-link', [
+            'model' => $model,
+        ]);
     }
     /**
      * Resend verification email

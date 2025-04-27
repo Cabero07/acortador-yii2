@@ -35,8 +35,8 @@ AppAsset::register($this);
     $menuItems = [
         ['label' => 'Home', 'url' => ['/site/index']],
         ['label' => 'Gestión de enlaces', 'url' => ['/site/links']],
+        ['label' => 'Crear enlace', 'url' => ['/site/create-link']],
         ['label' => 'Dashboard', 'url' => ['/site/dashboard']],
-        ['label' => 'Contact', 'url' => ['/site/contact']],
     ];
     if (Yii::$app->user->isGuest) {
         $menuItems[] = ['label' => 'Crear Cuenta', 'url' => ['/site/signup']];
