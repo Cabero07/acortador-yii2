@@ -39,14 +39,14 @@ return [
         'authManager' => [
             'class' => 'yii\rbac\DbManager', // Usa DbManager para manejar roles y permisos
         ],
-        /*
         'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
+            'enablePrettyUrl' => true, // Habilitar URLs amigables
+            'showScriptName' => true,  // Mostrar index.php en la URL
             'rules' => [
+                '<shortCode:\w+>' => 'link/redirect', // Ruta para redirección de enlaces acortados
+                'site/<action:\w+>' => 'site/<action>', // Rutas para las acciones del controlador Site
             ],
         ],
-        */
     ],
     'params' => $params,
 ];

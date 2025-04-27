@@ -26,7 +26,7 @@ class LinkController extends Controller
             $stats->earnings += 0.05; // Ejemplo: Ganancia fija por clic
             $stats->save();
 
-            return $this->redirect($link->url);
+            return $this->redirect($link->url); // Redirección a la URL original
         }
 
         throw new NotFoundHttpException('El enlace no existe.');
