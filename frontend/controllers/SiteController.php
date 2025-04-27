@@ -240,8 +240,10 @@ class SiteController extends Controller
     }
     public function actionLinks()
     {
+        $userId = Yii::$app->user->id;
+
         $dataProvider = new ActiveDataProvider([
-            'query' => Link::find(),
+            'query' => Link::find()->where(['user_id' => $userId]),
             'pagination' => [
                 'pageSize' => 10, // Paginación con 10 elementos por página
             ],
@@ -275,9 +277,14 @@ class SiteController extends Controller
     {
         $model = new Link();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', 'Enlace acortado creado exitosamente.');
-            return $this->redirect(['site/links']);
+        if ($model->load(Yii::$app->request->post())) {
+            // Asignar el ID del usuario autenticado al modelo
+            $model->user_id = Yii::$app->user->id;
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Enlace acortado creado exitosamente.');
+                return $this->redirect(['site/links']);
+            }
         }
 
         return $this->render('create-link', [
