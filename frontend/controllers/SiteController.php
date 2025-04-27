@@ -11,10 +11,14 @@ use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use common\models\LoginForm;
+use common\models\LinkStats;
+use common\models\User;
+use common\models\Link;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
 use frontend\models\ContactForm;
+
 
 /**
  * Site controller
@@ -223,10 +227,10 @@ class SiteController extends Controller
 
     public function actionDashboard()
     {
-        // Aquí puedes agregar lógica para recopilar datos dinámicos
-        $totalClicks = 123456; // Ejemplo: Total de clics (dato estático por ahora)
-        $totalEarnings = 4567.89; // Ejemplo: Ganancias totales (dato estático por ahora)
-        $latestNews = "Nueva funcionalidad añadida al sistema de enlaces acortados"; // Última noticia estática
+        $totalClicks = LinkStats::find()->sum('clicks') ?? 0;
+        $totalEarnings = LinkStats::find()->sum('earnings') ?? 0.00;
+
+        $latestNews = "Nueva funcionalidad añadida al sistema de enlaces acortados";
 
         return $this->render('dashboard', [
             'totalClicks' => $totalClicks,
@@ -234,7 +238,7 @@ class SiteController extends Controller
             'latestNews' => $latestNews,
         ]);
     }
-    
+
     /**
      * Resend verification email
      *
