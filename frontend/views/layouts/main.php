@@ -37,6 +37,7 @@ AppAsset::register($this);
         ]);
         $menuItems = [
             ['label' => 'Inicio', 'url' => ['/site/index']],
+            ['label' => 'Noticias', 'url' => ['/news/index']],
             ['label' => 'Gestión de enlaces', 'url' => ['/site/links']],
             ['label' => 'Panel de Control', 'url' => ['/site/dashboard']],
         ];
