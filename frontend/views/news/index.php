@@ -10,10 +10,17 @@ $this->title = 'Noticias';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="news-index">
-    <h1><?= Html::encode($this->title) ?></h1>
+    <h1><i class="fas fa-newspaper text-primary"></i> <?= Html::encode($this->title) ?></h1>
 
     <?= ListView::widget([
         'dataProvider' => $dataProvider,
-        'itemView' => '_item', // Renderiza cada noticia utilizando la vista "_item.php"
+        'itemView' => '_item',
+        'summary' => false,
+        'options' => [
+            'class' => 'list-group',
+        ],
+        'itemOptions' => [
+            'class' => 'list-group-item',
+        ],
     ]); ?>
 </div>

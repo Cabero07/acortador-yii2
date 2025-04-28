@@ -10,7 +10,7 @@ $this->params['breadcrumbs'][] = ['label' => 'Noticias', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="news-view">
-    <h1><?= Html::encode($this->title) ?></h1>
-    <p><small>Publicado por <?= Html::encode($model->author->username) ?> el <?= Yii::$app->formatter->asDate($model->created_at) ?></small></p>
-    <p><?= Yii::$app->formatter->asNtext($model->content) ?></p>
+    <h1><i class="fas fa-newspaper text-primary"></i> <?= Html::encode($this->title) ?></h1>
+    <p><small><i class="fas fa-user"></i> Publicado por <?= Html::encode($model->author->username) ?> el <?= Yii::$app->formatter->asDate($model->created_at) ?></small></p>
+    <p><i class="fas fa-align-left"></i> <?= Yii::$app->formatter->asNtext($model->content) ?></p>
 </div>
