@@ -46,7 +46,7 @@ AppAsset::register($this);
             'items' => $menuItems,
         ]);
         if (Yii::$app->user->isGuest) {
-            echo Html::tag('div', Html::a('Crear Cuenta', ['/site/singup'], ['class' => ['btn btn-link login text-decoration-none']]), ['class' => ['d-flex']]);
+            echo Html::tag('div', Html::a('Crear Cuenta', ['/site/signup'], ['class' => ['btn btn-link login text-decoration-none']]), ['class' => ['d-flex']]);
             echo Html::tag('div', Html::a('Acceder', ['/site/login'], ['class' => ['btn btn-link login text-decoration-none']]), ['class' => ['d-flex']]);
         } else {
             echo Html::beginForm(['/site/logout'], 'post', ['class' => 'd-flex'])

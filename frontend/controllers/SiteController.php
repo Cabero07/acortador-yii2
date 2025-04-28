@@ -33,40 +33,22 @@ class SiteController extends Controller
     {
         return [
             'access' => [
-                'class' => \yii\filters\AccessControl::class,
+                'class' => AccessControl::class,
                 'rules' => [
-                    // Permitir acceso a 'signup' y 'login' solo para usuarios no autenticados
+                    // Permitir acceso a las acciones 'login', 'signup' y 'error' a cualquier usuario
                     [
+                        'actions' => ['login', 'signup', 'error'],
                         'allow' => true,
-                        'actions' => ['signup', 'login'],
-                        'roles' => ['?'], // '?' indica usuarios no autenticados
                     ],
-                    // Permitir acceso para usuarios autenticados con rol 'user'
+                    // Requerir autenticación para todas las demás acciones
                     [
                         'allow' => true,
-                        'roles' => ['@'], // '@' indica usuarios autenticados
-                        'matchCallback' => function ($rule, $action) {
-                            $auth = Yii::$app->authManager;
-                            $userId = Yii::$app->user->id;
-                            return $auth->checkAccess($userId, 'user'); // Verifica que el usuario tenga el rol 'user'
-                        },
-                        'denyCallback' => function ($rule, $action) {
-                            return Yii::$app->response->redirect(['site/login']); // Redirige al login
-                        },
-                    ],
-                    // Permitir acceso a 'logout' solo para usuarios autenticados
-                    [
-                        'allow' => true,
-                        'actions' => ['logout'],
-                        'roles' => ['@'],
+                        'roles' => ['@'], // '@' indica que el usuario debe estar autenticado
                     ],
                 ],
-            ],
-            'verbs' => [
-                'class' => \yii\filters\VerbFilter::class,
-                'actions' => [
-                    'logout' => ['post'],
-                ],
+                'denyCallback' => function ($rule, $action) {
+                    return Yii::$app->response->redirect(['site/login']); // Redirigir al login si no está autenticado
+                },
             ],
         ];
     }
