@@ -6,7 +6,7 @@
 /** @var string $latestNews */
 
 use yii\helpers\Html;
-use yii\frontend\controllers\SiteController;
+
 
 $this->title = 'Dashboard';
 ?>
@@ -15,40 +15,48 @@ $this->title = 'Dashboard';
         <h1 class="mb-4"><i class="fas fa-chart-pie text-primary"></i> <?= Html::encode($this->title) ?></h1>
 
         <div class="row">
-            <!-- Card: Total Clicks -->
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card shadow h-100">
-                    <div class="card-body text-center">
-                        <h2 class="card-title text-success"><i class="fas fa-mouse-pointer"></i></h2>
-                        <h4 class="card-text">Total de Clics</h4>
-                        <p class="card-text display-6"><?= number_format($totalClicks) ?></p>
+            <!-- Contador de clics -->
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="card text-center shadow">
+                    <div class="card-body">
+                        <div class="icon mb-3">
+                            <i class="fas fa-mouse-pointer fa-3x text-primary"></i>
+                        </div>
+                        <h5 class="card-title">Total de Clics</h5>
+                        <p class="card-text display-4"><?= number_format($totalClicks) ?></p>
                     </div>
                 </div>
             </div>
 
-            <!-- Card: Total Earnings -->
-            <div class="col-lg-4 col-md-6 mb-4">
-                <div class="card shadow h-100">
-                    <div class="card-body text-center">
-                        <h2 class="card-title text-warning"><i class="fas fa-dollar-sign"></i></h2>
-                        <h4 class="card-text">Ganancias Totales</h4>
-                        <p class="card-text display-6">$<?= number_format($totalEarnings, 2) ?></p>
+            <!-- Balance acumulado -->
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="card text-center shadow">
+                    <div class="card-body">
+                        <div class="icon mb-3">
+                            <i class="fas fa-dollar-sign fa-3x text-success"></i>
+                        </div>
+                        <h5 class="card-title">Balance Acumulado</h5>
+                        <p class="card-text display-4">$<?= number_format($totalEarnings, 2) ?></p>
                     </div>
                 </div>
             </div>
 
-            <!-- Card: Latest News -->
-            <div class="dashboard-news">
-                <h3>Últimas Noticias</h3>
-                <?php if ($latestNews): ?>
-                    <div class="news-item">
-                        <h4><?= \yii\helpers\Html::encode($latestNews->title) ?></h4>
-                        <p><?= \yii\helpers\Html::encode($latestNews->content) ?></p>
-                        <small>Publicado el <?= Yii::$app->formatter->asDate($latestNews->created_at, 'long') ?></small>
+            <!-- Última noticia -->
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="card text-center shadow">
+                    <div class="card-body">
+                        <div class="icon mb-3">
+                            <i class="fas fa-newspaper fa-3x text-info"></i>
+                        </div>
+                        <h5 class="card-title">Última Noticia</h5>
+                        <?php if ($latestNews): ?>
+                            <h6 class="card-subtitle mb-2 text-muted"><?= Yii::$app->formatter->asDate($latestNews->created_at, 'long') ?></h6>
+                            <p class="card-text"><?= \yii\helpers\Html::encode($latestNews->content) ?></p>
+                        <?php else: ?>
+                            <p class="card-text">No hay noticias disponibles.</p>
+                        <?php endif; ?>
                     </div>
-                <?php else: ?>
-                    <p>No hay noticias disponibles en este momento.</p>
-                <?php endif; ?>
+                </div>
             </div>
         </div>
     </div>
