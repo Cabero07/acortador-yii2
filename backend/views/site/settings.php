@@ -9,19 +9,24 @@ use yii\widgets\ActiveForm;
 $this->title = 'Configuraciones Generales';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
 <div class="settings-form">
-    <div class="card">
+    <div class="card shadow-sm">
         <div class="card-header bg-info text-white">
-            <h3 class="card-title"><?= Html::encode($this->title) ?></h3>
+            <h3 class="card-title"><i class="fas fa-cogs"></i> <?= Html::encode($this->title) ?></h3>
         </div>
         <div class="card-body">
             <?php $form = ActiveForm::begin(); ?>
 
-            <?= $form->field($model, 'linkLimitPerUser')->textInput(['type' => 'number']) ?>
-
             <div class="form-group">
-                <?= Html::submitButton('Guardar', ['class' => 'btn btn-success']) ?>
+                <?= $form->field($model, 'linkLimitPerUser')->textInput([
+                    'type' => 'number',
+                    'class' => 'form-control',
+                    'placeholder' => 'Límite de enlaces por usuario',
+                ])->label('<i class="fas fa-link"></i> Límite de Enlaces por Usuario') ?>
+            </div>
+
+            <div class="form-group text-end">
+                <?= Html::submitButton('<i class="fas fa-save"></i> Guardar', ['class' => 'btn btn-success']) ?>
             </div>
 
             <?php ActiveForm::end(); ?>

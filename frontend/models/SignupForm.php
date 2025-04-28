@@ -49,12 +49,14 @@ class SignupForm extends Model
             return null;
         }
 
+        // Crear un nuevo usuario
         $user = new User();
         $user->username = $this->username;
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->generateEmailVerificationToken();
+        $user->status = 0; // Asegurarse de que el estado sea inactivo por defecto
 
         if ($user->save()) {
             // Asignar el rol "user" al nuevo usuario

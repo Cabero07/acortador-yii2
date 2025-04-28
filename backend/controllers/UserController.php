@@ -45,45 +45,28 @@ class UserController extends Controller
      * @param int $id ID del usuario.
      * @param string $roleName Nuevo rol a asignar.
      */
-    public function actionChangeRole($id)
-    {
-        $auth = Yii::$app->authManager;
-        $user = User::findOne($id);
+    public function actionChangeRole($id, $roleName)
+{
+    $auth = Yii::$app->authManager;
+    $user = User::findOne($id);
 
-        if (!$user) {
-            Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
-            return $this->redirect(['manage']);
-        }
-
-        $roleName = Yii::$app->request->post('roleName'); // Obtener el parámetro desde el POST
-
-        if (!$roleName) {
-            Yii::$app->session->setFlash('error', 'No se envió el rol a asignar.');
-            return $this->redirect(['manage']);
-        }
-
-        $role = $auth->getRole($roleName);
-        if (!$role) {
-            Yii::$app->session->setFlash('error', "El rol '{$roleName}' no existe.");
-            return $this->redirect(['manage']);
-        }
-
-        // Cambiar el rol
-        $auth->revokeAll($user->id);
-        $auth->assign($role, $user->id);
-        $log = new UserLog([
-            'user_id' => $user->id,
-            'action' => "Rol cambiado a '{$roleName}'",
-            'performed_by' => Yii::$app->user->id,
-        ]);
-        
-        if (!$log->save()) {
-            Yii::error('Error al guardar el log: ' . json_encode($log->errors), __METHOD__);
-        }
-
-        Yii::$app->session->setFlash('success', "Rol cambiado a '{$roleName}' con éxito.");
+    if (!$user) {
+        Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
         return $this->redirect(['manage']);
     }
+
+    $role = $auth->getRole($roleName);
+    if (!$role) {
+        Yii::$app->session->setFlash('error', "El rol '{$roleName}' no existe.");
+        return $this->redirect(['manage']);
+    }
+
+    // Cambiar el rol
+    $auth->revokeAll($user->id);
+    $auth->assign($role, $user->id);
+    Yii::$app->session->setFlash('success', "Rol cambiado a '{$roleName}' con éxito.");
+    return $this->redirect(['manage']);
+}
 
 
 
