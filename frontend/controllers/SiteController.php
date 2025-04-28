@@ -41,7 +41,7 @@ class SiteController extends Controller
                         'actions' => ['signup', 'login'],
                         'roles' => ['?'], // '?' indica usuarios no autenticados
                     ],
-                    // Permitir acceso a todo excepto 'signup' y 'login' para usuarios autenticados con rol 'user'
+                    // Permitir acceso para usuarios autenticados con rol 'user'
                     [
                         'allow' => true,
                         'roles' => ['@'], // '@' indica usuarios autenticados
@@ -51,7 +51,7 @@ class SiteController extends Controller
                             return $auth->checkAccess($userId, 'user'); // Verifica que el usuario tenga el rol 'user'
                         },
                         'denyCallback' => function ($rule, $action) {
-                            throw new \yii\web\ForbiddenHttpException('No tienes permiso para realizar esta acción.');
+                            return Yii::$app->response->redirect(['site/login']); // Redirige al login
                         },
                     ],
                     // Permitir acceso a 'logout' solo para usuarios autenticados
@@ -60,6 +60,12 @@ class SiteController extends Controller
                         'actions' => ['logout'],
                         'roles' => ['@'],
                     ],
+                ],
+            ],
+            'verbs' => [
+                'class' => \yii\filters\VerbFilter::class,
+                'actions' => [
+                    'logout' => ['post'],
                 ],
             ],
         ];
