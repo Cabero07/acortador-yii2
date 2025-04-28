@@ -233,16 +233,25 @@ class SiteController extends Controller
 
     public function actionDashboard()
     {
-        $totalClicks = LinkStats::find()->sum('clicks') ?? 0;
-        $totalEarnings = LinkStats::find()->sum('earnings') ?? 0.00;
+        $userId = Yii::$app->user->id; // Obtener ID del usuario autenticado
+
+        // Calcular clics filtrados por usuario
+        $totalClicks = LinkStats::find()
+            ->joinWith('link') // Relación con la tabla 'links'
+            ->where(['links.user_id' => $userId]) // Filtrar por el usuario actual
+            ->sum('clicks') ?? 0;
+
+        // Calcular ganancias basadas en la nueva lógica
+        $conversionRate = 4.25; // Ganancias por cada 1000 clics
+        $totalEarnings = ($totalClicks / 1000) * $conversionRate;
 
         // Obtener la última noticia creada
         $latestNews = News::find()->orderBy(['created_at' => SORT_DESC])->one();
 
         return $this->render('dashboard', [
             'totalClicks' => $totalClicks,
-            'totalEarnings' => $totalEarnings,
-            'latestNews' => $latestNews, // Pasar la última noticia a la vista
+            'totalEarnings' => round($totalEarnings, 2), // Redondear a 2 decimales
+            'latestNews' => $latestNews,
         ]);
     }
     public function actionLinks()
