@@ -46,29 +46,59 @@ class UserController extends Controller
      * @param string $roleName Nuevo rol a asignar.
      */
     public function actionChangeRole($id, $roleName)
-{
-    $auth = Yii::$app->authManager;
-    $user = User::findOne($id);
+    {
+        $user = User::findOne($id);
 
-    if (!$user) {
-        Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
+        if (!$user) {
+            Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
+            return $this->redirect(['manage']);
+        }
+
+        // Validar que el rol es válido
+        if (!in_array($roleName, ['user', 'admin'])) {
+            Yii::$app->session->setFlash('error', "El rol '{$roleName}' no es válido.");
+            return $this->redirect(['manage']);
+        }
+
+        // Actualizar el rol del usuario
+        $user->role = $roleName;
+        if ($user->save(false)) { // Guardar sin validación adicional
+            Yii::$app->session->setFlash('success', "Rol cambiado a '{$roleName}' con éxito.");
+        } else {
+            Yii::$app->session->setFlash('error', 'No se pudo cambiar el rol del usuario.');
+        }
+
         return $this->redirect(['manage']);
     }
+    /**
+     * Elimina una cuenta de usuario.
+     * @param int $id ID del usuario a eliminar.
+     * @return \yii\web\Response
+     */
+    public function actionDeleteAccount($id)
+    {
+        $user = User::findOne($id);
 
-    $role = $auth->getRole($roleName);
-    if (!$role) {
-        Yii::$app->session->setFlash('error', "El rol '{$roleName}' no existe.");
+        if (!$user) {
+            Yii::$app->session->setFlash('error', 'Usuario no encontrado.');
+            return $this->redirect(['manage']);
+        }
+
+        // Evitar que un administrador se elimine a sí mismo
+        if ($user->id === Yii::$app->user->id) {
+            Yii::$app->session->setFlash('error', 'No puedes eliminar tu propia cuenta.');
+            return $this->redirect(['manage']);
+        }
+
+        // Eliminar el usuario
+        if ($user->delete()) {
+            Yii::$app->session->setFlash('success', 'Usuario eliminado con éxito.');
+        } else {
+            Yii::$app->session->setFlash('error', 'No se pudo eliminar la cuenta del usuario.');
+        }
+
         return $this->redirect(['manage']);
     }
-
-    // Cambiar el rol
-    $auth->revokeAll($user->id);
-    $auth->assign($role, $user->id);
-    Yii::$app->session->setFlash('success', "Rol cambiado a '{$roleName}' con éxito.");
-    return $this->redirect(['manage']);
-}
-
-
 
     /**
      * Habilita o deshabilita un usuario.
@@ -96,7 +126,7 @@ class UserController extends Controller
             'action' => $status ? 'Usuario habilitado' : 'Usuario deshabilitado',
             'performed_by' => Yii::$app->user->id,
         ]);
-        
+
         if (!$log->save()) {
             Yii::error('Error al guardar el log: ' . json_encode($log->errors), __METHOD__);
         }

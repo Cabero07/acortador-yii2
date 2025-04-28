@@ -100,6 +100,14 @@ $this->params['breadcrumbs'][] = $this->title;
                                         'data-confirm' => '¿Estás seguro de asignar el rol de User a este usuario?',
                                     ]) ?>
                                 <?php endif; ?>
+
+                                <!-- Botón para eliminar cuenta -->
+                                <?= Html::a('<i class="fas fa-trash-alt"></i> Eliminar', Url::to(['delete-account', 'id' => $user->id]), [
+                                    'class' => 'btn btn-danger btn-sm',
+                                    'data-confirm' => '¿Estás seguro de que deseas eliminar esta cuenta? Esta acción no se puede deshacer.',
+                                    'data-method' => 'post', // Asegura que la solicitud sea POST para mayor seguridad
+                                ]) ?>
+
                             </td>
                         </tr>
                     <?php endforeach; ?>

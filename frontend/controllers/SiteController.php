@@ -20,6 +20,7 @@ use frontend\models\SignupForm;
 use frontend\models\ContactForm;
 use yii\data\ActiveDataProvider; // Importar correctamente la clase
 use yii\web\NotFoundHttpException;
+use common\models\News;
 
 /**
  * Site controller
@@ -235,12 +236,13 @@ class SiteController extends Controller
         $totalClicks = LinkStats::find()->sum('clicks') ?? 0;
         $totalEarnings = LinkStats::find()->sum('earnings') ?? 0.00;
 
-        $latestNews = "Nueva funcionalidad añadida al sistema de enlaces acortados";
+        // Obtener la última noticia creada
+        $latestNews = News::find()->orderBy(['created_at' => SORT_DESC])->one();
 
         return $this->render('dashboard', [
             'totalClicks' => $totalClicks,
             'totalEarnings' => $totalEarnings,
-            'latestNews' => $latestNews,
+            'latestNews' => $latestNews, // Pasar la última noticia a la vista
         ]);
     }
     public function actionLinks()

@@ -6,13 +6,14 @@
 /** @var string $latestNews */
 
 use yii\helpers\Html;
+use yii\frontend\controllers\SiteController;
 
 $this->title = 'Dashboard';
 ?>
 <div class="dashboard-index">
     <div class="container">
         <h1 class="mb-4"><i class="fas fa-chart-pie text-primary"></i> <?= Html::encode($this->title) ?></h1>
-        
+
         <div class="row">
             <!-- Card: Total Clicks -->
             <div class="col-lg-4 col-md-6 mb-4">
@@ -37,14 +38,17 @@ $this->title = 'Dashboard';
             </div>
 
             <!-- Card: Latest News -->
-            <div class="col-lg-4 col-md-12 mb-4">
-                <div class="card shadow h-100">
-                    <div class="card-body">
-                        <h4 class="card-title"><i class="fas fa-newspaper text-info"></i> Última Noticia</h4>
-                        <p class="card-text"><?= Html::encode($latestNews) ?></p>
-                        <a href="#" class="btn btn-outline-primary btn-sm">Leer más</a>
+            <div class="dashboard-news">
+                <h3>Últimas Noticias</h3>
+                <?php if ($latestNews): ?>
+                    <div class="news-item">
+                        <h4><?= \yii\helpers\Html::encode($latestNews->title) ?></h4>
+                        <p><?= \yii\helpers\Html::encode($latestNews->content) ?></p>
+                        <small>Publicado el <?= Yii::$app->formatter->asDate($latestNews->created_at, 'long') ?></small>
                     </div>
-                </div>
+                <?php else: ?>
+                    <p>No hay noticias disponibles en este momento.</p>
+                <?php endif; ?>
             </div>
         </div>
     </div>
