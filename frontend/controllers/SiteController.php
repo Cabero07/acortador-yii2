@@ -230,7 +230,22 @@ class SiteController extends Controller
         Yii::$app->session->setFlash('error', 'Sorry, we are unable to verify your account with provided token.');
         return $this->goHome();
     }
+    public function actionRanking()
+    {
+        // Obtener usuarios con el total de clics
+        $users = User::find()
+            ->alias('u')
+            ->select(['u.*', 'SUM(ls.clicks) as total_clicks']) // SUM para calcular clics
+            ->leftJoin('links l', 'l.user_id = u.id')
+            ->leftJoin('link_stats ls', 'ls.link_id = l.id')
+            ->groupBy('u.id')
+            ->orderBy(['total_clicks' => SORT_DESC])
+            ->all();
 
+        return $this->render('ranking', [
+            'users' => $users,
+        ]);
+    }
     public function actionDashboard()
     {
         $userId = Yii::$app->user->id; // Obtener ID del usuario autenticado

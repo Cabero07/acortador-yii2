@@ -62,6 +62,11 @@ class User extends ActiveRecord implements IdentityInterface
         return $this->hasMany(Link::class, ['user_id' => 'id']);
     }
 
+    public function getLinkStats()
+    {
+        return $this->hasMany(LinkStats::class, ['link_id' => 'id'])
+            ->via('links'); // Relación a través de 'links'
+    }
     /**
      * Atributo virtual para obtener el total de clics del usuario.
      */

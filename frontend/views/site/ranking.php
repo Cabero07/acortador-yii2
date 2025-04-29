@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Html;
 
 $this->title = 'Ranking de Usuarios';
@@ -18,7 +19,7 @@ $this->title = 'Ranking de Usuarios';
                 <tr>
                     <td><?= $index + 1 ?></td>
                     <td><?= Html::encode($user->username) ?></td>
-                    <td><?= $user->total_clicks ?></td>
+                    <td><?= $user->total_clicks ?? 0 ?></td> <!-- Manejo de valores nulos -->
                 </tr>
             <?php endforeach; ?>
         </tbody>

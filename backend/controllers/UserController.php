@@ -72,12 +72,18 @@ class UserController extends Controller
     }
     public function actionRanking()
     {
+        // Optimizar la consulta para el ranking y asegurar que 'total_clicks' esté presente
         $users = User::find()
-            ->select(['user.*', 'total_clicks' => 'SUM(link_stats.clicks)'])
-            ->leftJoin('links', 'links.user_id = user.id')
-            ->leftJoin('link_stats', 'link_stats.link_id = links.id')
-            ->groupBy('user.id')
+            ->alias('u')
+            ->select([
+                'u.*', // Seleccionar todas las columnas del modelo User
+                'total_clicks' => 'SUM(ls.clicks)' // Agregar 'total_clicks' como un alias
+            ])
+            ->leftJoin('links l', 'l.user_id = u.id')
+            ->leftJoin('link_stats ls', 'ls.link_id = l.id')
+            ->groupBy('u.id')
             ->orderBy(['total_clicks' => SORT_DESC])
+            ->asArray() // Convertir los resultados a un array para asegurar acceso a 'total_clicks'
             ->all();
 
         return $this->render('ranking', [

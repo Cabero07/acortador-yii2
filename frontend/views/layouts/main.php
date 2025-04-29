@@ -39,6 +39,7 @@ AppAsset::register($this);
             ['label' => 'Inicio', 'url' => ['/site/index']],
             ['label' => 'Noticias', 'url' => ['/news/index']],
             ['label' => 'Gestión de enlaces', 'url' => ['/site/links']],
+            ['label' => 'Ranking', 'url' => ['/site/ranking']],
             ['label' => 'Panel de Control', 'url' => ['/site/dashboard']],
         ];
 
