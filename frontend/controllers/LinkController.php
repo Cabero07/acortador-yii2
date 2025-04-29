@@ -23,7 +23,7 @@ class LinkController extends Controller
             }
 
             $stats->clicks += 1;
-            $stats->earnings += 0.05; // Ejemplo: Ganancia fija por clic
+            $stats->earnings += 0.00425; // Ejemplo: Ganancia fija por clic
             $stats->save();
 
             return $this->redirect($link->url); // Redirección a la URL original
