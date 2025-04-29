@@ -23,12 +23,19 @@ class Link extends ActiveRecord
             [['short_code'], 'unique'], // Asegurar que el código sea único
         ];
     }
-    public function getStats()
-    {
-        return $this->hasOne(LinkStats::class, ['link_id' => 'id']);
-    }
+    /**
+     * Relación con el usuario que creó el enlace.
+     */
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    /**
+     * Relación con las estadísticas del enlace.
+     */
+    public function getStats()
+    {
+        return $this->hasOne(LinkStats::class, ['link_id' => 'id']);
     }
 }

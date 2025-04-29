@@ -6,7 +6,7 @@ use Yii;
 use yii\db\ActiveRecord;
 
 /**
- * Modelo para registrar logs de cambios en los usuarios.
+ * Modelo para la tabla `user_log`.
  */
 class UserLog extends ActiveRecord
 {
@@ -15,7 +15,7 @@ class UserLog extends ActiveRecord
      */
     public static function tableName()
     {
-        return '{{%user_log}}'; // Tabla en la base de datos
+        return '{{%user_log}}';
     }
 
     /**
@@ -32,7 +32,7 @@ class UserLog extends ActiveRecord
     }
 
     /**
-     * Relación con el modelo User (usuario afectado).
+     * Relación con el usuario afectado.
      */
     public function getUser()
     {
@@ -40,7 +40,7 @@ class UserLog extends ActiveRecord
     }
 
     /**
-     * Relación con el modelo User (administrador que realizó la acción).
+     * Relación con el administrador que realizó la acción.
      */
     public function getPerformedBy()
     {

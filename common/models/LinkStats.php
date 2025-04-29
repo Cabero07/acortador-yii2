@@ -24,6 +24,9 @@ class LinkStats extends ActiveRecord
         ];
     }
 
+    /**
+     * Relación con el enlace asociado.
+     */
     public function getLink()
     {
         return $this->hasOne(Link::class, ['id' => 'link_id']);

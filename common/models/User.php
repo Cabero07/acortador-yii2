@@ -242,4 +242,24 @@ class User extends ActiveRecord implements IdentityInterface
     {
         $this->password_reset_token = null;
     }
+    /**
+     * Relación con los enlaces creados.
+     */
+    
+
+    /**
+     * Relación con los registros de usuario.
+     */
+    public function getUserLogs()
+    {
+        return $this->hasMany(UserLog::class, ['user_id' => 'id']);
+    }
+
+    /**
+     * Relación con las noticias creadas.
+     */
+    public function getNews()
+    {
+        return $this->hasMany(News::class, ['created_by' => 'id']);
+    }
 }
