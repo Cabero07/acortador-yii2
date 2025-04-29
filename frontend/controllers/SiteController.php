@@ -232,14 +232,18 @@ class SiteController extends Controller
     }
     public function actionRanking()
     {
-        // Obtener usuarios con el total de clics
+        // Optimizar la consulta para el ranking y asegurar que 'total_clicks' esté presente
         $users = User::find()
             ->alias('u')
-            ->select(['u.*', 'SUM(ls.clicks) as total_clicks']) // SUM para calcular clics
+            ->select([
+                'u.*', // Seleccionar todas las columnas del modelo User
+                'total_clicks' => 'SUM(ls.clicks)' // Agregar 'total_clicks' como un alias
+            ])
             ->leftJoin('links l', 'l.user_id = u.id')
             ->leftJoin('link_stats ls', 'ls.link_id = l.id')
             ->groupBy('u.id')
             ->orderBy(['total_clicks' => SORT_DESC])
+            ->asArray() // Convertir los resultados a un array para asegurar acceso a 'total_clicks'
             ->all();
 
         return $this->render('ranking', [
