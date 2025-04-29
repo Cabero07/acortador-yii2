@@ -49,24 +49,24 @@ class SignupForm extends Model
             return null;
         }
 
-        // Crear un nuevo usuario
         $user = new User();
         $user->username = $this->username;
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        $user->status = 0; // Asegurarse de que el estado sea inactivo por defecto
 
         if ($user->save()) {
-            // Asignar el rol "user" al nuevo usuario
             $auth = Yii::$app->authManager;
-            $userRole = $auth->getRole('user');
-            $auth->assign($userRole, $user->id);
-
-            return $this->sendEmail($user);
+            $role = $auth->getRole('user'); // Verificar si el rol existe
+            if ($role) {
+                $auth->assign($role, $user->id); // Asignar el rol
+            } else {
+                throw new \Exception('El rol "user" no existe.');
+            }
+            return $user;
         }
 
-        return false;
+        return null;
     }
 
     /**
