@@ -5,14 +5,39 @@ namespace frontend\controllers;
 use Yii;
 use common\models\News;
 use yii\data\ActiveDataProvider;
+use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+
 
 /**
  * NewsController implements the actions for displaying news in the frontend.
  */
 class NewsController extends Controller
-{
+{   
+    public function behaviors()
+    {
+        return [
+            'access' => [
+                'class' => AccessControl::class,
+                'rules' => [
+                    // Permitir acceso a las acciones 'login', 'signup' y 'error' a cualquier usuario
+                    [
+                        'actions' => ['login', 'signup', 'error'],
+                        'allow' => true,
+                    ],
+                    // Requerir autenticación para todas las demás acciones
+                    [
+                        'allow' => true,
+                        'roles' => ['@'], // '@' indica que el usuario debe estar autenticado
+                    ],
+                ],
+                'denyCallback' => function ($rule, $action) {
+                    return Yii::$app->response->redirect(['site/login']); // Redirigir al login si no está autenticado
+                },
+            ],
+        ];
+    }
     /**
      * Lists all News models.
      * @return string
