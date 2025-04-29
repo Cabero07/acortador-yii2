@@ -54,7 +54,7 @@ class SignupForm extends Model
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-
+        $user->status = 0; // Asegurarse de que el estado sea inactivo por defecto
         if ($user->save()) {
             $auth = Yii::$app->authManager;
             $role = $auth->getRole('user'); // Verificar si el rol existe
