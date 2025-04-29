@@ -55,7 +55,6 @@ class SignupForm extends Model
         $user->email = $this->email;
         $user->setPassword($this->password);
         $user->generateAuthKey();
-        $user->generateEmailVerificationToken();
         $user->status = 0; // Asegurarse de que el estado sea inactivo por defecto
 
         if ($user->save()) {

@@ -21,7 +21,7 @@ class SettingsForm extends Model
     {
         Yii::$app->params['linkLimitPerUser'] = $this->linkLimitPerUser;
 
-        // Opcional: guardar en base de datos u otro lugar si es dinámico
+        // Guardar en un archivo o base de datos si es necesario
         $paramsFile = Yii::getAlias('@common/config/params.php');
         $params = include $paramsFile;
         $params['linkLimitPerUser'] = $this->linkLimitPerUser;
