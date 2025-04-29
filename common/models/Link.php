@@ -27,4 +27,8 @@ class Link extends ActiveRecord
     {
         return $this->hasOne(LinkStats::class, ['link_id' => 'id']);
     }
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
 }

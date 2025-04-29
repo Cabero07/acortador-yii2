@@ -7,6 +7,7 @@ use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
 use yii\web\IdentityInterface;
+use yii\db\Expression;
 
 /**
  * User model
@@ -56,7 +57,21 @@ class User extends ActiveRecord implements IdentityInterface
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
         ];
     }
+    public function getLinks()
+    {
+        return $this->hasMany(Link::class, ['user_id' => 'id']);
+    }
 
+    /**
+     * Atributo virtual para obtener el total de clics del usuario.
+     */
+    public function getTotalClicks()
+    {
+        return LinkStats::find()
+            ->joinWith('link')
+            ->where(['link.user_id' => $this->id])
+            ->sum('link_stats.clicks') ?? 0; // Devuelve 0 si no hay clics
+    }
     /**
      * {@inheritdoc}
      */
@@ -80,16 +95,16 @@ class User extends ActiveRecord implements IdentityInterface
      * {@inheritdoc}
      */
     public static function findIdentityByAccessToken($token, $type = null)
-        {
-            $user = static::findOne(['access_token' => $token, 'status' => self::STATUS_ACTIVE]);
-    
-            // Verificar si el usuario tiene el rol de admin
-            if ($user && Yii::$app->authManager->checkAccess($user->id, 'admin')) {
-                return $user;
-            }
-    
-            return null; // No permitir la autenticación si no es admin
+    {
+        $user = static::findOne(['access_token' => $token, 'status' => self::STATUS_ACTIVE]);
+
+        // Verificar si el usuario tiene el rol de admin
+        if ($user && Yii::$app->authManager->checkAccess($user->id, 'admin')) {
+            return $user;
         }
+
+        return null; // No permitir la autenticación si no es admin
+    }
 
     /**
      * Finds user by username
@@ -126,7 +141,8 @@ class User extends ActiveRecord implements IdentityInterface
      * @param string $token verify email token
      * @return static|null
      */
-    public static function findByVerificationToken($token) {
+    public static function findByVerificationToken($token)
+    {
         return static::findOne([
             'verification_token' => $token,
             'status' => self::STATUS_INACTIVE

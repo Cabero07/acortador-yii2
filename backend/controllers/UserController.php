@@ -70,6 +70,20 @@ class UserController extends Controller
 
         return $this->redirect(['manage']);
     }
+    public function actionRanking()
+    {
+        $users = User::find()
+            ->select(['user.*', 'total_clicks' => 'SUM(link_stats.clicks)'])
+            ->leftJoin('links', 'links.user_id = user.id')
+            ->leftJoin('link_stats', 'link_stats.link_id = links.id')
+            ->groupBy('user.id')
+            ->orderBy(['total_clicks' => SORT_DESC])
+            ->all();
+
+        return $this->render('ranking', [
+            'users' => $users,
+        ]);
+    }
     /**
      * Elimina una cuenta de usuario.
      * @param int $id ID del usuario a eliminar.
