@@ -165,7 +165,30 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+    public function actionClick($shortCode)
+    {
+        // Buscar el enlace y el usuario asociado
+        $link = Link::findOne(['short_code' => $shortCode]);
+        if ($link) {
+            $user = $link->user;
 
+            // Incrementar el balance del usuario
+            if ($user) {
+                $user->incrementBalance();
+            }
+
+            // Registrar clic en las estadísticas
+            $linkStat = new LinkStats();
+            $linkStat->link_id = $link->id;
+            $linkStat->clicks = 1;
+            $linkStat->save();
+
+            // Redirigir al enlace original
+            return $this->redirect($link->url);
+        }
+
+        throw new NotFoundHttpException('El enlace no existe.');
+    }
     /**
      * Resets password.
      *

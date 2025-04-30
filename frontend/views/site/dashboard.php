@@ -36,7 +36,7 @@ $this->title = 'Dashboard';
                             <i class="fas fa-dollar-sign fa-3x text-success"></i>
                         </div>
                         <h5 class="card-title">Balance Acumulado</h5>
-                        <p class="card-text display-4">$<?= number_format($totalEarnings, 2) ?></p>
+                        <p class="card-text display-4">$<?= number_format(Yii::$app->user->identity->balance, 4) ?></p>
                     </div>
                 </div>
             </div>

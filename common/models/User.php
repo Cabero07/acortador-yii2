@@ -68,6 +68,17 @@ class User extends ActiveRecord implements IdentityInterface
             ->via('links'); // Relación a través de 'links'
     }
     /**
+     * Incrementa el balance del usuario.
+     *
+     * @param float $amount Cantidad a incrementar.
+     * @return void
+     */
+    public function incrementBalance(float $amount = 0.0042): void
+    {
+        $this->balance += $amount; // Incrementar el balance
+        $this->save(false, ['balance']); // Guardar solo la columna 'balance'
+    }
+    /**
      * Atributo virtual para obtener el total de clics del usuario.
      */
     public function getTotalClicks()
@@ -254,7 +265,7 @@ class User extends ActiveRecord implements IdentityInterface
     /**
      * Relación con los enlaces creados.
      */
-    
+
 
     /**
      * Relación con los registros de usuario.
