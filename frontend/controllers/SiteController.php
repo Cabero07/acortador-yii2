@@ -167,21 +167,32 @@ class SiteController extends Controller
     }
     public function actionClick($shortCode)
     {
-        // Buscar el enlace y el usuario asociado
+        // Buscar el enlace por su código corto
         $link = Link::findOne(['short_code' => $shortCode]);
+
         if ($link) {
             $user = $link->user;
 
-            // Incrementar el balance del usuario
+            // Verificar si el usuario existe
             if ($user) {
-                $user->incrementBalance();
+                $earningsPerClick = 0.0042; // Ganancias por clic
+                if ($user->addToBalance($earningsPerClick)) {
+                    Yii::debug("Balance actualizado para el usuario {$user->id}: {$user->balance}", __METHOD__);
+                } else {
+                    Yii::error("Error al actualizar el balance para el usuario {$user->id}", __METHOD__);
+                }
             }
 
-            // Registrar clic en las estadísticas
+            // Registrar el clic en las estadísticas
             $linkStat = new LinkStats();
             $linkStat->link_id = $link->id;
             $linkStat->clicks = 1;
-            $linkStat->save();
+            $linkStat->earnings = $earningsPerClick;
+            if ($linkStat->save()) {
+                Yii::debug("Estadísticas actualizadas para el enlace {$link->id}", __METHOD__);
+            } else {
+                Yii::error("Error al guardar estadísticas para el enlace {$link->id}: " . json_encode($linkStat->getErrors()), __METHOD__);
+            }
 
             // Redirigir al enlace original
             return $this->redirect($link->url);
@@ -283,16 +294,15 @@ class SiteController extends Controller
             ->where(['links.user_id' => $userId]) // Filtrar por el usuario actual
             ->sum('clicks') ?? 0;
 
-        // Calcular ganancias basadas en la nueva lógica
-        $conversionRate = 4.25; // Ganancias por cada 1000 clics
-        $totalEarnings = ($totalClicks / 1000) * $conversionRate;
+        // Obtener el balance directamente del usuario autenticado
+        $userBalance = Yii::$app->user->identity->balance ?? 0.00;
 
         // Obtener la última noticia creada
         $latestNews = News::find()->orderBy(['created_at' => SORT_DESC])->one();
 
         return $this->render('dashboard', [
             'totalClicks' => $totalClicks,
-            'totalEarnings' => round($totalEarnings, 2), // Redondear a 2 decimales
+            'totalEarnings' => round($userBalance, 2), // Usar el balance acumulado del usuario
             'latestNews' => $latestNews,
         ]);
     }

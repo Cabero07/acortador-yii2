@@ -68,7 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= Html::encode($user->username) ?></td>
                             <td><?= Html::encode($user->email) ?></td>
                             <td class="text-center fw-bold">
-                                $<?= number_format($user->balance, 4) ?>
+                                $<?= number_format($user->balance, 2) ?>
                             </td>
                             <td>
                                 <?= $user->status

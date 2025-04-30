@@ -68,15 +68,22 @@ class User extends ActiveRecord implements IdentityInterface
             ->via('links'); // Relación a través de 'links'
     }
     /**
-     * Incrementa el balance del usuario.
+     * Incrementar el balance del usuario.
      *
      * @param float $amount Cantidad a incrementar.
-     * @return void
+     * @return bool
      */
-    public function incrementBalance(float $amount = 0.0042): void
+    public function addToBalance(float $amount): bool
     {
-        $this->balance += $amount; // Incrementar el balance
-        $this->save(false, ['balance']); // Guardar solo la columna 'balance'
+        $this->balance += $amount;
+        Yii::debug("Intentando guardar balance: {$this->balance}", __METHOD__);
+        if ($this->save(false, ['balance'])) {
+            Yii::debug("Balance guardado correctamente: {$this->balance}", __METHOD__);
+            return true;
+        } else {
+            Yii::error("Error al guardar el balance: " . json_encode($this->getErrors()), __METHOD__);
+            return false;
+        }
     }
     /**
      * Atributo virtual para obtener el total de clics del usuario.
