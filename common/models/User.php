@@ -77,6 +77,10 @@ class User extends ActiveRecord implements IdentityInterface
             ->where(['link.user_id' => $this->id])
             ->sum('link_stats.clicks') ?? 0; // Devuelve 0 si no hay clics
     }
+    public function getTotalEarnings()
+    {
+        return $this->getLinkStats()->sum('earnings') ?? 0;
+    }
     /**
      * {@inheritdoc}
      */

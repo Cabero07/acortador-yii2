@@ -55,6 +55,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <th><i class="fas fa-hashtag"></i> ID</th>
                         <th><i class="fas fa-user"></i> Nombre de Usuario</th>
                         <th><i class="fas fa-envelope"></i> Correo Electrónico</th>
+                        <th><i class="fas fa-dollar-sign"></i> Ganancia Total</th>
                         <th><i class="fas fa-toggle-on"></i> Estado</th>
                         <th><i class="fas fa-user-tag"></i> Rol</th>
                         <th><i class="fas fa-tools"></i> Acciones</th>
@@ -66,6 +67,9 @@ $this->params['breadcrumbs'][] = $this->title;
                             <td><?= $user->id ?></td>
                             <td><?= Html::encode($user->username) ?></td>
                             <td><?= Html::encode($user->email) ?></td>
+                            <td class="text-center fw-bold">
+                                $<?= number_format($user->getTotalEarnings(), 2) ?>
+                            </td>
                             <td>
                                 <?= $user->status
                                     ? '<span class="badge bg-success">Habilitado</span>'
@@ -76,38 +80,12 @@ $this->params['breadcrumbs'][] = $this->title;
                             </td>
                             <td>
                                 <!-- Acción para cambiar el estado -->
-                                <?php if ($user->status): ?>
-                                    <?= Html::a('<i class="fas fa-ban"></i> Deshabilitar', Url::to(['toggle-status', 'id' => $user->id, 'status' => 0]), [
-                                        'class' => 'btn btn-warning btn-sm',
-                                        'data-confirm' => '¿Estás seguro de deshabilitar este usuario?',
-                                    ]) ?>
-                                <?php else: ?>
-                                    <?= Html::a('<i class="fas fa-check"></i> Habilitar', Url::to(['toggle-status', 'id' => $user->id, 'status' => 10]), [
-                                        'class' => 'btn btn-success btn-sm',
-                                        'data-confirm' => '¿Estás seguro de habilitar este usuario?',
-                                    ]) ?>
-                                <?php endif; ?>
-
-                                <!-- Acción para cambiar el rol -->
-                                <?php if ($user->role === 'user'): ?>
-                                    <?= Html::a('<i class="fas fa-user-shield"></i> Cambiar rol', Url::to(['change-role', 'id' => $user->id, 'roleName' => 'admin']), [
-                                        'class' => 'btn btn-info btn-sm',
-                                        'data-confirm' => '¿Estás seguro de asignar el rol de Admin a este usuario?',
-                                    ]) ?>
-                                <?php elseif ($user->role === 'admin'): ?>
-                                    <?= Html::a('<i class="fas fa-user"></i> Cambiar rol', Url::to(['change-role', 'id' => $user->id, 'roleName' => 'user']), [
-                                        'class' => 'btn btn-secondary btn-sm',
-                                        'data-confirm' => '¿Estás seguro de asignar el rol de User a este usuario?',
-                                    ]) ?>
-                                <?php endif; ?>
-
-                                <!-- Botón para eliminar cuenta -->
-                                <?= Html::a('<i class="fas fa-trash-alt"></i> Eliminar', Url::to(['delete-account', 'id' => $user->id]), [
-                                    'class' => 'btn btn-danger btn-sm',
-                                    'data-confirm' => '¿Estás seguro de que deseas eliminar esta cuenta? Esta acción no se puede deshacer.',
-                                    'data-method' => 'post', // Asegura que la solicitud sea POST para mayor seguridad
+                                <?= Html::a('<i class="fas fa-edit"></i>', ['update', 'id' => $user->id], ['class' => 'btn btn-sm btn-warning']) ?>
+                                <?= Html::a('<i class="fas fa-trash"></i>', ['delete', 'id' => $user->id], [
+                                    'class' => 'btn btn-sm btn-danger',
+                                    'data-confirm' => '¿Estás seguro de eliminar este usuario?',
+                                    'data-method' => 'post',
                                 ]) ?>
-
                             </td>
                         </tr>
                     <?php endforeach; ?>
