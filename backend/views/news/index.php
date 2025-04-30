@@ -15,8 +15,8 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><i class="fas fa-newspaper text-primary"></i> <?= Html::encode($this->title) ?></h1>
 
-    <div class="card shadow-sm bg-light p-3 mb-4">
-        <h5><i class="fas fa-search text-success"></i> Filtros de Búsqueda</h5>
+    <div class="card bg-light shadow-sm p-3 mb-4">
+        <h5><i class="fas fa-search  text-success"></i> Filtros de Búsqueda</h5>
         <?php $form = ActiveForm::begin([
             'method' => 'get',
             'action' => ['index'],
@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 <?= $form->field($searchModel, 'title')->textInput(['placeholder' => 'Buscar por título'])->label('<i class="fas fa-heading"></i> Título') ?>
             </div>
             <div class="col-md-4">
-                <?= $form->field($searchModel, 'created_by')->textInput(['placeholder' => 'Buscar por autor'])->label('<i class="fas fa-user"></i> Autor') ?>
+                <?= $form->field($searchModel, 'author')->textInput(['placeholder' => 'Buscar por nombre de usuario'])->label('<i class="fas fa-user"></i> Autor') ?>
             </div>
             <div class="col-md-4">
                 <?= Html::submitButton('<i class="fas fa-search"></i> Buscar', ['class' => 'btn btn-primary mt-4']) ?>
@@ -50,7 +50,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'created_at:datetime',
             [
                 'attribute' => 'created_by',
-                'value' => 'author.username',
+                'value' => function ($model) {
+                    return $model->author ? $model->author->username : '(Sin Autor)';
+                },
                 'label' => 'Autor',
             ],
 

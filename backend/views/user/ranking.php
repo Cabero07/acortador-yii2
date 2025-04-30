@@ -5,12 +5,12 @@ use yii\helpers\Html;
 $this->title = 'Ranking de Usuarios';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="user-logs">
+<div class="user-logs ">
     <div class="card shadow-sm">
         <div class="card-header bg-primary text-white">
             <h3 class="card-title"><?= Html::encode($this->title) ?></h3>
         </div>
-        <div class="card-body">
+        <div class="card-body bg-light">
             <!-- Formulario de Búsqueda y Filtros -->
             <div class="filter-form mb-4">
 

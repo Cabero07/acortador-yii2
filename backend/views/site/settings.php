@@ -14,7 +14,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="card-header bg-info text-white">
             <h3 class="card-title"><i class="fas fa-cogs"></i> <?= Html::encode($this->title) ?></h3>
         </div>
-        <div class="card-body">
+        <div class="card-body bg-light">
             <?php $form = ActiveForm::begin(); ?>
 
             <div class="form-group">

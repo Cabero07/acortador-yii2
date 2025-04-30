@@ -12,7 +12,7 @@ $this->params['breadcrumbs'][] = $this->title;
         <div class="card-header bg-primary text-white">
             <h3 class="card-title"><i class="fas fa-history"></i> <?= Html::encode($this->title) ?></h3>
         </div>
-        <div class="card-body">
+        <div class="card-body bg-light">
             <!-- Formulario de Búsqueda y Filtros -->
             <div class="filter-form mb-4">
 
