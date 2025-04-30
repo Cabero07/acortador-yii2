@@ -7,6 +7,7 @@ use common\models\News;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use backend\models\NewsSearch;
 
 /**
  * NewsController implements the CRUD actions for News model.
@@ -19,11 +20,11 @@ class NewsController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => News::find(),
-        ]);
+        $searchModel = new NewsSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }

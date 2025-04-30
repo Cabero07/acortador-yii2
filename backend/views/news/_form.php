@@ -8,7 +8,7 @@ use yii\widgets\ActiveForm;
 /** @var yii\widgets\ActiveForm $form */
 ?>
 
-<div class="news-form card shadow-sm p-3">
+<div class="news-form card  bg-light shadow-sm p-3">
     <h2><i class="fas fa-edit text-primary"></i> <?= $model->isNewRecord ? 'Crear Noticia' : 'Actualizar Noticia' ?></h2>
 
     <?php $form = ActiveForm::begin(); ?>
