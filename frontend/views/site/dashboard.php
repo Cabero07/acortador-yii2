@@ -47,7 +47,7 @@ $this->title = 'Dashboard';
                             <br>
                             <small class="text-muted">Publicado en: <?= Yii::$app->formatter->asDate($latestNews->created_at) ?></small>
                         </p>
-                        <a href="#" class="btn btn-outline-info">Leer más</a>
+                        <a href="/news/index" class="btn btn-outline-info">Leer más</a>
                     <?php else: ?>
                         <p class="text-muted">No hay noticias disponibles.</p>
                     <?php endif; ?>
