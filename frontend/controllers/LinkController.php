@@ -7,6 +7,7 @@ use yii\web\Controller;
 use common\models\Link;
 use common\models\LinkStats;
 use yii\web\NotFoundHttpException;
+use common\models\User;
 
 class LinkController extends Controller
 {
@@ -45,9 +46,16 @@ class LinkController extends Controller
         // Encuentra al propietario del enlace
         $owner = $link->user; // Relación definida en el modelo Link
         if ($owner) {
-            // Incrementa el balance del propietario
-            $owner->balance += 0.0005;
-            $owner->save(false); // Guarda sin validaciones
+            // Verifica si el propietario fue referido por otro usuario
+            if ($owner->referrer_id) {
+                // Encuentra al usuario principal (el "padre")
+                $referrer = User::findOne($owner->referrer_id);
+                if ($referrer) {
+                    // Incrementa el balance del usuario principal
+                    $referrer->balance += 0.0005;
+                    $referrer->save(false); // Guarda sin validaciones
+                }
+            }
         }
 
         // Opcional: Guarda el clic en la tabla de estadísticas
