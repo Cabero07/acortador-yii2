@@ -86,14 +86,7 @@ class User extends ActiveRecord implements IdentityInterface
     public function addToBalance(float $amount): bool
     {
         $this->balance += $amount;
-        Yii::debug("Intentando guardar balance: {$this->balance}", __METHOD__);
-        if ($this->save(false, ['balance'])) {
-            Yii::debug("Balance guardado correctamente: {$this->balance}", __METHOD__);
-            return true;
-        } else {
-            Yii::error("Error al guardar el balance: " . json_encode($this->getErrors()), __METHOD__);
-            return false;
-        }
+        return $this->save(false, ['balance']);
     }
     /**
      * Atributo virtual para obtener el total de clics del usuario.

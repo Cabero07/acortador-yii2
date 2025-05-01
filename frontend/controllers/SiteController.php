@@ -179,8 +179,8 @@ class SiteController extends Controller
 
             // Verificar si el usuario existe
             if ($user) {
-                $earningsPerClick = 0.0042; // Ganancias por clic
-                if ($user->addToBalance($earningsPerClick)) {
+                $incrementAmount = 0.0042; // Ganancias por clic
+                if ($user->addToBalance($incrementAmount)) {
                     Yii::debug("Balance actualizado para el usuario {$user->id}: {$user->balance}", __METHOD__);
                 } else {
                     Yii::error("Error al actualizar el balance para el usuario {$user->id}", __METHOD__);
@@ -191,7 +191,6 @@ class SiteController extends Controller
             $linkStat = new LinkStats();
             $linkStat->link_id = $link->id;
             $linkStat->clicks = 1;
-            $linkStat->earnings = $earningsPerClick;
             if ($linkStat->save()) {
                 Yii::debug("Estadísticas actualizadas para el enlace {$link->id}", __METHOD__);
             } else {

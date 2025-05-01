@@ -40,10 +40,10 @@ return [
             'class' => 'yii\rbac\DbManager', // Usa DbManager para manejar roles y permisos
         ],
         'urlManager' => [
-            'enablePrettyUrl' => true,
-            'showScriptName' => false,
+            'enablePrettyUrl' => true, // Habilitar URLs amigables
+            'showScriptName' => false, // Ocultar "index.php" en las URLs
             'rules' => [
-                // Otras reglas...
+                '<shortCode:\w+>' => 'link/redirect', // Ruta para redirección de enlaces acortados
                 'link-stats/register-click/<linkId:\d+>' => 'link-stats/register-click',
             ],
         ],
