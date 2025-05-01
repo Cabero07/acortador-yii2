@@ -114,7 +114,10 @@ class SiteController extends Controller
 
         return $this->goHome();
     }
-
+    public function actionSupport()
+    {
+        return $this->render('support');
+    }
     /**
      * Displays about page.
      *

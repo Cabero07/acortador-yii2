@@ -37,7 +37,6 @@ AppAsset::register($this);
         ]);
         $menuItems = [
             ['label' => 'Inicio', 'url' => ['/site/index']],
-            ['label' => 'Noticias', 'url' => ['/news/index']],
             ['label' => 'Gestión de enlaces', 'url' => ['/site/links']],
             ['label' => 'Ranking', 'url' => ['/site/ranking']],
             ['label' => 'Panel de Control', 'url' => ['/site/dashboard']],
@@ -51,12 +50,28 @@ AppAsset::register($this);
             echo Html::tag('div', Html::a('Crear Cuenta', ['/site/signup'], ['class' => ['btn btn-link login text-decoration-none']]), ['class' => ['d-flex']]);
             echo Html::tag('div', Html::a('Acceder', ['/site/login'], ['class' => ['btn btn-link login text-decoration-none']]), ['class' => ['d-flex']]);
         } else {
-            echo Html::beginForm(['/site/logout'], 'post', ['class' => 'd-flex'])
-                . Html::submitButton(
-                    'Salir (' . Yii::$app->user->identity->username . ')',
-                    ['class' => 'btn btn-link logout text-decoration-none']
-                )
-                . Html::endForm();
+            echo Html::beginTag('div', ['class' => 'dropdown']);
+            echo Html::button(
+                'Usuario (' . Yii::$app->user->identity->username . ') <span class="caret"></span>',
+                [
+                    'class' => 'btn btn-secondary dropdown-toggle',
+                    'type' => 'button',
+                    'id' => 'userMenu',
+                    'data-bs-toggle' => 'dropdown',
+                    'aria-expanded' => 'false',
+                ]
+            );
+            echo Html::beginTag('ul', ['class' => 'dropdown-menu', 'aria-labelledby' => 'userMenu']);
+            echo Html::tag('li', Html::a('Perfil', ['/site/profile'], ['class' => 'dropdown-item']));
+            echo Html::tag('li', Html::a('Noticias', ['/news/index'], ['class' => 'dropdown-item']));
+            echo Html::tag('li', Html::a('Configuraciones', ['/site/settings'], ['class' => 'dropdown-item']));
+            echo Html::tag('li', Html::a('Soporte', ['/site/support'], ['class' => 'dropdown-item']));
+            echo Html::tag('li', Html::a('Acerca de', ['/site/about'], ['class' => 'dropdown-item']));
+            echo Html::tag('li', Html::beginForm(['/site/logout'], 'post', ['class' => 'bg-danger'])
+                . Html::submitButton('Salir', ['class' => 'dropdown-item'])
+                . Html::endForm());
+            echo Html::endTag('ul');
+            echo Html::endTag('div');
         }
         NavBar::end();
         ?>
@@ -74,7 +89,7 @@ AppAsset::register($this);
 
     <footer class="footer mt-auto bg-dark text-light py-3">
         <div class="container">
-            <p class="float-start">Copyright &copy; <?php echo(date('Y'))?> CaberoTech</p>
+            <p class="float-start">Copyright &copy; <?php echo (date('Y')) ?> CaberoTech</p>
         </div>
     </footer>
 
