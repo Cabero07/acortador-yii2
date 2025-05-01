@@ -2,6 +2,10 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\web\View;
+use common\models\User;
+use common\models\Link;
+use common\models\LinkStats;
 
 $this->title = 'Mi Perfil';
 ?>
@@ -17,7 +21,7 @@ $this->title = 'Mi Perfil';
                 <div class="card-body">
                     <h5 class="card-title"><i class="fas fa-info-circle text-info"></i> Información del Usuario</h5>
                     <p><strong>Nombre de Usuario:</strong> <?= Html::encode(Yii::$app->user->identity->username) ?></p>
-                    <p><strong>Total de Clics:</strong> <?= Html::encode(Yii::$app->user->identity->getTotalClicks()) ?></p>
+                    <p><strong>Total de Clics:</strong> <?= Html::encode(Yii::$app->user->identity->totalClicks) ?></p>
                     <p><strong>Balance Acumulado:</strong> $<?= Html::encode(number_format(Yii::$app->user->identity->balance, 2)) ?></p>
                 </div>
             </div>

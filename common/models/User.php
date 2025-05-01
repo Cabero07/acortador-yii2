@@ -102,8 +102,8 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return LinkStats::find()
             ->joinWith('link') // Relación con la tabla 'links'
-            ->where(['link.user_id' => $this->id]) // Aquí debería ser 'links.user_id'
-            ->sum('link_stats.clicks') ?? 0; // Devuelve 0 si no hay clics
+            ->where(['links.user_id' => $this->id]) // Cambiar 'link' a 'links'
+            ->sum('link_stats.clicks') ?? 0;
     }
     public function getTotalEarnings()
     {

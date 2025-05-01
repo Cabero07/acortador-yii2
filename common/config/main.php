@@ -12,6 +12,10 @@ return [
         'authManager' => [
             'class' => 'yii\rbac\DbManager', // Usa la base de datos para almacenar roles y permisos
         ],
+        'user' => [
+            'identityClass' => 'common\models\User', // Asegúrate de que esta clase sea correcta
+            'enableAutoLogin' => true,
+        ],
         
     ],
 ];

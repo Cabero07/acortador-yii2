@@ -288,28 +288,6 @@ class SiteController extends Controller
             'users' => $users,
         ]);
     }
-    public function actionDashboard()
-    {
-        $userId = Yii::$app->user->id; // Obtener ID del usuario autenticado
-
-        // Calcular clics filtrados por usuario
-        $totalClicks = LinkStats::find()
-            ->joinWith('link') // Relación con la tabla 'links'
-            ->where(['links.user_id' => $userId]) // Filtrar por el usuario actual
-            ->sum('clicks') ?? 0;
-
-        // Obtener el balance directamente del usuario autenticado
-        $userBalance = Yii::$app->user->identity->balance ?? 0.00;
-
-        // Obtener la última noticia creada
-        $latestNews = News::find()->orderBy(['created_at' => SORT_DESC])->one();
-
-        return $this->render('dashboard', [
-            'totalClicks' => $totalClicks,
-            'totalEarnings' => round($userBalance, 2), // Usar el balance acumulado del usuario
-            'latestNews' => $latestNews,
-        ]);
-    }
     public function actionLinks()
     {
         $userId = Yii::$app->user->id;
