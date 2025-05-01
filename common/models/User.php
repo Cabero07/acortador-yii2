@@ -135,7 +135,21 @@ class User extends ActiveRecord implements IdentityInterface
 
         return null; // No permitir la autenticación si no es admin
     }
+    /**
+     * Relación para obtener el usuario que refirió al actual.
+     */
+    public function getReferrer()
+    {
+        return $this->hasOne(User::class, ['id' => 'referrer_id']);
+    }
 
+    /**
+     * Relación para obtener los usuarios referidos por el actual.
+     */
+    public function getReferrals()
+    {
+        return $this->hasMany(User::class, ['referrer_id' => 'id']);
+    }
     /**
      * Finds user by username
      *
