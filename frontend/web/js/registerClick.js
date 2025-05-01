@@ -1,8 +1,9 @@
-function registerClick(linkId) {
-    fetch(`/link-stats/register-click/${linkId}`, {
+function registerClick(shortCode) {
+    fetch(`/link/register-click?shortCode=${shortCode}`, {
         method: 'POST',
         headers: {
             'X-CSRF-Token': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'Content-Type': 'application/json',
         },
     })
         .then(response => response.json())

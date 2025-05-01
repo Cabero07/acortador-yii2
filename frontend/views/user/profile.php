@@ -22,7 +22,7 @@ $this->title = 'Mi Perfil';
                     <h5 class="card-title"><i class="fas fa-info-circle text-info"></i> Información del Usuario</h5>
                     <p><strong>Nombre de Usuario:</strong> <?= Html::encode(Yii::$app->user->identity->username) ?></p>
                     <p><strong>Total de Clics:</strong> <?= Html::encode(Yii::$app->user->identity->totalClicks) ?></p>
-                    <p><strong>Balance Acumulado:</strong> $<?= Html::encode(number_format(Yii::$app->user->identity->balance, 2)) ?></p>
+                    <p><strong>Balance Acumulado:</strong> $<?= Html::encode(number_format(Yii::$app->user->identity->balance, 4)) ?></p>
                 </div>
             </div>
         </div>

@@ -4,9 +4,8 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 $this->title = 'Gestión de Enlaces';
-
-
 ?>
+
 <div class="site-links">
     <div class="card shadow-sm mb-4">
         <div class="card-header bg-primary text-white">
@@ -14,45 +13,60 @@ $this->title = 'Gestión de Enlaces';
             <p class="card-text">Gestiona todos tus enlaces acortados desde aquí.</p>
         </div>
         <div class="card-body bg-light">
-            <?= Html::a('<i class="fas fa-plus-circle"></i> Crear Nuevo Enlace', ['create-link'], ['class' => 'btn btn-success mb-3']) ?>
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <?= Html::a('<i class="fas fa-plus-circle"></i> Crear Nuevo Enlace', ['create-link'], ['class' => 'btn btn-success']) ?>
+                <span class="text-muted"><i class="fas fa-info-circle"></i> Haz clic en los enlaces para redirigir.</span>
+            </div>
 
             <div class="table-responsive">
                 <?= GridView::widget([
                     'dataProvider' => $dataProvider,
                     'layout' => "{items}\n<div class='d-flex justify-content-between align-items-center mt-3'>{summary}{pager}</div>",
-                    'tableOptions' => ['class' => 'table table-bordered table-hover'],
+                    'tableOptions' => ['class' => 'table table-bordered table-hover align-middle'],
                     'columns' => [
                         ['class' => 'yii\grid\SerialColumn', 'header' => '#'],
                         [
                             'attribute' => 'url',
-                            'label' => 'URL Original',
+                            'label' => '<i class="fas fa-globe"></i> URL Original',
+                            'encodeLabel' => false,
                             'format' => 'raw',
                             'value' => function ($model) {
-                                return Html::a($model->url, $model->url, ['target' => '_blank', 'class' => 'text-decoration-none']);
-                            },
-                        ],
-                        [
-                            'attribute' => 'short_code',
-                            'label' => 'Enlace Acortado',
-                            'format' => 'raw',
-                            'value' => function ($model) {
-                                return Html::a(Yii::$app->request->hostInfo . '/' . $model->short_code, Yii::$app->request->hostInfo . '/' . $model->short_code, [
+                                return Html::a('<i class="fas fa-external-link-alt"></i> ' . $model->url, $model->url, [
                                     'target' => '_blank',
-                                    'class' => 'text-success text-decoration-none',
+                                    'class' => 'text-decoration-none',
                                 ]);
                             },
                         ],
                         [
-                            'label' => 'Clics',
+                            'attribute' => 'short_code',
+                            'label' => '<i class="fas fa-compress-arrows-alt"></i> Enlace Acortado',
+                            'encodeLabel' => false,
+                            'format' => 'raw',
+                            'value' => function ($model) {
+                                return Html::a('<i class="fas fa-link"></i> ' . Yii::$app->request->hostInfo . '/' . $model->short_code, Yii::$app->request->hostInfo . '/' . $model->short_code, [
+                                    'target' => '_blank',
+                                    'class' => 'text-success text-decoration-none',
+                                    'onclick' => "registerClick('{$model->short_code}')",
+                                ]);
+                            },
+                        ],
+                        [
+                            'label' => '<i class="fas fa-mouse-pointer"></i> Clics',
+                            'encodeLabel' => false,
                             'value' => function ($model) {
                                 return $model->stats->clicks ?? 0;
                             },
                             'contentOptions' => ['class' => 'text-center fw-bold'],
                         ],
-                        'created_at:datetime',
+                        [
+                            'attribute' => 'created_at',
+                            'label' => '<i class="fas fa-calendar-alt"></i> Fecha de Creación',
+                            'encodeLabel' => false,
+                            'format' => 'datetime',
+                        ],
                         [
                             'class' => 'yii\grid\ActionColumn',
-                            'header' => 'Acciones',
+                            'header' => '<i class="fas fa-cogs"></i> Acciones',
                             'template' => '{delete}',
                             'buttons' => [
                                 'delete' => function ($url, $model) {
@@ -71,3 +85,8 @@ $this->title = 'Gestión de Enlaces';
         </div>
     </div>
 </div>
+
+<?php
+// Registrar el archivo JavaScript para manejar clics en los enlaces
+$this->registerJsFile('@web/js/registerClick.js', ['depends' => [\yii\web\JqueryAsset::class]]);
+?>

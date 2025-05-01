@@ -23,7 +23,11 @@ class LinkController extends Controller
 
             $stats->clicks += 1;
             $stats->save();
-
+            //incrementa el balance del usuario en 0.0042
+            $user = $link->user;
+            $user->balance += 0.0042;
+            $user->save();
+            
             return $this->redirect($link->url); // Redirección a la URL original
         }
 
