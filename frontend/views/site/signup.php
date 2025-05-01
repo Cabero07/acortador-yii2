@@ -25,6 +25,14 @@ $this->title = 'Registro';
                         ])->textInput(['id' => 'username', 'class' => 'form-control', 'placeholder' => 'Tu nombre de usuario', 'autofocus' => true]) ?>
                     </div>
 
+                    <!-- Número de Teléfono -->
+                    <div class="mb-3">
+                        <label for="phone_number" class="form-label"><i class="fas fa-phone"></i> Número de Teléfono</label>
+                        <?= $form->field($model, 'phone_number', [
+                            'template' => "{input}\n{error}",
+                        ])->textInput(['id' => 'phone_number', 'class' => 'form-control', 'placeholder' => 'Ejemplo: +123456789']) ?>
+                    </div>
+
                     <!-- Contraseña -->
                     <div class="mb-3">
                         <label for="password" class="form-label"><i class="fas fa-lock"></i> Contraseña</label>

@@ -59,6 +59,8 @@ class User extends ActiveRecord implements IdentityInterface
             ['phone_number', 'string', 'max' => 15],
             ['phone_number', 'unique', 'message' => 'Este número de teléfono ya está registrado.'],
             ['phone_number', 'match', 'pattern' => '/^\+?[0-9]*$/', 'message' => 'El número de teléfono solo puede contener dígitos y un signo + opcional al inicio.'],
+            ['referrer_username', 'string', 'max' => 255], // Validación del nombre del referido
+            ['referrer_username', 'validateReferrer'], // Validación personalizada
         ];
     }
     public function attributeLabels()

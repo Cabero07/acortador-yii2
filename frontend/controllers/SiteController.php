@@ -134,18 +134,22 @@ class SiteController extends Controller
      * @return mixed
      */
     public function actionSignup()
-    {
-        $model = new SignupForm();
+{
+    $model = new SignupForm();
 
-        if ($model->load(Yii::$app->request->post()) && $model->signup()) {
-            Yii::$app->session->setFlash('success', '¡Gracias por registrarte! Ahora debes esperar a que un administrador active la cuenta.');
-            return $this->goHome();
+    if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+        if ($user = $model->signup()) {
+            Yii::$app->session->setFlash('success', '¡Registro exitoso!');
+            return $this->redirect(['login']);
+        } else {
+            Yii::$app->session->setFlash('error', 'Hubo un problema al crear tu cuenta. Inténtalo de nuevo.');
         }
-
-        return $this->render('signup', [
-            'model' => $model,
-        ]);
     }
+
+    return $this->render('signup', [
+        'model' => $model,
+    ]);
+}
 
     /**
      * Requests password reset.
@@ -169,7 +173,15 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
-
+    public function validateReferrer($attribute, $params)
+    {
+        if (!empty($this->referrer_username)) {
+            $referrer = User::findOne(['username' => $this->referrer_username]);
+            if (!$referrer) {
+                $this->addError($attribute, 'El usuario referido no existe.');
+            }
+        }
+    }
     /**
      * Resets password.
      *
