@@ -23,8 +23,8 @@ $this->title = 'Ranking de Usuarios';
                 </thead>
                 <tbody>
                     <?php foreach ($users as $index => $user): ?>
-                        <tr class="<?= $index === 0 ? 'bg-warning' : ($index === 1 ? 'bg-light text-dark' : ($index === 2 ? 'bg-danger text-white' : '')) ?>">
-                            <td><strong>#<?= $index + 1 ?></strong></td>
+                        <tr >
+                            <td class="<?= $index === 0 ? 'bg-warning' : ($index === 1 ? 'bg-orange text-dark' : ($index === 2 ? 'bg-danger text-white' : '')) ?>"><strong>#<?= $index + 1 ?></strong></td>
                             <td><?= Html::encode($user['username']) ?></td>
                             <td class="text-center fw-bold"><?= $user['total_clicks'] ?? 0 ?></td>
                         </tr>

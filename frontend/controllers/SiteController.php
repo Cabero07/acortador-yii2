@@ -169,40 +169,7 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
-    public function actionClick($shortCode)
-    {
-        // Buscar el enlace por su código corto
-        $link = Link::findOne(['short_code' => $shortCode]);
 
-        if ($link) {
-            $user = $link->user;
-
-            // Verificar si el usuario existe
-            if ($user) {
-                $incrementAmount = 0.0042; // Ganancias por clic
-                if ($user->addToBalance($incrementAmount)) {
-                    Yii::debug("Balance actualizado para el usuario {$user->id}: {$user->balance}", __METHOD__);
-                } else {
-                    Yii::error("Error al actualizar el balance para el usuario {$user->id}", __METHOD__);
-                }
-            }
-
-            // Registrar el clic en las estadísticas
-            $linkStat = new LinkStats();
-            $linkStat->link_id = $link->id;
-            $linkStat->clicks = 1;
-            if ($linkStat->save()) {
-                Yii::debug("Estadísticas actualizadas para el enlace {$link->id}", __METHOD__);
-            } else {
-                Yii::error("Error al guardar estadísticas para el enlace {$link->id}: " . json_encode($linkStat->getErrors()), __METHOD__);
-            }
-
-            // Redirigir al enlace original
-            return $this->redirect($link->url);
-        }
-
-        throw new NotFoundHttpException('El enlace no existe.');
-    }
     /**
      * Resets password.
      *

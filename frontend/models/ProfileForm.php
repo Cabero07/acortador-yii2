@@ -21,7 +21,7 @@ class ProfileForm extends Model
             [['email', 'phone_number'], 'required'],
             ['email', 'email', 'message' => 'El correo no es válido.'],
             ['phone_number', 'string', 'max' => 15],
-            ['phone_number', 'match', 'pattern' => '/^\+?[0-9]*$/', 'message' => 'El número de teléfono solo puede contener dígitos y un signo + opcional al inicio.'],
+            ['phone_number', 'match', 'pattern' => '/^\+?[0-9]*$/', 'message' => 'El número de teléfono solo puede contener dígitos y un signo + opcional al inicio, no deje espacios de por medio.'],
         ];
     }
 
