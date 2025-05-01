@@ -67,9 +67,9 @@ class User extends ActiveRecord implements IdentityInterface
             'phone_number' => 'Número de Teléfono',
         ];
     }
-    public function getLinks()
+    public function getLink()
     {
-        return $this->hasMany(Link::class, ['user_id' => 'id']);
+        return $this->hasOne(Link::class, ['id' => 'link_id']); // Relaciona link_id con la tabla links
     }
 
     public function getLinkStats()
@@ -101,8 +101,8 @@ class User extends ActiveRecord implements IdentityInterface
     public function getTotalClicks()
     {
         return LinkStats::find()
-            ->joinWith('link')
-            ->where(['link.user_id' => $this->id])
+            ->joinWith('link') // Relación con la tabla 'links'
+            ->where(['link.user_id' => $this->id]) // Aquí debería ser 'links.user_id'
             ->sum('link_stats.clicks') ?? 0; // Devuelve 0 si no hay clics
     }
     public function getTotalEarnings()
