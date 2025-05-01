@@ -52,10 +52,10 @@ $this->params['breadcrumbs'][] = $this->title;
             <table class="table table-hover table-striped">
                 <thead class="bg-secondary text-white">
                     <tr>
-                        <th><i class="fas fa-hashtag"></i> ID</th>
                         <th><i class="fas fa-user"></i> Nombre de Usuario</th>
                         <th><i class="fas fa-envelope"></i> Correo Electrónico</th>
                         <th><i class="fas fa-dollar-sign"></i> Ganancia Total</th>
+                        <th><i class="fas fa-phone"></i> Número </th>
                         <th><i class="fas fa-toggle-on"></i> Estado</th>
                         <th><i class="fas fa-user-tag"></i> Rol</th>
                         <th><i class="fas fa-tools"></i> Acciones</th>
@@ -64,10 +64,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 <tbody>
                     <?php foreach ($users as $user): ?>
                         <tr>
-                            <td><?= $user->id ?></td>
                             <td><?= Html::encode($user->username) ?></td>
                             <td><?= Html::encode($user->email) ?></td>
                             <td><?= Html::encode($user->balance) ?></td>
+                            <td><?= Html::encode($user->phone_number) ?></td>
                             <td>
                                 <?= $user->status
                                     ? '<span class="badge bg-success">Habilitado</span>'

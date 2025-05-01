@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 $this->title = 'Gestión de Enlaces';
-$this->params['breadcrumbs'][] = $this->title;
+
 
 ?>
 <div class="site-links">

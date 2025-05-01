@@ -1,0 +1,34 @@
+<?php
+
+namespace frontend\controllers;
+
+use Yii;
+use yii\web\Controller;
+use frontend\models\ProfileForm;
+
+class UserController extends Controller
+{
+    public function actionProfile()
+    {
+        $model = new ProfileForm();
+        $user = Yii::$app->user->identity;
+
+        // Precargar valores actuales
+        $model->email = $user->email;
+        $model->phone_number = $user->phone_number;
+
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($model->saveProfile()) {
+                Yii::$app->session->setFlash('success', 'Tu perfil ha sido actualizado correctamente.');
+            } else {
+                Yii::$app->session->setFlash('error', 'Ocurrió un error al actualizar tu perfil.');
+            }
+
+            return $this->refresh();
+        }
+
+        return $this->render('profile', [
+            'model' => $model,
+        ]);
+    }
+}

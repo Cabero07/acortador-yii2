@@ -12,37 +12,22 @@ use common\models\User;
 class SignupForm extends Model
 {
     public $username;
-    public $email;
+    public $phone_number;
     public $password;
 
-
-    /**
-     * {@inheritdoc}
-     */
     public function rules()
     {
         return [
-            ['username', 'trim'],
-            ['username', 'required'],
-            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This username has already been taken.'],
-            ['username', 'string', 'min' => 2, 'max' => 255],
-
-            ['email', 'trim'],
-            ['email', 'required'],
-            ['email', 'email'],
-            ['email', 'string', 'max' => 255],
-            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'This email address has already been taken.'],
-
-            ['password', 'required'],
-            ['password', 'string', 'min' => Yii::$app->params['user.passwordMinLength']],
+            [['username', 'phone_number', 'password'], 'required'],
+            ['username', 'string', 'min' => 3, 'max' => 20],
+            ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este nombre de usuario ya está registrado.'],
+            ['phone_number', 'string', 'max' => 15],
+            ['phone_number', 'match', 'pattern' => '/^\+?[0-9]*$/', 'message' => 'El número de teléfono solo puede contener dígitos y un signo + opcional al inicio, no deje espacios de por medio.'],
+            ['phone_number', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este número de teléfono ya está registrado.'],
+            ['password', 'string', 'min' => 6],
         ];
     }
 
-    /**
-     * Signs user up.
-     *
-     * @return bool whether the creating new account was successful and email was sent
-     */
     public function signup()
     {
         if (!$this->validate()) {
@@ -51,7 +36,7 @@ class SignupForm extends Model
 
         $user = new User();
         $user->username = $this->username;
-        $user->email = $this->email;
+        $user->phone_number = $this->phone_number;
         $user->setPassword($this->password);
         $user->generateAuthKey();
         $user->status = 0; // Asegurarse de que el estado sea inactivo por defecto
@@ -67,24 +52,5 @@ class SignupForm extends Model
         }
 
         return null;
-    }
-
-    /**
-     * Sends confirmation email to user
-     * @param User $user user model to with email should be send
-     * @return bool whether the email was sent
-     */
-    protected function sendEmail($user)
-    {
-        return Yii::$app
-            ->mailer
-            ->compose(
-                ['html' => 'emailVerify-html', 'text' => 'emailVerify-text'],
-                ['user' => $user]
-            )
-            ->setFrom([Yii::$app->params['supportEmail'] => Yii::$app->name . ' robot'])
-            ->setTo($this->email)
-            ->setSubject('Account registration at ' . Yii::$app->name)
-            ->send();
     }
 }

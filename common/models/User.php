@@ -55,6 +55,16 @@ class User extends ActiveRecord implements IdentityInterface
         return [
             ['status', 'default', 'value' => self::STATUS_INACTIVE],
             ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_INACTIVE, self::STATUS_DELETED]],
+            ['phone_number', 'required'],
+            ['phone_number', 'string', 'max' => 15],
+            ['phone_number', 'unique', 'message' => 'Este número de teléfono ya está registrado.'],
+            ['phone_number', 'match', 'pattern' => '/^\+?[0-9]*$/', 'message' => 'El número de teléfono solo puede contener dígitos y un signo + opcional al inicio.'],
+        ];
+    }
+    public function attributeLabels()
+    {
+        return [
+            'phone_number' => 'Número de Teléfono',
         ];
     }
     public function getLinks()

@@ -67,6 +67,15 @@ class UserController extends Controller
         } else {
             Yii::$app->session->setFlash('error', 'No se pudo cambiar el rol del usuario.');
         }
+        $log = new UserLog([
+            'user_id' => $user->id,
+            'action' => $roleName ? "Rol cambiado a {$roleName} " : '',
+            'performed_by' => Yii::$app->user->id,
+        ]);
+
+        if (!$log->save()) {
+            Yii::error('Error al guardar el log: ' . json_encode($log->errors), __METHOD__);
+        }
 
         return $this->redirect(['manage']);
     }

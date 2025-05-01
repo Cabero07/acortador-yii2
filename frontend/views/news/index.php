@@ -7,7 +7,6 @@ use yii\widgets\ListView;
 /** @var yii\data\ActiveDataProvider $dataProvider */
 
 $this->title = 'Noticias';
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="news-index">
     <h1><i class="fas fa-newspaper text-primary"></i> <?= Html::encode($this->title) ?></h1>

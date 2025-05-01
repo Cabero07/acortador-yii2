@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 $this->title = 'Ranking de Usuarios';
-$this->params['breadcrumbs'][] = $this->title;
+
 
 ?>
 <div class="ranking">
