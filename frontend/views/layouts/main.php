@@ -72,10 +72,9 @@ AppAsset::register($this);
         </div>
     </main>
 
-    <footer class="footer mt-auto py-3 text-muted">
+    <footer class="footer mt-auto bg-dark text-light py-3">
         <div class="container">
             <p class="float-start">Copyright &copy; <?php echo(date('Y'))?> CaberoTech</p>
-            <p class="float-end"><?= Yii::powered() ?></p>
         </div>
     </footer>
 
