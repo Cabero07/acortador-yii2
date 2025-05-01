@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     <tr>
                         <th><i class="fas fa-user"></i> Nombre de Usuario</th>
                         <th><i class="fas fa-envelope"></i> Correo Electrónico</th>
-                        <th><i class="fas fa-dollar-sign"></i> Ganancia Total</th>
+                        <th><i class="fas fa-dollar-sign"></i> Balance </th>
                         <th><i class="fas fa-phone"></i> Número </th>
                         <th><i class="fas fa-toggle-on"></i> Estado</th>
                         <th><i class="fas fa-user-tag"></i> Rol</th>
