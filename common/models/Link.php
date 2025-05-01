@@ -38,4 +38,5 @@ class Link extends ActiveRecord
     {
         return $this->hasOne(LinkStats::class, ['link_id' => 'id']);
     }
+    
 }

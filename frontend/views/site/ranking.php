@@ -24,9 +24,9 @@ $this->title = 'Ranking de Usuarios';
                 <tbody>
                     <?php foreach ($users as $index => $user): ?>
                         <tr >
-                            <td class="<?= $index === 0 ? 'bg-warning' : ($index === 1 ? 'bg-orange text-dark' : ($index === 2 ? 'bg-danger text-white' : '')) ?>"><strong>#<?= $index + 1 ?></strong></td>
-                            <td><?= Html::encode($user['username']) ?></td>
-                            <td class="text-center fw-bold"><?= $user['total_clicks'] ?? 0 ?></td>
+                            <td class=" fw-bold text-black <?= $index === 0 ? 'bg-warning' : ($index === 1 ? 'bg-secondary' : ($index === 2 ? 'bg-danger' : '')) ?>"><strong>#<?= $index + 1 ?></strong></td>
+                            <td class="text-center fw-bold text-black <?= $index === 0 ? 'bg-warning' : ($index === 1 ? 'bg-secondary' : ($index === 2 ? 'bg-danger' : '')) ?>"><?= Html::encode($user['username']) ?></td>
+                            <td class="text-center fw-bold text-black <?= $index === 0 ? 'bg-warning' : ($index === 1 ? 'bg-secondary' : ($index === 2 ? 'bg-danger' : '')) ?>""><?= $user['total_clicks'] ?? 0 ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

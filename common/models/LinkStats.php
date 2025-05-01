@@ -37,13 +37,14 @@ class LinkStats extends ActiveRecord
         ];
     }
 
-    /**
-     * Relación con la tabla `links`.
-     *
-     * @return \yii\db\ActiveQuery
-     */
+
     public function getLink()
     {
         return $this->hasOne(Link::class, ['id' => 'link_id']);
+    }
+
+    public function getUser()
+    {
+        return $this->hasOne(User::class, ['id' => 'user_id']);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+
 namespace frontend\controllers;
 
 use Yii;
@@ -27,10 +28,31 @@ class LinkController extends Controller
             $user = $link->user;
             $user->balance += 0.0042;
             $user->save();
-            
+
             return $this->redirect($link->url); // Redirección a la URL original
         }
 
         throw new NotFoundHttpException('El enlace no existe.');
+    }
+    public function actionTrack($linkId)
+    {
+        // Encuentra el enlace por su ID
+        $link = Link::findOne($linkId);
+        if (!$link) {
+            return $this->asJson(['success' => false, 'message' => 'El enlace no existe.']);
+        }
+
+        // Encuentra al propietario del enlace
+        $owner = $link->user; // Relación definida en el modelo Link
+        if ($owner) {
+            // Incrementa el balance del propietario
+            $owner->balance += 0.0005;
+            $owner->save(false); // Guarda sin validaciones
+        }
+
+        // Opcional: Guarda el clic en la tabla de estadísticas
+        $this->registerClick($linkId);
+
+        return $this->asJson(['success' => true, 'message' => 'Clic registrado correctamente.']);
     }
 }
