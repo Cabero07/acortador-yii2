@@ -173,15 +173,6 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
-    public function validateReferrer($attribute, $params)
-    {
-        if (!empty($this->referrer_username)) {
-            $referrer = User::findOne(['username' => $this->referrer_username]);
-            if (!$referrer) {
-                $this->addError($attribute, 'El usuario referido no existe.');
-            }
-        }
-    }
     /**
      * Resets password.
      *
