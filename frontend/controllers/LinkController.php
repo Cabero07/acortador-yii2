@@ -25,42 +25,26 @@ class LinkController extends Controller
 
             $stats->clicks += 1;
             $stats->save();
-            //incrementa el balance del usuario en 0.0042
+
+            // Incrementar balance del propietario del enlace
             $user = $link->user;
-            $user->balance += 0.0042;
-            $user->save();
+            if ($user) {
+                $user->balance += 0.0042; // Ganancia por clic personal
+                $user->save(false);
+
+                // Verificar si el usuario fue referido por otro usuario
+                if ($user->referrer_id) {
+                    $referrer = User::findOne($user->referrer_id);
+                    if ($referrer) {
+                        $referrer->balance += 0.0005; // Ganancia por referencia
+                        $referrer->save(false);
+                    }
+                }
+            }
 
             return $this->redirect($link->url); // Redirección a la URL original
         }
 
         throw new NotFoundHttpException('El enlace no existe.');
-    }
-    public function actionTrack($linkId)
-    {
-        // Encuentra el enlace por su ID
-        $link = Link::findOne($linkId);
-        if (!$link) {
-            return $this->asJson(['success' => false, 'message' => 'El enlace no existe.']);
-        }
-
-        // Encuentra al propietario del enlace
-        $owner = $link->user; // Relación definida en el modelo Link
-        if ($owner) {
-            // Verifica si el propietario fue referido por otro usuario
-            if ($owner->referrer_id) {
-                // Encuentra al usuario principal (el "padre")
-                $referrer = User::findOne($owner->referrer_id);
-                if ($referrer) {
-                    // Incrementa el balance del usuario principal
-                    $referrer->balance += 0.0005;
-                    $referrer->save(false); // Guarda sin validaciones
-                }
-            }
-        }
-
-        // Opcional: Guarda el clic en la tabla de estadísticas
-        $this->registerClick($linkId);
-
-        return $this->asJson(['success' => true, 'message' => 'Clic registrado correctamente.']);
     }
 }
