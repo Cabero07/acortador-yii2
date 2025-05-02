@@ -29,14 +29,14 @@ class LinkController extends Controller
             // Incrementar balance del propietario del enlace
             $user = $link->user;
             if ($user) {
-                $user->balance += 0.0042; // Ganancia por clic personal
+                $user->balance += 0.004; // Ganancia por clic personal
                 $user->save(false);
 
                 // Verificar si el usuario fue referido por otro usuario
                 if ($user->referrer_id) {
                     $referrer = User::findOne($user->referrer_id);
                     if ($referrer) {
-                        $referrer->balance += 0.0005; // Ganancia por referencia
+                        $referrer->balance += 0.002; // Ganancia por referencia
                         $referrer->save(false);
                     }
                 }

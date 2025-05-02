@@ -65,6 +65,7 @@ AppAsset::register($this);
             echo Html::tag('li', Html::a('Noticias', ['/news/index'], ['class' => 'dropdown-item']));
             echo Html::tag('li', Html::a('Configuraciones', ['/site/settings'], ['class' => 'dropdown-item']));
             echo Html::tag('li', Html::a('Soporte', ['/site/support'], ['class' => 'dropdown-item']));
+            echo Html::tag('li', Html::a('Preguntas Frecuentes', ['/site/faq'], ['class' => 'dropdown-item']));
             echo Html::tag('li', Html::a('Acerca de', ['/site/about'], ['class' => 'dropdown-item']));
             echo Html::tag('li', Html::beginForm(['/site/logout'], 'post', ['class' => 'bg-danger'])
                 . Html::submitButton('Salir', ['class' => 'dropdown-item'])
