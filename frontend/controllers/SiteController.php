@@ -134,22 +134,23 @@ class SiteController extends Controller
      * @return mixed
      */
     public function actionSignup()
-{
-    $model = new SignupForm();
+    {
+        $model = new SignupForm();
 
-    if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-        if ($user = $model->signup()) {
-            Yii::$app->session->setFlash('success', '¡Registro exitoso!');
-            return $this->redirect(['login']);
-        } else {
-            Yii::$app->session->setFlash('error', 'Hubo un problema al crear tu cuenta. Inténtalo de nuevo.');
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            if ($user = $model->signup()) {
+                Yii::$app->session->setFlash('success', '¡Registro exitoso!');
+                return $this->redirect(['login']);
+            } else {
+                Yii::$app->session->setFlash('error', 'Hubo un problema al crear tu cuenta. Inténtalo de nuevo.');
+            }
         }
+
+        return $this->render('signup', [
+            'model' => $model,
+        ]);
     }
 
-    return $this->render('signup', [
-        'model' => $model,
-    ]);
-}
 
     /**
      * Requests password reset.

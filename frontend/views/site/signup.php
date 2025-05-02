@@ -22,7 +22,15 @@ $this->title = 'Registro';
                         <label for="username" class="form-label"><i class="fas fa-user"></i> Nombre de Usuario</label>
                         <?= $form->field($model, 'username', [
                             'template' => "{input}\n{error}",
-                        ])->textInput(['id' => 'username', 'class' => 'form-control', 'placeholder' => 'Tu nombre de usuario', 'autofocus' => true]) ?>
+                        ])->textInput(['id' => 'username', 'class' => 'form-control', 'placeholder' => '', 'autofocus' => true]) ?>
+                    </div>
+
+                    <!-- Correo Electrónico -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label"><i class="fas fa-envelope"></i> Correo Electrónico</label>
+                        <?= $form->field($model, 'email', [
+                            'template' => "{input}\n{error}",
+                        ])->textInput(['id' => 'email', 'class' => 'form-control', 'placeholder' => '']) ?>
                     </div>
 
                     <!-- Número de Teléfono -->

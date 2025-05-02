@@ -12,15 +12,20 @@ use common\models\User;
 class SignupForm extends Model
 {
     public $username;
+    public $email;
     public $phone_number;
     public $password;
     public $referrer_username; // Campo para el nombre de usuario del referido
     public function rules()
     {
         return [
-            [['username', 'phone_number', 'password'], 'required'],
+            [['username', 'email', 'phone_number', 'password'], 'required'],
             ['username', 'string', 'min' => 3, 'max' => 20],
             ['username', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este nombre de usuario ya está registrado.'],
+            ['email', 'email'],
+            ['email', 'string', 'max' => 255],
+            ['email', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este correo electrónico ya está registrado.'],
+            ['phone_number', 'required'],
             ['phone_number', 'string', 'max' => 15],
             ['phone_number', 'match', 'pattern' => '/^\+?[0-9]*$/', 'message' => 'El número de teléfono solo puede contener dígitos y un signo + opcional al inicio, no deje espacios de por medio.'],
             ['phone_number', 'unique', 'targetClass' => '\common\models\User', 'message' => 'Este número de teléfono ya está registrado.'],
@@ -28,6 +33,7 @@ class SignupForm extends Model
             ['referrer_username', 'string', 'max' => 255], // Validación del nombre del referido
             ['referrer_username', 'validateReferrer'], // Validación personalizada
         ];
+
     }
     /**
      * Validar que el usuario referido exista
@@ -49,6 +55,7 @@ class SignupForm extends Model
 
         $user = new User();
         $user->username = $this->username;
+        $user->email = $this->email;
         $user->phone_number = $this->phone_number;
         $user->setPassword($this->password);
         $user->generateAuthKey();
