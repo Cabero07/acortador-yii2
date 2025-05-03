@@ -15,7 +15,12 @@ class LinkController extends Controller
     public function actionRedirect($shortCode)
     {
         $link = Link::findOne(['short_code' => $shortCode]);
+        if (!$link -> is_active) {
+            // Si el enlace no está activo, redirigir a una página de error o mostrar un mensaje
+            throw new NotFoundHttpException('El enlace no existe.');
+        }
 
+        
         if ($link) {
             // Incrementar estadísticas
             $stats = LinkStats::findOne(['link_id' => $link->id]);

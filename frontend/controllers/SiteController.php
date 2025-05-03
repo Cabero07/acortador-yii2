@@ -232,7 +232,6 @@ class SiteController extends Controller
                     $log->amount = -$amount;
                     $log->balance_after = $user->balance;
                     $log->performed_by = $userId;
-                    $log->created_at = date('Y-m-d H:i:s');
                     $log->save(false);
 
                     Yii::$app->session->setFlash('success', 'Retiro realizado exitosamente.');
@@ -397,9 +396,12 @@ class SiteController extends Controller
             }
             // Validar el modelo
             if ($model->validate()) {
+                // Desactivar el enlace.
+                $model->is_active = 0;
                 // Guardar el enlace en la base de datos
                 $model->save();
                 Yii::$app->session->setFlash('success', 'Enlace acortado creado exitosamente.');
+                
                 return $this->redirect(['site/links']);
             } else {
                 Yii::$app->session->setFlash('error', 'Hubo un problema al guardar tu enlace.');
