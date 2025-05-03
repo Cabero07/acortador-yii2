@@ -47,6 +47,7 @@ return [
                 'link-stats/register-click/<linkId:\d+>' => 'link-stats/register-click',
                 'user/changePassword' => 'user/change-password', // Ruta para cambiar contraseña
                 'user/profile' => 'user/profile', // Ruta para el perfil
+                'site/linkStats' => 'site/link-stats',
             ],
         ],
         'formatter' => [

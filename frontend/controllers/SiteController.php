@@ -190,6 +190,17 @@ class SiteController extends Controller
             'userId' => $userId,
         ]);
     }
+    public function actionLinkStats()
+    {
+        $userId = Yii::$app->user->id;
+
+        // Obtener estadísticas agrupadas por día
+        $stats = (new LinkStats())->getClicksGroupedByDay($userId);
+
+        return $this->render('linkStats', [
+            'stats' => $stats,
+        ]);
+    }
     public function actionWithdrawn()
     {
         $userId = Yii::$app->user->id;

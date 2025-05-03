@@ -18,6 +18,10 @@ AppAsset::register($this);
 
 <head>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <?php
+    $this->registerJsFile('https://cdn.jsdelivr.net/npm/chart.js', ['position' => \yii\web\View::POS_END]);
+    $this->registerJsFile('https://cdn.jsdelivr.net/npm/moment', ['position' => \yii\web\View::POS_END]);
+    ?>
     <meta charset="<?= Yii::$app->charset ?>">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <?php $this->registerCsrfMetaTags() ?>
@@ -38,6 +42,7 @@ AppAsset::register($this);
         $menuItems = [
             ['label' => 'Inicio', 'url' => ['/site/index']],
             ['label' => 'Gestión de enlaces', 'url' => ['/site/links']],
+            ['label' => 'Estadisticas diarias', 'url' => ['/site/linkStats']],
             ['label' => 'Ranking', 'url' => ['/site/ranking']],
         ];
 

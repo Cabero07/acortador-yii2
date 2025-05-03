@@ -37,7 +37,18 @@ class LinkStats extends ActiveRecord
         ];
     }
 
-
+    public function getClicksGroupedByDay($userId)
+    {
+        return self::find()
+            ->alias('ls')
+            ->select(['DATE(ls.created_at) as day', 'SUM(ls.clicks) as total_clicks', 'l.id as link_id', 'l.url as link_url'])
+            ->leftJoin('links l', 'l.id = ls.link_id')
+            ->where(['l.user_id' => $userId])
+            ->groupBy(['DATE(ls.created_at)', 'l.id'])
+            ->orderBy(['day' => SORT_DESC])
+            ->asArray()
+            ->all();
+    }
     public function getLink()
     {
         return $this->hasOne(Link::class, ['id' => 'link_id']);
