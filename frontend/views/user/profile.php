@@ -59,8 +59,6 @@ $this->title = 'Mi Perfil';
         </div>
     </div>
 
-    
-
     <!-- Sección de Referidos -->
     <div class="row">
         <div class="col-lg-12">

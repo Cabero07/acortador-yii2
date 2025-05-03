@@ -3,18 +3,16 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
-
-$this->title = 'Mi Perfil';
+$this->title = 'Cambiar Contraseña';
 ?>
-<div class="user-profile mt-5">
-    <h1 class="text-center text-primary"><i class="fas fa-user-circle"></i> <?= Html::encode($this->title) ?></h1>
-    <p class="text-center text-secondary">Gestiona la información de tu cuenta</p>
+<div class="change-password mt-5">
+    <h1 class="text-center text-danger"><i class="fas fa-key"></i> <?= Html::encode($this->title) ?></h1>
+    <p class="text-center text-secondary">Actualiza la contraseña de tu cuenta</p>
 
     <div class="row justify-content-center">
         <div class="col-lg-6">
             <div class="card shadow-lg mb-4">
                 <div class="card-body">
-                    <h5 class="card-title"><i class="fas fa-key text-danger"></i> Cambiar Contraseña</h5>
                     <?php $form = ActiveForm::begin(['id' => 'form-change-password']); ?>
 
                     <!-- Campo para contraseña actual -->

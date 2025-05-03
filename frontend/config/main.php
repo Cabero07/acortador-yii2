@@ -45,6 +45,8 @@ return [
             'rules' => [
                 '<shortCode:\w+>' => 'link/redirect', // Ruta para redirección de enlaces acortados
                 'link-stats/register-click/<linkId:\d+>' => 'link-stats/register-click',
+                'user/changePassword' => 'user/change-password', // Ruta para cambiar contraseña
+                'user/profile' => 'user/profile', // Ruta para el perfil
             ],
         ],
         'formatter' => [

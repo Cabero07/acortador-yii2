@@ -36,13 +36,12 @@ class UserController extends Controller
     }
     public function actionChangePassword()
     {
-        // Modelo para cambiar contraseña
         $passwordModel = new PasswordChangeForm();
 
         if (Yii::$app->request->isPost) {
-
             if ($passwordModel->load(Yii::$app->request->post()) && $passwordModel->validate() && $passwordModel->changePassword()) {
                 Yii::$app->session->setFlash('success', 'Contraseña cambiada exitosamente.');
+                return $this->redirect(['profile']);
             }
         }
 
