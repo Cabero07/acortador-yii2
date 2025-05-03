@@ -36,7 +36,7 @@ AppAsset::register($this);
         <?php
         NavBar::begin([
             'options' => [
-                'class' => 'navbar navbar-expand-md navbar-dark bg-dark fixed-top',
+                'class' => 'navbar navbar-expand-md navbar-dark bg-dark ',
             ],
         ]);
         $menuItems = [
