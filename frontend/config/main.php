@@ -47,6 +47,15 @@ return [
                 'link-stats/register-click/<linkId:\d+>' => 'link-stats/register-click',
             ],
         ],
+        'formatter' => [
+            'class' => 'yii\i18n\Formatter',
+            'decimalSeparator' => '.',
+            'thousandSeparator' => ',',
+            'numberFormatterOptions' => [
+                NumberFormatter::MIN_FRACTION_DIGITS => 4,
+                NumberFormatter::MAX_FRACTION_DIGITS => 4,
+            ],
+        ],
     ],
     'params' => $params,
 ];

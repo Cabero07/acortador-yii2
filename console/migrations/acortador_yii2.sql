@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 01-05-2025 a las 04:00:58
+-- Tiempo de generación: 03-05-2025 a las 04:45:57
 -- Versión del servidor: 9.1.0
--- Versión de PHP: 8.2.26
+-- Versión de PHP: 8.4.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -129,6 +129,19 @@ CREATE TABLE IF NOT EXISTS `link_stats` (
 -- --------------------------------------------------------
 
 --
+-- Estructura de tabla para la tabla `migration`
+--
+
+DROP TABLE IF EXISTS `migration`;
+CREATE TABLE IF NOT EXISTS `migration` (
+  `version` varchar(180) COLLATE utf8mb4_general_ci NOT NULL,
+  `apply_time` int DEFAULT NULL,
+  PRIMARY KEY (`version`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Estructura de tabla para la tabla `news`
 --
 
@@ -152,14 +165,15 @@ CREATE TABLE IF NOT EXISTS `news` (
 DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int NOT NULL AUTO_INCREMENT,
+  `referrer_id` int DEFAULT NULL,
   `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Nombre de usuario único',
-  `email` varchar(100) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Correo electrónico único',
+  `email` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   `password_hash` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Hash de la contraseña',
   `auth_key` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Clave de autenticación para sesiones',
   `access_token` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'Token de acceso para APIs',
   `status` tinyint(1) NOT NULL DEFAULT '10',
   `created_links_count` int NOT NULL DEFAULT '0' COMMENT 'Número de enlaces creados por el usuario',
-  `balance` float NOT NULL DEFAULT '0' COMMENT 'Balance acumulado del usuario por ingresos',
+  `balance` decimal(10,4) NOT NULL DEFAULT '0.0000' COMMENT 'Balance acumulado del usuario por ingresos',
   `role` varchar(20) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'user' COMMENT 'Rol del usuario: user o admin',
   `profile_picture` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'URL de la imagen de perfil',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de creación',
@@ -168,7 +182,8 @@ CREATE TABLE IF NOT EXISTS `user` (
   `phone_number` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'Número de teléfono del usuario',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `email` (`email`),
+  KEY `fk-user-referrer_id` (`referrer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
@@ -184,9 +199,13 @@ CREATE TABLE IF NOT EXISTS `user_log` (
   `action` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
   `performed_by` int NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `amount` decimal(10,4) DEFAULT NULL COMMENT 'Monto asociado al evento',
+  `balance_after` decimal(10,4) DEFAULT NULL COMMENT 'Balance del usuario después del evento',
+  `description` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'Descripción adicional del evento',
   PRIMARY KEY (`id`),
   KEY `fk-user_log-user_id` (`user_id`),
-  KEY `fk-user_log-performed_by` (`performed_by`)
+  KEY `fk-user_log-performed_by` (`performed_by`),
+  KEY `idx-user_log-performed_by` (`performed_by`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
@@ -214,9 +233,16 @@ ALTER TABLE `news`
   ADD CONSTRAINT `news_ibfk_1` FOREIGN KEY (`created_by`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 
 --
+-- Filtros para la tabla `user`
+--
+ALTER TABLE `user`
+  ADD CONSTRAINT `fk-user-referrer_id` FOREIGN KEY (`referrer_id`) REFERENCES `user` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+--
 -- Filtros para la tabla `user_log`
 --
 ALTER TABLE `user_log`
+  ADD CONSTRAINT `fk-user_log-performed_by` FOREIGN KEY (`performed_by`) REFERENCES `user` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `user_log_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE,
   ADD CONSTRAINT `user_log_ibfk_2` FOREIGN KEY (`performed_by`) REFERENCES `user` (`id`) ON DELETE CASCADE;
 COMMIT;
