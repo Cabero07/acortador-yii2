@@ -41,9 +41,31 @@ AppAsset::register($this);
         ]);
         $menuItems = [
             ['label' => 'Inicio', 'url' => ['/site/index']],
-            ['label' => 'Gestión de enlaces', 'url' => ['/site/links']],
-            ['label' => 'Estadisticas diarias', 'url' => ['/site/linkStats']],
+            // Dropdown: Links
+            [
+                'label' => '<i class="fas fa-link"></i> Links',
+                'url' => '#',
+                'items' => [
+                    ['label' => 'Crear Nuevo Enlace', 'url' => ['/site/create-link']],
+                    ['label' => 'Mis Enlaces', 'url' => ['/site/links']],
+                    ['label' => 'Estadísticas', 'url' => ['/site/linkStats']],
+                ],
+                'encode' => false,
+                'dropDownOptions' => ['class' => 'dropdown-menu'],
+            ],
             ['label' => 'Ranking', 'url' => ['/site/ranking']],
+            // Dropdown: Ayuda
+            [
+                'label' => '<i class="fas fa-question-circle"></i> Ayuda',
+                'url' => '#',
+                'items' => [
+                    ['label' => 'Acerca de', 'url' => ['/site/about']],
+                    ['label' => 'Soporte', 'url' => ['/site/support']],
+                    ['label' => 'FAQ', 'url' => ['/site/faq']],
+                ],
+                'encode' => false,
+                'dropDownOptions' => ['class' => 'dropdown-menu'],
+            ],
         ];
 
         echo Nav::widget([
@@ -72,9 +94,7 @@ AppAsset::register($this);
             echo Html::tag('li', Html::a('Retirar', ['/site/withdrawn'], ['class' => 'dropdown-item']));
             echo Html::tag('li', Html::a('Noticias', ['/news/index'], ['class' => 'dropdown-item']));
             echo Html::tag('li', Html::a('Configuraciones', ['/site/settings'], ['class' => 'dropdown-item']));
-            echo Html::tag('li', Html::a('Soporte', ['/site/support'], ['class' => 'dropdown-item']));
-            echo Html::tag('li', Html::a('Preguntas Frecuentes', ['/site/faq'], ['class' => 'dropdown-item']));
-            echo Html::tag('li', Html::a('Acerca de', ['/site/about'], ['class' => 'dropdown-item']));
+
             echo Html::tag('li', Html::beginForm(['/site/logout'], 'post', ['class' => 'bg-danger'])
                 . Html::submitButton('Salir', ['class' => 'dropdown-item'])
                 . Html::endForm());
@@ -105,4 +125,4 @@ AppAsset::register($this);
 </body>
 
 </html>
-<?php $this->endPage();
+<?php $this->endPage(); ?>

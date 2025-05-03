@@ -4,8 +4,6 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 $this->title = 'Crear Enlace Acortado';
-$this->params['breadcrumbs'][] = ['label' => 'Listado de Enlaces', 'url' => ['site/links']];
-$this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <div class="site-create-link">

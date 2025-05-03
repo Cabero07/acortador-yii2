@@ -391,12 +391,25 @@ class SiteController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             // Asignar el ID del usuario autenticado al modelo
             $model->user_id = Yii::$app->user->id;
-
-            if ($model->save()) {
+            //si el campo short_code está vacío, generamos uno
+            if (empty($model->short_code)) {
+                $model->short_code = Yii::$app->security->generateRandomString(6);
+            }
+            // Validar el modelo
+            if ($model->validate()) {
+                // Guardar el enlace en la base de datos
+                $model->save();
                 Yii::$app->session->setFlash('success', 'Enlace acortado creado exitosamente.');
                 return $this->redirect(['site/links']);
+            } else {
+                Yii::$app->session->setFlash('error', 'Hubo un problema al guardar tu enlace.');
             }
         }
+        if ($model->save()) {
+            Yii::$app->session->setFlash('success', 'Enlace acortado creado exitosamente.');
+            return $this->redirect(['site/links']);
+        }
+
 
         return $this->render('create-link', [
             'model' => $model,
