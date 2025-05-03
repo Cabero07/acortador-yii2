@@ -1,5 +1,11 @@
 <?php
+
 use yii\helpers\Html;
+use yii\widgets\DetailView;
+use common\models\UserLog;
+use common\models\User;
+use yii\data\ActiveDataProvider;
+use yii\web\View;
 
 $this->title = 'Actividad de Balance';
 ?>
@@ -11,21 +17,24 @@ $this->title = 'Actividad de Balance';
         <thead class="bg-primary text-white">
             <tr>
                 <th>Fecha</th>
-                <th>Descripción</th>
+                <th>Acción</th>
                 <th>Monto</th>
                 <th>Balance Posterior</th>
             </tr>
         </thead>
         <tbody>
             <?php foreach ($logs as $log): ?>
-                <tr>
-                    <td><?= Yii::$app->formatter->asDatetime($log->created_at) ?></td>
-                    <td><?= Html::encode($log->description) ?></td>
-                    <td class="<?= $log->amount > 0 ? 'text-success' : 'text-danger' ?>">
-                        <?= $log->amount > 0 ? '+' : '' ?><?= Yii::$app->formatter->asCurrency($log->amount) ?>
-                    </td>
-                    <td><?= Yii::$app->formatter->asCurrency($log->balance_after) ?></td>
-                </tr>
+                <?php if (in_array($log->action, ['Recibir', 'Retirar'])): ?>
+                    <tr>
+                        <td><?= Html::encode($log->user->username) ?></td>
+                        <td><?= Yii::$app->formatter->asDatetime($log->created_at) ?></td>
+                        <td><?= Html::encode($log->action) ?></td>
+                        <td class="<?= $log->amount > 0 ? 'text-success' : 'text-danger' ?>">
+                            <?=Yii::$app->formatter->asCurrency($log->amount) ?>
+                        </td>
+                        <td><?=Yii::encode($log->balance_after) ?></td>
+                    </tr>
+                <?php endif; ?>
             <?php endforeach; ?>
         </tbody>
     </table>

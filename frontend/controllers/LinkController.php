@@ -35,9 +35,10 @@ class LinkController extends Controller
 
                 $log = new UserLog([
                     'user_id' => $user->id,
-                    'amount' => 0.004,
-                    'action' => 'Ingreso por clic',
-                    'performed_by' => Yii::$app->user->id,
+                    'amount' => 0.04,
+                    'action' => 'Recibir',
+                    'performed_by' => $user->id,
+                    'balance_after' => $user->balance,
                 ]);
         
                 if (!$log->save()) {

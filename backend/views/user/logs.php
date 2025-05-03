@@ -13,33 +13,31 @@ $this->params['breadcrumbs'][] = $this->title;
             <h3 class="card-title"><i class="fas fa-history"></i> <?= Html::encode($this->title) ?></h3>
         </div>
         <div class="card-body bg-light">
-            <!-- Formulario de Búsqueda y Filtros -->
-            <div class="filter-form mb-4">
-
-                <!-- Tabla de Usuarios -->
-                <table class="table table-hover table-striped">
-                    <thead class="bg-secondary text-white">
-                        <tr>
-                            <th><i class="fas fa-hashtag"></i> ID</th>
-                            <th><i class="fas fa-user"></i> Usuario Afectado</th>
-                            <th><i class="fas fa-tasks"></i> Acción</th>
-                            <th><i class="fas fa-user-shield"></i> Realizado por</th>
-                            <th><i class="fas fa-calendar-alt"></i> Fecha</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    <?php foreach ($logs as $log): ?>
+            <!-- Tabla de Usuarios -->
+            <table class="table table-hover table-striped">
+                <thead class="bg-secondary text-white">
                     <tr>
-                        <td><?= $log->id ?></td>
-                        <td><?= Html::encode($log->user->username) ?></td>
-                        <td><?= Html::encode($log->action) ?></td>
-                        <td><?= Html::encode($log->performedBy->username) ?></td>
-                        <td><?= Yii::$app->formatter->asDatetime($log->created_at) ?></td>
+                        <th><i class="fas fa-hashtag"></i> ID</th>
+                        <th><i class="fas fa-user"></i> Usuario Afectado</th>
+                        <th><i class="fas fa-tasks"></i> Acción</th>
+                        <th><i class="fas fa-user-shield"></i> Realizado por</th>
+                        <th><i class="fas fa-calendar-alt"></i> Fecha</th>
                     </tr>
+                </thead>
+                <tbody>
+                <?php foreach ($logs as $log): ?>
+                    <?php if (in_array($log->action, ['Usuario habilitado', 'Usuario deshabilitado', 'Rol cambiado a user ', 'Rol cambiado a admin '])): ?>
+                        <tr>
+                            <td><?= $log->id ?></td>
+                            <td><?= Html::encode($log->user->username) ?></td>
+                            <td><?= Html::encode($log->action) ?></td>
+                            <td><?= Html::encode($log->performedBy->username) ?></td>
+                            <td><?= Yii::$app->formatter->asDatetime($log->created_at) ?></td>
+                        </tr>
+                    <?php endif; ?>
                 <?php endforeach; ?>
-                    </tbody>
-                </table>
-            </div>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

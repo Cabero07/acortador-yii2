@@ -36,11 +36,6 @@ class UserLog extends ActiveRecord
             [['user_id', 'action', 'performed_by'], 'required'], // Campos obligatorios para todas las acciones
             [['user_id', 'performed_by'], 'integer'], // IDs deben ser enteros
             [['amount', 'balance_after'], 'number'], // Campos numéricos, opcionales
-            [['amount', 'balance_after'], 'required', 'when' => function ($model) {
-                return in_array($model->action, ['Ganar Dinero', 'Retirar Dinero']);
-            }, 'whenClient' => "function (attribute, value) {
-            return ['Ganar Dinero', 'Retirar Dinero'].includes($('#userlog-action').val());
-        }"],
             [['created_at'], 'safe'], // Fecha
             [['action', 'description'], 'string', 'max' => 255], // Textos con límite de 255 caracteres
         ];
