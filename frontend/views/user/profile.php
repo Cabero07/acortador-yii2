@@ -3,9 +3,9 @@
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
+
 $this->title = 'Mi Perfil';
 ?>
-
 <div class="user-profile mt-5">
     <h1 class="text-center text-primary"><i class="fas fa-user-circle"></i> <?= Html::encode($this->title) ?></h1>
     <p class="text-center text-secondary">Gestiona la información de tu cuenta</p>
@@ -33,7 +33,7 @@ $this->title = 'Mi Perfil';
                 <div class="card-body">
                     <h5 class="card-title"><i class="fas fa-edit text-warning"></i> Actualizar Información</h5>
                     <?php $form = ActiveForm::begin(['id' => 'form-update-profile']); ?>
-
+                    
                     <!-- Campo para actualizar correo electrónico -->
                     <div class="mb-3">
                         <label for="email" class="form-label"><i class="fas fa-envelope"></i> Correo Electrónico</label>
@@ -58,6 +58,8 @@ $this->title = 'Mi Perfil';
             </div>
         </div>
     </div>
+
+    
 
     <!-- Sección de Referidos -->
     <div class="row">

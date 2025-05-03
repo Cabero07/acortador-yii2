@@ -8,6 +8,7 @@ use frontend\models\ProfileForm;
 use common\models\User;
 use common\models\Link;
 use common\models\LinkStats;
+use frontend\models\PasswordChangeForm;
 class UserController extends Controller
 {
     public function actionProfile()
@@ -31,6 +32,22 @@ class UserController extends Controller
 
         return $this->render('profile', [
             'model' => $model,
+        ]);
+    }
+    public function actionChangePassword()
+    {
+        // Modelo para cambiar contraseña
+        $passwordModel = new PasswordChangeForm();
+
+        if (Yii::$app->request->isPost) {
+
+            if ($passwordModel->load(Yii::$app->request->post()) && $passwordModel->validate() && $passwordModel->changePassword()) {
+                Yii::$app->session->setFlash('success', 'Contraseña cambiada exitosamente.');
+            }
+        }
+
+        return $this->render('changePassword', [
+            'passwordModel' => $passwordModel,
         ]);
     }
 }

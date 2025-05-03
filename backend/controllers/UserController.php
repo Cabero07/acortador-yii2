@@ -81,22 +81,38 @@ class UserController extends Controller
     }
     public function actionRanking()
     {
-        // Optimizar la consulta para el ranking y asegurar que 'total_clicks' esté presente
-        $users = User::find()
+        // Obtener el ranking de usuarios por visitas
+        $usersByVisits = User::find()
             ->alias('u')
             ->select([
-                'u.*', // Seleccionar todas las columnas del modelo User
-                'total_clicks' => 'SUM(ls.clicks)' // Agregar 'total_clicks' como un alias
+                'u.username',
+                'total_clicks' => 'SUM(ls.clicks)',
             ])
             ->leftJoin('links l', 'l.user_id = u.id')
             ->leftJoin('link_stats ls', 'ls.link_id = l.id')
             ->groupBy('u.id')
             ->orderBy(['total_clicks' => SORT_DESC])
-            ->asArray() // Convertir los resultados a un array para asegurar acceso a 'total_clicks'
+            ->limit(10)
+            ->asArray()
+            ->all();
+
+        // Obtener el ranking de usuarios por referidos dentro de la tabla `user`
+        $usersByReferrals = User::find()
+            ->alias('u')
+            ->select([
+                'u.username',
+                'total_referrals' => 'COUNT(ref.id)', // Calcula la cantidad de referidos
+            ])
+            ->leftJoin('user ref', 'ref.referrer_id = u.id') // Relación con la misma tabla
+            ->groupBy('u.id')
+            ->orderBy(['total_referrals' => SORT_DESC])
+            ->limit(10)
+            ->asArray()
             ->all();
 
         return $this->render('ranking', [
-            'users' => $users,
+            'usersByVisits' => $usersByVisits,
+            'usersByReferrals' => $usersByReferrals,
         ]);
     }
     /**

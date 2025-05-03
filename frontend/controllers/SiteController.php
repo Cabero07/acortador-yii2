@@ -201,7 +201,6 @@ class SiteController extends Controller
 
         if ($user->balance < 10) {
             Yii::$app->session->setFlash('error', 'No tienes suficiente balance para realizar un retiro. El balance mínimo requerido es de $10.');
-            return $this->redirect(['activity']);
         }
 
         if (Yii::$app->request->isPost) {
