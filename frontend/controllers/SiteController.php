@@ -181,8 +181,9 @@ class SiteController extends Controller
     }
     public function actionActivity()
     {
-        $userId = Yii::$app->user->id;
-        $logs = UserLog::getBalanceLogs($userId)->all();
+        $logs = UserLog::find()
+            ->orderBy(['created_at' => SORT_DESC])
+            ->all();
 
         return $this->render('activity', [
             'logs' => $logs,

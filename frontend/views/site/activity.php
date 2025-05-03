@@ -26,13 +26,12 @@ $this->title = 'Actividad de Balance';
             <?php foreach ($logs as $log): ?>
                 <?php if (in_array($log->action, ['Recibir', 'Retirar'])): ?>
                     <tr>
-                        <td><?= Html::encode($log->user->username) ?></td>
                         <td><?= Yii::$app->formatter->asDatetime($log->created_at) ?></td>
                         <td><?= Html::encode($log->action) ?></td>
                         <td class="<?= $log->amount > 0 ? 'text-success' : 'text-danger' ?>">
-                            <?=Yii::$app->formatter->asCurrency($log->amount) ?>
+                            <?= Yii::$app->formatter->asCurrency($log->amount) ?>
                         </td>
-                        <td><?=Yii::encode($log->balance_after) ?></td>
+                        <td><?= Yii::$app->formatter->asCurrency($log->balance_after) ?></td>
                     </tr>
                 <?php endif; ?>
             <?php endforeach; ?>

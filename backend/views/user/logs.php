@@ -25,17 +25,17 @@ $this->params['breadcrumbs'][] = $this->title;
                     </tr>
                 </thead>
                 <tbody>
-                <?php foreach ($logs as $log): ?>
-                    <?php if (in_array($log->action, ['Usuario habilitado', 'Usuario deshabilitado', 'Rol cambiado a user ', 'Rol cambiado a admin '])): ?>
-                        <tr>
-                            <td><?= $log->id ?></td>
-                            <td><?= Html::encode($log->user->username) ?></td>
-                            <td><?= Html::encode($log->action) ?></td>
-                            <td><?= Html::encode($log->performedBy->username) ?></td>
-                            <td><?= Yii::$app->formatter->asDatetime($log->created_at) ?></td>
-                        </tr>
-                    <?php endif; ?>
-                <?php endforeach; ?>
+                    <?php foreach ($logs as $log): ?>
+                        <?php if (in_array($log->action, ['Usuario habilitado', 'Usuario deshabilitado', 'Rol cambiado a user ', 'Rol cambiado a admin '])): ?>
+                            <tr>
+                                <td><?= $log->id ?></td>
+                                <td><?= Html::encode($log->user->username) ?></td>
+                                <td><?= Html::encode($log->action) ?></td>
+                                <td><?= Html::encode($log->performedBy->username) ?></td>
+                                <td><?= Yii::$app->formatter->asDatetime($log->created_at) ?></td>
+                            </tr>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
                 </tbody>
             </table>
         </div>
