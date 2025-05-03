@@ -11,11 +11,6 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <h1><?= Html::encode($this->title) ?></h1>
 
-    <p>
-        <?= Html::a('Show Active', ['index', 'filter' => 'active'], ['class' => 'btn btn-success']) ?>
-        <?= Html::a('Show Inactive', ['index', 'filter' => 'inactive'], ['class' => 'btn btn-warning']) ?>
-    </p>
-
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
         'filterModel' => $searchModel,
