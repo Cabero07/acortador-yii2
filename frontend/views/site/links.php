@@ -51,6 +51,16 @@ $this->title = 'Gestión de Enlaces';
                             },
                         ],
                         [
+                            'attribute' => 'is_active',
+                            'label' => '<i class="fas fa-toggle-on"></i> Estado',
+                            'encodeLabel' => false,
+                            'format' => 'raw',
+                            'value' => function ($model) {
+                                return $model->is_active ? '<span class="badge bg-success">Activo</span>' : '<span class="badge bg-danger">Inactivo</span>';
+                            },
+                            'contentOptions' => ['class' => 'text-center'],
+                        ],
+                        [
                             'label' => '<i class="fas fa-mouse-pointer"></i> Clics',
                             'encodeLabel' => false,
                             'value' => function ($model) {
