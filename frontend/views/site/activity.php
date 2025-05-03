@@ -23,7 +23,6 @@ $this->title = 'Actividad de Balance';
                     <th><i class="fas fa-wallet"></i> Balance Posterior</th>
                 </tr>
             </thead>
-            <?php $userId = Yii::$app->user->id; ?>
             <tbody>
                 <?php foreach ($logs as $log): ?>
                     <?php if ($log->user_id === $userId && in_array($log->action, ['Recibir', 'Retirar'])): ?>

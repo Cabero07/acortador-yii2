@@ -184,9 +184,58 @@ class SiteController extends Controller
         $logs = UserLog::find()
             ->orderBy(['created_at' => SORT_DESC])
             ->all();
-
+        $userId = Yii::$app->user->id;
         return $this->render('activity', [
             'logs' => $logs,
+            'userId' => $userId,
+        ]);
+    }
+    public function actionWithdrawn()
+    {
+        $userId = Yii::$app->user->id;
+        $user = User::findOne($userId);
+
+        if (!$user) {
+            throw new NotFoundHttpException('Usuario no encontrado.');
+        }
+
+        if ($user->balance < 10) {
+            Yii::$app->session->setFlash('error', 'No tienes suficiente balance para realizar un retiro. El balance mínimo requerido es de $10.');
+            return $this->redirect(['activity']);
+        }
+
+        if (Yii::$app->request->isPost) {
+            $amount = Yii::$app->request->post('amount');
+
+            if ($amount <= 0 || $amount > $user->balance) {
+                Yii::$app->session->setFlash('error', 'El monto ingresado no es válido.');
+            } elseif ($amount < 10) {
+                Yii::$app->session->setFlash('error', 'El monto mínimo para retirar es de $10.');
+            } else {
+                // Descontar el balance
+                $user->balance -= $amount;
+                if ($user->save(false)) {
+                    // Registrar en user_log
+                    $log = new UserLog();
+                    $log->user_id = $userId;
+                    $log->action = 'Retirar';
+                    $log->amount = -$amount;
+                    $log->balance_after = $user->balance;
+                    $log->performed_by = $userId;
+                    $log->created_at = date('Y-m-d H:i:s');
+                    $log->save(false);
+
+                    Yii::$app->session->setFlash('success', 'Retiro realizado exitosamente.');
+                } else {
+                    Yii::$app->session->setFlash('error', 'Ocurrió un error al procesar el retiro.');
+                }
+
+                return $this->redirect(['activity']);
+            }
+        }
+
+        return $this->render('withdrawn', [
+            'user' => $user,
         ]);
     }
 
@@ -256,22 +305,38 @@ class SiteController extends Controller
     }
     public function actionRanking()
     {
-        // Optimizar la consulta para el ranking y asegurar que 'total_clicks' esté presente
-        $users = User::find()
+        // Obtener el ranking de usuarios por visitas
+        $usersByVisits = User::find()
             ->alias('u')
             ->select([
-                'u.*', // Seleccionar todas las columnas del modelo User
-                'total_clicks' => 'SUM(ls.clicks)' // Agregar 'total_clicks' como un alias
+                'u.username',
+                'total_clicks' => 'SUM(ls.clicks)',
             ])
             ->leftJoin('links l', 'l.user_id = u.id')
             ->leftJoin('link_stats ls', 'ls.link_id = l.id')
             ->groupBy('u.id')
             ->orderBy(['total_clicks' => SORT_DESC])
-            ->asArray() // Convertir los resultados a un array para asegurar acceso a 'total_clicks'
+            ->limit(10)
+            ->asArray()
+            ->all();
+
+        // Obtener el ranking de usuarios por referidos dentro de la tabla `user`
+        $usersByReferrals = User::find()
+            ->alias('u')
+            ->select([
+                'u.username',
+                'total_referrals' => 'COUNT(ref.id)', // Calcula la cantidad de referidos
+            ])
+            ->leftJoin('user ref', 'ref.referrer_id = u.id') // Relación con la misma tabla
+            ->groupBy('u.id')
+            ->orderBy(['total_referrals' => SORT_DESC])
+            ->limit(10)
+            ->asArray()
             ->all();
 
         return $this->render('ranking', [
-            'users' => $users,
+            'usersByVisits' => $usersByVisits,
+            'usersByReferrals' => $usersByReferrals,
         ]);
     }
     public function actionLinks()
