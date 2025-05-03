@@ -21,6 +21,8 @@ use frontend\models\ContactForm;
 use yii\data\ActiveDataProvider; // Importar correctamente la clase
 use yii\web\NotFoundHttpException;
 use common\models\News;
+use common\models\UserLog;
+
 
 /**
  * Site controller
@@ -177,6 +179,16 @@ class SiteController extends Controller
             'model' => $model,
         ]);
     }
+    public function actionActivity()
+    {
+        $userId = Yii::$app->user->id;
+        $logs = UserLog::getBalanceLogs($userId)->all();
+
+        return $this->render('activity', [
+            'logs' => $logs,
+        ]);
+    }
+
     /**
      * Resets password.
      *

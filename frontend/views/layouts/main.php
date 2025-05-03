@@ -62,6 +62,7 @@ AppAsset::register($this);
             );
             echo Html::beginTag('ul', ['class' => 'dropdown-menu', 'aria-labelledby' => 'userMenu']);
             echo Html::tag('li', Html::a('Perfil', ['/user/profile'], ['class' => 'dropdown-item']));
+            echo Html::tag('li', Html::a('Actividad', ['/site/activity'], ['class' => 'dropdown-item']));
             echo Html::tag('li', Html::a('Noticias', ['/news/index'], ['class' => 'dropdown-item']));
             echo Html::tag('li', Html::a('Configuraciones', ['/site/settings'], ['class' => 'dropdown-item']));
             echo Html::tag('li', Html::a('Soporte', ['/site/support'], ['class' => 'dropdown-item']));
