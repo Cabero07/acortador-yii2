@@ -18,33 +18,41 @@ $this->params['breadcrumbs'][] = $this->title;
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
+        'filterModel' => $searchModel,
         'columns' => [
-            'id',
-            'url',
+            ['class' => 'yii\grid\SerialColumn'],
+            'short_code',
+            'url:url',
             [
                 'attribute' => 'is_active',
+                'filter' => [1 => 'Active', 0 => 'Inactive'],
                 'value' => function ($model) {
                     return $model->is_active ? 'Active' : 'Inactive';
                 },
+                'format' => 'raw',
             ],
             [
-                'attribute' => 'created_by',
+                'attribute' => 'user_id',
+                'label' => 'Created By',
                 'value' => function ($model) {
-                    return $model->creator ? $model->creator->username : 'Unknown';
+                    return $model->creator ? Html::encode($model->creator->username) : 'Unknown';
                 },
             ],
+            'created_at',
+            'updated_at',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'template' => '{activate} {deactivate} {delete}',
                 'buttons' => [
                     'activate' => function ($url, $model) {
-                        return $model->is_active ? '' : Html::a('Activate', ['activate', 'id' => $model->id]);
+                        return !$model->is_active ? Html::a('Activate', ['activate', 'id' => $model->id], ['class' => 'btn btn-success btn-sm']) : '';
                     },
                     'deactivate' => function ($url, $model) {
-                        return $model->is_active ? Html::a('Deactivate', ['deactivate', 'id' => $model->id]) : '';
+                        return $model->is_active ? Html::a('Deactivate', ['deactivate', 'id' => $model->id], ['class' => 'btn btn-warning btn-sm']) : '';
                     },
                     'delete' => function ($url, $model) {
                         return Html::a('Delete', ['delete', 'id' => $model->id], [
+                            'class' => 'btn btn-danger btn-sm',
                             'data' => [
                                 'confirm' => 'Are you sure you want to delete this link?',
                                 'method' => 'post',

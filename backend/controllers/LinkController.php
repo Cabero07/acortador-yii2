@@ -7,6 +7,9 @@ use backend\models\Link;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
+use yii\filters\VerbFilter;
+use backend\models\LinkSearch;
+
 
 /**
  * LinkController implements the CRUD actions for Link model.
@@ -15,22 +18,12 @@ class LinkController extends Controller
 {
     public function actionIndex()
     {
-        $query = Link::find();
-        $filter = Yii::$app->request->get('filter', 'inactive');
-
-        if ($filter === 'active') {
-            $query->where(['is_active' => 1]);
-        } else {
-            $query->where(['is_active' => 0]);
-        }
-
-        $dataProvider = new ActiveDataProvider([
-            'query' => $query,
-        ]);
+        $searchModel = new LinkSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
         return $this->render('index', [
+            'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'filter' => $filter,
         ]);
     }
 
