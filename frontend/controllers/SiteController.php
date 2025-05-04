@@ -183,6 +183,7 @@ class SiteController extends Controller
     {
         $logs = UserLog::find()
             ->orderBy(['created_at' => SORT_DESC])
+            ->limit(15)
             ->all();
         $userId = Yii::$app->user->id;
         return $this->render('activity', [
