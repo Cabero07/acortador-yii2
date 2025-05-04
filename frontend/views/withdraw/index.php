@@ -57,19 +57,13 @@ $this->title = 'Mis Retiros';
                                     'pendiente' => '<span class="badge badge-warning"><i class="fas fa-hourglass-half"></i> Pendiente</span>',
                                     'aprobado' => '<span class="badge badge-info"><i class="fas fa-check-circle"></i> Aprobado</span>',
                                     'completado' => '<span class="badge badge-success"><i class="fas fa-check"></i> Completado</span>',
+                                    'rechazado' => '<span class="badge badge-danger"><i class="fas fa-times-circle"></i> Rechazado</span>',
                                 ];
                                 return $statusLabels[$model->status] ?? $model->status;
                             },
                             'format' => 'html',
                             'headerOptions' => ['class' => 'text-center'],
                             'contentOptions' => ['class' => 'text-center'],
-                        ],
-                        [
-                            'attribute' => 'created_at',
-                            'label' => 'Fecha de Solicitud',
-                            'format' => ['date', 'php:d/m/Y H:i:s'],
-                            'headerOptions' => ['class' => 'text-center'],
-                            'contentOptions' => ['class' => 'text-center text-muted'],
                         ],
                     ],
                 ]); ?>

@@ -27,20 +27,19 @@ $this->title = 'Solicitar Retiro';
 
                 <div class="form-group">
                     <?= $form->field($model, 'payment_method')->dropDownList([
-                        'CUP' => '<i class="fas fa-credit-card"></i> CUP',
-                        'MLC' => '<i class="fas fa-university"></i> MLC',
-                        'QVAPAY' => '<i class="fas fa-envelope"></i> QVAPAY',
+                        'CUP' => 'CUP',
+                        'MLC' => 'MLC',
+                        'QVAPAY' => 'QVAPAY',
                     ], [
                         'prompt' => 'Selecciona un método de pago',
                         'class' => 'form-control',
-                        'encode' => false, // Permitir HTML en las opciones para los íconos
                     ])->label('<i class="fas fa-money-check-alt"></i> Método de Pago') ?>
                 </div>
 
                 <div class="form-group">
                     <?= $form->field($model, 'details')->textInput([
                         'class' => 'form-control',
-                        'placeholder' => '1234-5678-9012-3456 (Número de tarjeta) o tu correo electrónico para QVAPAY',
+                        'placeholder' => '1234-5678-9012-3456 (Número de tarjeta) o tu correo electrónico',
                     ])->label('<i class="fas fa-info-circle"></i> Detalles del Pago') ?>
                 </div>
 
@@ -57,6 +56,33 @@ $this->title = 'Solicitar Retiro';
 </div>
 
 <?php
-// Carga de Font Awesome para los íconos
+$script = <<<JS
+    $('#withdrawrequest-payment_method').change(function () {
+        let method = $(this).val();
+        let detailsInput = $('#withdrawrequest-details');
+
+        if (method === 'CUP' || method === 'MLC') {
+            detailsInput.attr('placeholder', '1234-5678-9012-3456 (Número de tarjeta)');
+            detailsInput.on('input', function () {
+                this.value = this.value.replace(/[^0-9]/g, '').replace(/(.{4})/g, '$1-').replace(/-$/, '');
+            });
+        } else if (method === 'QVAPAY') {
+            detailsInput.attr('placeholder', 'Correo electrónico');
+            detailsInput.off('input').on('input', function () {
+                // No formatear para QVAPAY, pero validar correo
+                let emailRegex = /^[^@\\s]+@[^@\\s]+\\.[^@\\s]+$/;
+                if (!emailRegex.test(this.value)) {
+                    $(this).addClass('is-invalid');
+                } else {
+                    $(this).removeClass('is-invalid');
+                }
+            });
+        } else {
+            detailsInput.attr('placeholder', 'Detalles del Pago');
+            detailsInput.off('input');
+        }
+    });
+JS;
+$this->registerJs($script);
 $this->registerCssFile('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');
 ?>

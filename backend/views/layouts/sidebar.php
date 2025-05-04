@@ -32,7 +32,6 @@
                     ['label' => 'Gestión de Noticias', 'url'=> ['news/index'] ,'iconStyle' => 'far'],
                     ['label' => 'Ranking', 'url'=> ['user/ranking'] ,'iconStyle' => 'far'],
                     ['label' => 'Pagos pendientes', 'url'=> ['withdraw/index'] ,'iconStyle' => 'far'],
-                    ['label' => 'Opciones', 'url'=> ['site/settings'] ,'iconStyle' => 'far'],
                     
                 ],
             ]);

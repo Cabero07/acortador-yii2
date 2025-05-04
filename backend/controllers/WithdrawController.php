@@ -14,7 +14,9 @@ class WithdrawController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => WithdrawRequest::find()
                 ->joinWith('user') // Para incluir los datos del usuario
-                ->where(['!=', 'withdraw_requests.status', 'completado']) // Especificar la tabla explícitamente
+                //no mostrar ni completado ni rechazado
+                ->where(['!=', 'withdraw_requests.status', 'completado'])
+                ->andWhere(['!=', 'withdraw_requests.status', 'rechazado'])
                 ->orderBy(['withdraw_requests.created_at' => SORT_DESC]), // Prefijo también para ordenar
             'pagination' => [
                 'pageSize' => 10,
@@ -34,6 +36,23 @@ class WithdrawController extends Controller
             $model->status = $status;
             $model->save();
             Yii::$app->session->setFlash('success', 'Estado actualizado.');
+        }
+
+        return $this->redirect(['index']);
+    }
+    public function actionReject($id)
+    {
+        $model = WithdrawRequest::findOne($id);
+
+        if ($model && $model->status === 'pendiente') {
+            $model->status = 'rechazado';
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Solicitud de retiro rechazada.');
+            } else {
+                Yii::$app->session->setFlash('error', 'Error al rechazar la solicitud.');
+            }
+        } else {
+            Yii::$app->session->setFlash('error', 'La solicitud no puede ser rechazada.');
         }
 
         return $this->redirect(['index']);

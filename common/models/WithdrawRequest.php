@@ -32,7 +32,7 @@ class WithdrawRequest extends ActiveRecord
             [['amount'], 'number', 'min' => 10], // Enforce $10 minimum
             [['payment_method'], 'in', 'range' => ['CUP', 'MLC', 'QVAPAY']],
             [['details'], 'string', 'max' => 255],
-            [['status'], 'in', 'range' => ['pendiente', 'aprobado', 'completado']],
+            [['status'], 'in', 'range' => ['pendiente', 'aprobado', 'completado', 'rechazado']],
             ['details', 'validateDetails'],
         ];
     }

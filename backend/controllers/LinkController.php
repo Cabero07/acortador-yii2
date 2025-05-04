@@ -20,12 +20,14 @@ class LinkController extends Controller
     {
         $searchModel = new LinkSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        //mostrar con prioridad los desactivados
+        $dataProvider->query->orderBy(['is_active' => SORT_ASC, 'created_at' => SORT_DESC]);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
     }
+
 
     public function actionActivate($id)
     {
