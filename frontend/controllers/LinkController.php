@@ -9,26 +9,21 @@ use common\models\LinkStats;
 use yii\web\NotFoundHttpException;
 use common\models\User;
 use common\models\UserLog;
+use common\models\IntermediatePage;
 
 class LinkController extends Controller
 {
     public function actionRedirect($shortCode)
     {
-        $link = Link::findOne(['short_code' => $shortCode]);
-        if (!$link -> is_active) {
-            // Si el enlace no está activo, redirigir a una página de error o mostrar un mensaje
-            throw new NotFoundHttpException('El enlace no existe.');
-        }
+        try {
+            $link = Link::findOne(['short_code' => $shortCode]);
 
-        
-        if ($link) {
-            // Incrementar estadísticas
-            $stats = LinkStats::findOne(['link_id' => $link->id]);
-
-            if (!$stats) {
-                $stats = new LinkStats(['link_id' => $link->id]);
+            if (!$link || !$link->is_active) {
+                throw new NotFoundHttpException('El enlace no existe o está inactivo.');
             }
 
+            // Incrementar estadísticas
+            $stats = LinkStats::findOne(['link_id' => $link->id]) ?? new LinkStats(['link_id' => $link->id]);
             $stats->clicks += 1;
             $stats->save();
 
@@ -68,13 +63,39 @@ class LinkController extends Controller
                         if (!$log->save()) {
                             Yii::error('Error al guardar el log: ' . json_encode($log->errors), __METHOD__);
                         }
+                        // Validar URL
+                        if (!filter_var($link->url, FILTER_VALIDATE_URL)) {
+                            throw new \Exception('La URL almacenada no es válida.');
+                        }
+
+                        // Redirección a la URL original
+                        return $this->redirect($link->url);
                     }
                 }
             }
 
             return $this->redirect($link->url); // Redirección a la URL original
+        } catch (\Exception $e) {
+            Yii::error('Error durante la redirección: ' . $e->getMessage(), __METHOD__);
+            throw new NotFoundHttpException('Hubo un problema al procesar su solicitud.');
+        }
+    }
+    public function actionIntermediate($shortCode)
+    {
+        $link = Link::findOne(['short_code' => $shortCode]);
+
+        if (!$link) {
+            throw new \yii\web\NotFoundHttpException('El enlace no existe.');
         }
 
-        throw new NotFoundHttpException('El enlace no existe.');
+        // Registrar la vista en la página intermedia
+        $intermediatePage = new IntermediatePage();
+        $intermediatePage->link_id = $link->id;
+        $intermediatePage->views += 1;
+        $intermediatePage->save();
+
+        return $this->render('intermediate', [
+            'link' => $link,
+        ]);
     }
 }
