@@ -15,10 +15,12 @@ document.addEventListener('DOMContentLoaded', function () {
                       if (data.success) {
                           console.log(data.message); // Mensaje de éxito
                       } else {
+                          alert('Ocurrió un error al registrar la visita. Por favor, inténtelo de nuevo.');
                           console.error(data.message); // Mensaje de error
                       }
                   })
                   .catch(error => {
+                      alert('No se pudo conectar al servidor. Por favor, revise su conexión a Internet.');
                       console.error('Error en la solicitud:', error);
                   });
             }

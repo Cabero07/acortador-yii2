@@ -3,7 +3,7 @@
 /** @var yii\web\View $this */
 /** @var string $name */
 /** @var string $message */
-/** @var Exception $exception*/
+/** @var Exception $exception */
 
 use yii\helpers\Html;
 
@@ -18,10 +18,9 @@ $this->title = $name;
     </div>
 
     <p>
-        The above error occurred while the Web server was processing your request.
+        Lamentamos el inconveniente. Este error ocurrió mientras procesábamos su solicitud.
     </p>
     <p>
-        Please contact us if you think this is a server error. Thank you.
+        Si el problema persiste, por favor <a href="/contact">contáctenos</a> con detalles sobre lo que intentaba hacer.
     </p>
-
 </div>
