@@ -14,10 +14,9 @@ class WithdrawController extends Controller
         $dataProvider = new ActiveDataProvider([
             'query' => WithdrawRequest::find()
                 ->joinWith('user') // Para incluir los datos del usuario
-                //no mostrar ni completado ni rechazado
                 ->where(['!=', 'withdraw_requests.status', 'completado'])
                 ->andWhere(['!=', 'withdraw_requests.status', 'rechazado'])
-                ->orderBy(['withdraw_requests.created_at' => SORT_DESC]), // Prefijo también para ordenar
+                ->orderBy(['withdraw_requests.created_at' => SORT_DESC]), 
             'pagination' => [
                 'pageSize' => 10,
             ],
@@ -34,18 +33,28 @@ class WithdrawController extends Controller
 
         if ($model && in_array($status, ['pendiente', 'aprobado', 'completado'])) {
             $model->status = $status;
-            $model->save();
-            Yii::$app->session->setFlash('success', 'Estado actualizado.');
+
+            if ($status === 'rechazado') {
+                $model->refundUserBalance(); // Refund user balance if rejected
+            }
+
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'Estado actualizado.');
+            }
+        } else {
+            Yii::$app->session->setFlash('error', 'No se pudo actualizar el estado.');
         }
 
         return $this->redirect(['index']);
     }
+
     public function actionReject($id)
     {
         $model = WithdrawRequest::findOne($id);
 
         if ($model && $model->status === 'pendiente') {
             $model->status = 'rechazado';
+            $model->refundUserBalance(); // Refund user if rejected
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', 'Solicitud de retiro rechazada.');
             } else {

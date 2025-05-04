@@ -7,7 +7,6 @@ use common\models\WithdrawRequest;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\data\ActiveDataProvider;
-use yii\web\BadRequestHttpException;
 
 class WithdrawController extends Controller
 {
@@ -18,14 +17,19 @@ class WithdrawController extends Controller
         if ($model->load(Yii::$app->request->post())) {
             $model->user_id = Yii::$app->user->id;
             $model->status = 'pendiente';
-            if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Solicitud de retiro enviada.');
-                return $this->redirect(['site/index']);
+
+            if ($model->validate()) {
+                $model->deductUserBalance(); // Deduce balance before saving
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('success', 'Solicitud de retiro enviada.');
+                    return $this->redirect(['site/index']);
+                }
             }
         }
 
         return $this->render('create', ['model' => $model]);
     }
+
     public function actionIndex()
     {
         $dataProvider = new ActiveDataProvider([

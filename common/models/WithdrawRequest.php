@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use yii\db\ActiveRecord;
+use yii\base\Exception;
 
 /**
  * This is the model class for table "withdraw_requests".
@@ -34,6 +35,7 @@ class WithdrawRequest extends ActiveRecord
             [['details'], 'string', 'max' => 255],
             [['status'], 'in', 'range' => ['pendiente', 'aprobado', 'completado', 'rechazado']],
             ['details', 'validateDetails'],
+            ['amount', 'validateSufficientFunds'], // Custom validation for funds
         ];
     }
 
@@ -49,6 +51,14 @@ class WithdrawRequest extends ActiveRecord
             if (!filter_var($this->details, FILTER_VALIDATE_EMAIL)) {
                 $this->addError($attribute, 'El correo electrónico no es válido.');
             }
+        }
+    }
+
+    public function validateSufficientFunds($attribute, $params)
+    {
+        $user = $this->getUser()->one();
+        if (!$user || $user->balance < $this->amount) {
+            $this->addError($attribute, 'Saldo insuficiente para realizar este retiro.');
         }
     }
 
@@ -76,8 +86,33 @@ class WithdrawRequest extends ActiveRecord
 
         return 1; // Default for USD or other methods
     }
+
     public function getUser()
     {
         return $this->hasOne(User::class, ['id' => 'user_id']);
+    }
+
+    public function deductUserBalance()
+    {
+        $user = $this->getUser()->one();
+        if ($user && $user->balance >= $this->amount) {
+            $user->balance -= $this->amount;
+            if (!$user->save()) {
+                throw new Exception('Error al deducir el saldo del usuario.');
+            }
+        } else {
+            throw new Exception('Saldo insuficiente para deducir.');
+        }
+    }
+
+    public function refundUserBalance()
+    {
+        $user = $this->getUser()->one();
+        if ($user) {
+            $user->balance += $this->amount;
+            if (!$user->save()) {
+                throw new Exception('Error al reembolsar el saldo al usuario.');
+            }
+        }
     }
 }
