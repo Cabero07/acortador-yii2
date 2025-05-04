@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 03-05-2025 a las 04:45:57
+-- Tiempo de generación: 04-05-2025 a las 16:15:33
 -- Versión del servidor: 9.1.0
 -- Versión de PHP: 8.4.0
 
@@ -207,6 +207,26 @@ CREATE TABLE IF NOT EXISTS `user_log` (
   KEY `fk-user_log-performed_by` (`performed_by`),
   KEY `idx-user_log-performed_by` (`performed_by`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `withdraw_requests`
+--
+
+DROP TABLE IF EXISTS `withdraw_requests`;
+CREATE TABLE IF NOT EXISTS `withdraw_requests` (
+  `id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `payment_method` enum('CUP','MLC','QVAPAY') COLLATE utf8mb4_general_ci NOT NULL,
+  `details` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `status` enum('pendiente','aprobado','completado','rechazado') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'pendiente',
+  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Restricciones para tablas volcadas
