@@ -9,93 +9,101 @@ use common\models\LinkStats;
 use yii\web\NotFoundHttpException;
 use common\models\User;
 use common\models\UserLog;
-use common\models\IntermediatePage;
 
 class LinkController extends Controller
 {
+    /**
+     * Acción para redirigir a la página intermedia antes de la URL original.
+     */
     public function actionRedirect($shortCode)
     {
-        try {
-            $link = Link::findOne(['short_code' => $shortCode]);
+        $link = Link::findOne(['short_code' => $shortCode]);
 
-            if (!$link || !$link->is_active) {
-                throw new NotFoundHttpException('El enlace no existe o está inactivo.');
-            }
-
-            // Incrementar estadísticas
-            $stats = LinkStats::findOne(['link_id' => $link->id]) ?? new LinkStats(['link_id' => $link->id]);
-            $stats->clicks += 1;
-            $stats->save();
-
-            // Incrementar balance del propietario del enlace
-            $user = $link->user;
-            if ($user) {
-                $user->balance += 0.004; // Ganancia por clic personal
-                $user->save(false);
-
-                $log = new UserLog([
-                    'user_id' => $user->id,
-                    'amount' => 0.004,
-                    'action' => 'Recibir',
-                    'performed_by' => $user->id,
-                    'balance_after' => $user->balance,
-                ]);
-                $log->save();
-                if (!$log->save()) {
-                    Yii::error('Error al guardar el log: ' . json_encode($log->errors), __METHOD__);
-                }
-
-                // Verificar si el usuario fue referido por otro usuario
-                if ($user->referrer_id) {
-                    $referrer = User::findOne($user->referrer_id);
-                    if ($referrer) {
-                        $referrer->balance += 0.002; // Ganancia por referencia
-                        $referrer->save(false);
-
-                        $log = new UserLog([
-                            'user_id' => $referrer->id,
-                            'amount' => 0.002,
-                            'action' => 'Recibir',
-                            'performed_by' => $referrer->id,
-                            'balance_after' => $referrer->balance,
-                        ]);
-                        $log->save();
-                        if (!$log->save()) {
-                            Yii::error('Error al guardar el log: ' . json_encode($log->errors), __METHOD__);
-                        }
-                        // Validar URL
-                        if (!filter_var($link->url, FILTER_VALIDATE_URL)) {
-                            throw new \Exception('La URL almacenada no es válida.');
-                        }
-
-                        // Redirección a la URL original
-                        return $this->redirect($link->url);
-                    }
-                }
-            }
-
-            return $this->redirect($link->url); // Redirección a la URL original
-        } catch (\Exception $e) {
-            Yii::error('Error durante la redirección: ' . $e->getMessage(), __METHOD__);
-            throw new NotFoundHttpException('Hubo un problema al procesar su solicitud.');
+        if (!$link || !$link->is_active) {
+            throw new NotFoundHttpException('El enlace no existe o está inactivo.');
         }
+
+        // Redirigir a la página intermedia.
+        return $this->redirect(['link/intermediate', 'shortCode' => $shortCode]);
     }
+
+    /**
+     * Acción para mostrar la página intermedia con anuncios y un contador.
+     */
     public function actionIntermediate($shortCode)
     {
         $link = Link::findOne(['short_code' => $shortCode]);
 
         if (!$link) {
-            throw new \yii\web\NotFoundHttpException('El enlace no existe.');
+            throw new NotFoundHttpException('El enlace no existe.');
         }
-
-        // Registrar la vista en la página intermedia
-        $intermediatePage = new IntermediatePage();
-        $intermediatePage->link_id = $link->id;
-        $intermediatePage->views += 1;
-        $intermediatePage->save();
 
         return $this->render('intermediate', [
             'link' => $link,
         ]);
+    }
+
+    /**
+     * Acción para completar la redirección y registrar clics y ganancias.
+     */
+    public function actionCompleteRedirect($shortCode)
+    {
+        $link = Link::findOne(['short_code' => $shortCode]);
+
+        if (!$link || !$link->is_active) {
+            throw new NotFoundHttpException('El enlace no existe o está inactivo.');
+        }
+
+        // Incrementar las estadísticas de clics.
+        $stats = LinkStats::findOne(['link_id' => $link->id]) ?? new LinkStats(['link_id' => $link->id]);
+        $stats->clicks += 1;
+
+        if ($stats->save()) {
+            $this->registerEarnings($link);
+        }
+
+        // Redirigir a la URL original.
+        return $this->redirect($link->url);
+    }
+
+    /**
+     * Método para registrar ganancias para el propietario del enlace y su referidor.
+     */
+    private function registerEarnings(Link $link)
+    {
+        $user = $link->user;
+
+        // Ganancia directa para el propietario del enlace.
+        if ($user) {
+            $this->addEarnings($user, 0.004, $user->id);
+
+            // Ganancia indirecta para el referidor, si existe.
+            if ($user->referrer_id) {
+                $referrer = User::findOne($user->referrer_id);
+                if ($referrer) {
+                    $this->addEarnings($referrer, 0.002, $user->id);
+                }
+            }
+        }
+    }
+
+    /**
+     * Método para agregar ganancias a un usuario y registrar el log.
+     */
+    private function addEarnings(User $user, float $amount, int $performedBy)
+    {
+        // Incrementar balance del usuario.
+        $user->balance += $amount;
+        $user->save(false);
+
+        // Registrar el log de la transacción.
+        $log = new UserLog([
+            'user_id' => $user->id,
+            'amount' => $amount,
+            'action' => 'Recibir',
+            'performed_by' => $performedBy,
+            'balance_after' => $user->balance,
+        ]);
+        $log->save(false);
     }
 }

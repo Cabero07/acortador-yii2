@@ -1,41 +1,47 @@
 <?php
-
 /** @var yii\web\View $this */
 /** @var common\models\Link $link */
 
 use yii\helpers\Html;
+use yii\helpers\Url;
 
-$this->title = 'Espere antes de continuar';
+$this->title = 'Redirigiendo...';
+
+// URL de redirección final
+$redirectUrl = Url::to(['link/complete-redirect', 'shortCode' => $link->short_code], true);
+
+// JavaScript para el contador
+$script = <<<JS
+    let countdown = 5; // Tiempo en segundos
+    const countdownElement = document.getElementById('countdown');
+    const redirectButton = document.getElementById('redirect-button');
+
+    const interval = setInterval(() => {
+        if (countdown <= 0) {
+            clearInterval(interval);
+            redirectButton.style.display = 'inline-block'; // Mostrar botón
+            window.location.href = '$redirectUrl'; // Redirigir automáticamente
+        } else {
+            countdownElement.innerText = countdown;
+            countdown--;
+        }
+    }, 1000);
+JS;
+
+$this->registerJs($script);
 ?>
 
 <div class="intermediate-page text-center">
-    <h1>Espere 15 segundos...</h1>
-    <p>Estamos mostrando anuncios relevantes. Su enlace estará disponible pronto.</p>
-
-    <!-- Temporizador -->
-    <div id="timer" class="display-4 text-danger">15</div>
-
-    <!-- Botón para continuar -->
-    <?= Html::a('Continuar al enlace', $link->url, [
-        'class' => 'btn btn-primary mt-3',
-        'id' => 'continue-button',
-        'style' => 'display: none;',
-    ]) ?>
+    <h1>Espere un momento...</h1>
+    <p>Será redirigido en <span id="countdown">5</span> segundos.</p>
+    
+    <div class="ads">
+        <h2>Anuncio</h2>
+        <p>Este es un espacio reservado para anuncios.</p>
+        <!-- Aquí puedes incluir contenido dinámico para los anuncios -->
+    </div>
+    
+    <p id="redirect-button" style="display: none;">
+        <?= Html::a('Haga clic aquí si no es redirigido automáticamente', $redirectUrl, ['class' => 'btn btn-primary']) ?>
+    </p>
 </div>
-
-<script>
-    let timer = 15;
-    const timerElement = document.getElementById('timer');
-    const continueButton = document.getElementById('continue-button');
-
-    const countdown = setInterval(() => {
-        timer--;
-        timerElement.textContent = timer;
-
-        if (timer <= 0) {
-            clearInterval(countdown);
-            continueButton.style.display = 'inline-block';
-            timerElement.style.display = 'none';
-        }
-    }, 1000);
-</script>
