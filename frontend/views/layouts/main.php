@@ -49,6 +49,7 @@ AppAsset::register($this);
                     ['label' => 'Crear Nuevo Enlace', 'url' => ['/site/create-link']],
                     ['label' => 'Mis Enlaces', 'url' => ['/site/links']],
                     ['label' => 'Estadísticas', 'url' => ['/site/linkStats']],
+                    ['label' => 'Recomendaciones', 'url' => ['/site/recomends']],
                 ],
                 'encode' => false,
                 'dropDownOptions' => ['class' => 'dropdown-menu'],

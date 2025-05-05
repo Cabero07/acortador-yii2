@@ -70,11 +70,6 @@ class SignupForm extends Model
         if ($user->save()) {
             $auth = Yii::$app->authManager;
             $role = $auth->getRole('user'); // Verificar si el rol existe
-            if ($role) {
-                $auth->assign($role, $user->id); // Asignar el rol
-            } else {
-                throw new \Exception('El rol "user" no existe.');
-            }
             return $user;
         }
 
