@@ -16,9 +16,9 @@ return [
             'csrfParam' => '_csrf-frontend',
         ],
         'user' => [
-            'identityClass' => 'common\models\User', // Clase de usuario
-            'enableAutoLogin' => true, // Habilitar inicio de sesión automático
-            'loginUrl' => ['site/login'], // Página de inicio de sesión
+            'identityClass' => 'common\models\User',
+            'enableAutoLogin' => true,
+            'loginUrl' => ['site/login'],
         ],
         'session' => [
             // this is the name of the session cookie used for login on the frontend
@@ -37,7 +37,7 @@ return [
             'errorAction' => 'site/error',
         ],
         'authManager' => [
-            'class' => 'yii\rbac\DbManager', // Usa DbManager para manejar roles y permisos
+            'class' => 'yii\rbac\DbManager',
         ],
         'urlManager' => [
             'enablePrettyUrl' => true, // Habilitar URLs amigables
@@ -45,8 +45,8 @@ return [
             'rules' => [
                 '<shortCode:\w+>' => 'link/redirect', // Ruta para redirección de enlaces acortados
                 'link-stats/register-click/<linkId:\d+>' => 'link-stats/register-click',
-                'user/changePassword' => 'user/change-password', // Ruta para cambiar contraseña
-                'user/profile' => 'user/profile', // Ruta para el perfil
+                'user/changePassword' => 'user/change-password',
+                'user/profile' => 'user/profile',
                 'site/linkStats' => 'site/link-stats',
             ],
         ],

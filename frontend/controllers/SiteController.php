@@ -156,7 +156,24 @@ class SiteController extends Controller
     {
         return $this->render('faq');
     }
-
+    public function actionRecomends()
+    {
+        // Recuperar los 10 enlaces más clicados
+        $topLinks = LinkStats::find()
+            ->select(['link_id', 'clicks'])
+            ->with('link') // Relación con el modelo Link
+            ->orderBy(['clicks' => SORT_DESC])
+            ->limit(10)
+            ->all();
+        // Verificar si hay enlaces recomendados
+        if (empty($topLinks)) {
+            Yii::$app->session->setFlash('info', 'No hay enlaces recomendados en este momento.');
+            return $this->redirect(['site/index']);
+        }
+        return $this->render('recomends', [
+            'topLinks' => $topLinks,
+        ]);
+    }
     /**
      * Requests password reset.
      *
@@ -217,7 +234,7 @@ class SiteController extends Controller
 
         if (Yii::$app->request->isPost) {
             $amount = Yii::$app->request->post('amount');
-
+            // Validar el monto ingresado
             if ($amount <= 0 || $amount > $user->balance) {
                 Yii::$app->session->setFlash('error', 'El monto ingresado no es válido.');
             } elseif ($amount < 10) {
@@ -234,7 +251,7 @@ class SiteController extends Controller
                     $log->balance_after = $user->balance;
                     $log->performed_by = $userId;
                     $log->save(false);
-
+                    
                     Yii::$app->session->setFlash('success', 'Retiro realizado exitosamente.');
                 } else {
                     Yii::$app->session->setFlash('error', 'Ocurrió un error al procesar el retiro.');
@@ -263,7 +280,7 @@ class SiteController extends Controller
         } catch (InvalidArgumentException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
-
+        
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
             Yii::$app->session->setFlash('success', 'New password saved.');
 
@@ -305,11 +322,12 @@ class SiteController extends Controller
         } catch (InvalidArgumentException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
+        // Verificar el token y obtener el usuario
         if (($user = $model->verifyEmail()) && Yii::$app->user->login($user)) {
             Yii::$app->session->setFlash('success', 'Your email has been confirmed!');
             return $this->goHome();
         }
-
+        // Si la verificación falla, mostrar un mensaje de error
         Yii::$app->session->setFlash('error', 'Sorry, we are unable to verify your account with provided token.');
         return $this->goHome();
     }
@@ -343,7 +361,7 @@ class SiteController extends Controller
             ->limit(10)
             ->asArray()
             ->all();
-
+        // Obtener el ranking de usuarios por referidos dentro de la tabla `user_log`
         return $this->render('ranking', [
             'usersByVisits' => $usersByVisits,
             'usersByReferrals' => $usersByReferrals,
@@ -352,7 +370,7 @@ class SiteController extends Controller
     public function actionLinks()
     {
         $userId = Yii::$app->user->id;
-
+        // Verificar si el usuario está autenticado
         $dataProvider = new ActiveDataProvider([
             'query' => Link::find()->where(['user_id' => $userId]),
             'pagination' => [
@@ -384,35 +402,31 @@ class SiteController extends Controller
 
         return $this->redirect(['site/index']);
     }
-    public function actionCreateLink()
+    public function actionCreateLink($url = null)
     {
         $model = new Link();
+        // Si se pasa una URL como parámetro, cargarla en el modelo
+        if ($url) {
+            $model->url = $url;
+        }
 
         if ($model->load(Yii::$app->request->post())) {
             // Asignar el ID del usuario autenticado al modelo
             $model->user_id = Yii::$app->user->id;
-            //si el campo short_code está vacío, generamos uno
+            // Generar un código único si no se proporciona uno
             if (empty($model->short_code)) {
                 $model->short_code = Yii::$app->security->generateRandomString(6);
             }
-            // Validar el modelo
-            if ($model->validate()) {
-                // Desactivar el enlace.
-                $model->is_active = 0;
-                // Guardar el enlace en la base de datos
-                $model->save();
+            // Desactivar el enlace
+            $model->is_active = 0;
+            // Validar y guardar el modelo
+            if ($model->save()) {
                 Yii::$app->session->setFlash('success', 'Enlace acortado creado exitosamente.');
-                
                 return $this->redirect(['site/links']);
             } else {
                 Yii::$app->session->setFlash('error', 'Hubo un problema al guardar tu enlace.');
             }
         }
-        if ($model->save()) {
-            Yii::$app->session->setFlash('success', 'Enlace acortado creado exitosamente.');
-            return $this->redirect(['site/links']);
-        }
-
 
         return $this->render('create-link', [
             'model' => $model,
