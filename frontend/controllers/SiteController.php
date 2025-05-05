@@ -251,7 +251,7 @@ class SiteController extends Controller
                     $log->balance_after = $user->balance;
                     $log->performed_by = $userId;
                     $log->save(false);
-                    
+
                     Yii::$app->session->setFlash('success', 'Retiro realizado exitosamente.');
                 } else {
                     Yii::$app->session->setFlash('error', 'Ocurrió un error al procesar el retiro.');
@@ -280,7 +280,7 @@ class SiteController extends Controller
         } catch (InvalidArgumentException $e) {
             throw new BadRequestHttpException($e->getMessage());
         }
-        
+
         if ($model->load(Yii::$app->request->post()) && $model->validate() && $model->resetPassword()) {
             Yii::$app->session->setFlash('success', 'New password saved.');
 
@@ -405,31 +405,41 @@ class SiteController extends Controller
     public function actionCreateLink($url = null)
     {
         $model = new Link();
+        $favicon = null;
+
         // Si se pasa una URL como parámetro, cargarla en el modelo
         if ($url) {
             $model->url = $url;
         }
 
+        // Si se envía el formulario
         if ($model->load(Yii::$app->request->post())) {
-            // Asignar el ID del usuario autenticado al modelo
-            $model->user_id = Yii::$app->user->id;
-            // Generar un código único si no se proporciona uno
-            if (empty($model->short_code)) {
-                $model->short_code = Yii::$app->security->generateRandomString(6);
-            }
-            // Desactivar el enlace
-            $model->is_active = 0;
-            // Validar y guardar el modelo
-            if ($model->save()) {
-                Yii::$app->session->setFlash('success', 'Enlace acortado creado exitosamente.');
-                return $this->redirect(['site/links']);
+            if (Yii::$app->request->post('preview')) {
+                // Obtener el favicon para previsualización
+                $favicon = \common\helpers\IconHelper::getFavicon($model->url);
             } else {
-                Yii::$app->session->setFlash('error', 'Hubo un problema al guardar tu enlace.');
+                // Asignar el ID del usuario autenticado al modelo
+                $model->user_id = Yii::$app->user->id;
+                // Generar un código único si no se proporciona uno
+                if (empty($model->short_code)) {
+                    $model->short_code = Yii::$app->security->generateRandomString(6);
+                }
+                // Desactivar el enlace por defecto
+                $model->is_active = 0;
+
+                // Validar y guardar el modelo
+                if ($model->save()) {
+                    Yii::$app->session->setFlash('success', 'Enlace acortado creado exitosamente.');
+                    return $this->redirect(['site/links']);
+                } else {
+                    Yii::$app->session->setFlash('error', 'Hubo un problema al guardar tu enlace.');
+                }
             }
         }
 
         return $this->render('create-link', [
             'model' => $model,
+            'favicon' => $favicon,
         ]);
     }
     /**

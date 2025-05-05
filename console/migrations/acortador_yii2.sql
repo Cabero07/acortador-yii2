@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 04-05-2025 a las 16:15:33
+-- Tiempo de generación: 05-05-2025 a las 12:59:06
 -- Versión del servidor: 9.1.0
 -- Versión de PHP: 8.4.0
 
@@ -29,8 +29,8 @@ SET time_zone = "+00:00";
 
 DROP TABLE IF EXISTS `auth_assignment`;
 CREATE TABLE IF NOT EXISTS `auth_assignment` (
-  `item_name` varchar(64) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `user_id` varchar(64) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `item_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `user_id` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `created_at` int DEFAULT NULL,
   PRIMARY KEY (`item_name`,`user_id`),
   KEY `idx-auth_assignment-user_id` (`user_id`)
@@ -44,10 +44,10 @@ CREATE TABLE IF NOT EXISTS `auth_assignment` (
 
 DROP TABLE IF EXISTS `auth_item`;
 CREATE TABLE IF NOT EXISTS `auth_item` (
-  `name` varchar(64) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `type` smallint NOT NULL,
-  `description` text COLLATE utf8mb3_unicode_ci,
-  `rule_name` varchar(64) COLLATE utf8mb3_unicode_ci DEFAULT NULL,
+  `description` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci,
+  `rule_name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci DEFAULT NULL,
   `data` blob,
   `created_at` int DEFAULT NULL,
   `updated_at` int DEFAULT NULL,
@@ -64,8 +64,8 @@ CREATE TABLE IF NOT EXISTS `auth_item` (
 
 DROP TABLE IF EXISTS `auth_item_child`;
 CREATE TABLE IF NOT EXISTS `auth_item_child` (
-  `parent` varchar(64) COLLATE utf8mb3_unicode_ci NOT NULL,
-  `child` varchar(64) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `parent` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `child` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   PRIMARY KEY (`parent`,`child`),
   KEY `child` (`child`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_unicode_ci;
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `auth_item_child` (
 
 DROP TABLE IF EXISTS `auth_rule`;
 CREATE TABLE IF NOT EXISTS `auth_rule` (
-  `name` varchar(64) COLLATE utf8mb3_unicode_ci NOT NULL,
+  `name` varchar(64) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `data` blob,
   `created_at` int DEFAULT NULL,
   `updated_at` int DEFAULT NULL,
@@ -94,15 +94,16 @@ CREATE TABLE IF NOT EXISTS `auth_rule` (
 DROP TABLE IF EXISTS `links`;
 CREATE TABLE IF NOT EXISTS `links` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `url` text COLLATE utf8mb4_general_ci NOT NULL,
-  `short_code` varchar(50) COLLATE utf8mb4_general_ci NOT NULL,
-  `title` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `description` text COLLATE utf8mb4_general_ci,
+  `url` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `short_code` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `description` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci,
   `expiration_date` datetime DEFAULT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT '1',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `user_id` int NOT NULL,
+  `thumbnail_url` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `short_code` (`short_code`),
   KEY `idx-links-user_id` (`user_id`)
@@ -134,7 +135,7 @@ CREATE TABLE IF NOT EXISTS `link_stats` (
 
 DROP TABLE IF EXISTS `migration`;
 CREATE TABLE IF NOT EXISTS `migration` (
-  `version` varchar(180) COLLATE utf8mb4_general_ci NOT NULL,
+  `version` varchar(180) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `apply_time` int DEFAULT NULL,
   PRIMARY KEY (`version`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
@@ -148,8 +149,8 @@ CREATE TABLE IF NOT EXISTS `migration` (
 DROP TABLE IF EXISTS `news`;
 CREATE TABLE IF NOT EXISTS `news` (
   `id` int NOT NULL AUTO_INCREMENT,
-  `title` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
-  `content` text COLLATE utf8mb4_general_ci NOT NULL,
+  `title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `content` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `created_by` int NOT NULL,
   PRIMARY KEY (`id`),
@@ -166,19 +167,19 @@ DROP TABLE IF EXISTS `user`;
 CREATE TABLE IF NOT EXISTS `user` (
   `id` int NOT NULL AUTO_INCREMENT,
   `referrer_id` int DEFAULT NULL,
-  `username` varchar(50) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Nombre de usuario único',
-  `email` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL,
-  `password_hash` varchar(255) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Hash de la contraseña',
-  `auth_key` varchar(32) COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Clave de autenticación para sesiones',
-  `access_token` varchar(32) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'Token de acceso para APIs',
+  `username` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Nombre de usuario único',
+  `email` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL,
+  `password_hash` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Hash de la contraseña',
+  `auth_key` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL COMMENT 'Clave de autenticación para sesiones',
+  `access_token` varchar(32) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'Token de acceso para APIs',
   `status` tinyint(1) NOT NULL DEFAULT '10',
   `created_links_count` int NOT NULL DEFAULT '0' COMMENT 'Número de enlaces creados por el usuario',
   `balance` decimal(10,4) NOT NULL DEFAULT '0.0000' COMMENT 'Balance acumulado del usuario por ingresos',
-  `role` varchar(20) COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'user' COMMENT 'Rol del usuario: user o admin',
-  `profile_picture` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'URL de la imagen de perfil',
+  `role` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'user' COMMENT 'Rol del usuario: user o admin',
+  `profile_picture` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'URL de la imagen de perfil',
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT 'Fecha de creación',
   `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Fecha de última actualización',
-  `verification_token` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'Token de verificación para el usuario',
+  `verification_token` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'Token de verificación para el usuario',
   `phone_number` varchar(15) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'Número de teléfono del usuario',
   PRIMARY KEY (`id`),
   UNIQUE KEY `username` (`username`),
@@ -196,12 +197,12 @@ DROP TABLE IF EXISTS `user_log`;
 CREATE TABLE IF NOT EXISTS `user_log` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
-  `action` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `action` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `performed_by` int NOT NULL,
   `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `amount` decimal(10,4) DEFAULT NULL COMMENT 'Monto asociado al evento',
   `balance_after` decimal(10,4) DEFAULT NULL COMMENT 'Balance del usuario después del evento',
-  `description` varchar(255) COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'Descripción adicional del evento',
+  `description` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci DEFAULT NULL COMMENT 'Descripción adicional del evento',
   PRIMARY KEY (`id`),
   KEY `fk-user_log-user_id` (`user_id`),
   KEY `fk-user_log-performed_by` (`performed_by`),
@@ -219,8 +220,8 @@ CREATE TABLE IF NOT EXISTS `withdraw_requests` (
   `id` int NOT NULL AUTO_INCREMENT,
   `user_id` int NOT NULL,
   `amount` decimal(10,2) NOT NULL,
-  `payment_method` enum('CUP','MLC','QVAPAY') COLLATE utf8mb4_general_ci NOT NULL,
-  `details` varchar(255) COLLATE utf8mb4_general_ci NOT NULL,
+  `payment_method` enum('CUP','MLC','QVAPAY') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
+  `details` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `status` enum('pendiente','aprobado','completado','rechazado') CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT 'pendiente',
   `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

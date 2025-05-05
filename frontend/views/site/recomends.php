@@ -18,6 +18,7 @@ $this->title = 'Enlaces Recomendados';
         <thead class="table-dark">
             <tr>
                 <th>#</th>
+                <th>Ícono</th>
                 <th>Enlace</th>
                 <th>Clics</th>
                 <th>Acción</th>
@@ -27,6 +28,15 @@ $this->title = 'Enlaces Recomendados';
             <?php foreach ($topLinks as $index => $linkStat): ?>
                 <tr>
                     <td><?= $index + 1 ?></td>
+                    <td class="text-center">
+                        <?php
+                        $parsedUrl = parse_url($linkStat->link->url);
+                        $faviconUrl = isset($parsedUrl['host']) ? 'https://' . $parsedUrl['host'] . '/favicon.ico' : null;
+                        ?>
+                        <?= $faviconUrl 
+                            ? Html::img($faviconUrl, ['alt' => 'Ícono', 'style' => 'width: 32px; height: 32px;']) 
+                            : '<span class="text-muted">No disponible</span>' ?>
+                    </td>
                     <td>
                         <a href="<?= Html::encode($linkStat->link->url) ?>" target="_blank" class="text-decoration-none">
                             <?= Html::encode($linkStat->link->url) ?>

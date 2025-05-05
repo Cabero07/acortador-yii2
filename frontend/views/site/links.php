@@ -24,7 +24,19 @@ $this->title = 'Gestión de Enlaces';
                     'layout' => "{items}\n<div class='d-flex justify-content-between align-items-center mt-3'>{summary}{pager}</div>",
                     'tableOptions' => ['class' => 'table table-bordered table-hover align-middle'],
                     'columns' => [
-                        ['class' => 'yii\grid\SerialColumn', 'header' => '#'],
+                        [
+                            'label' => '<i class="fas fa-image"></i> Ícono',
+                            'encodeLabel' => false,
+                            'format' => 'raw',
+                            'value' => function ($model) {
+                                $parsedUrl = parse_url($model->url);
+                                $faviconUrl = isset($parsedUrl['host']) ? 'https://' . $parsedUrl['host'] . '/favicon.ico' : null;
+                                return $faviconUrl 
+                                    ? Html::img($faviconUrl, ['alt' => 'Ícono', 'style' => 'width: 32px; height: 32px;']) 
+                                    : '<span class="text-muted">No disponible</span>';
+                            },
+                            'contentOptions' => ['class' => 'text-center'],
+                        ],
                         [
                             'attribute' => 'url',
                             'label' => '<i class="fas fa-globe"></i> URL Original',
