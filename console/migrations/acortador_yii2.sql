@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 05-05-2025 a las 12:59:06
+-- Tiempo de generación: 06-05-2025 a las 18:36:27
 -- Versión del servidor: 9.1.0
--- Versión de PHP: 8.4.0
+-- Versión de PHP: 8.2.26
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -126,19 +126,6 @@ CREATE TABLE IF NOT EXISTS `link_stats` (
   KEY `link_id` (`link_id`),
   KEY `idx-link_stats-link_id` (`link_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `migration`
---
-
-DROP TABLE IF EXISTS `migration`;
-CREATE TABLE IF NOT EXISTS `migration` (
-  `version` varchar(180) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
-  `apply_time` int DEFAULT NULL,
-  PRIMARY KEY (`version`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
