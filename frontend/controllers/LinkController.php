@@ -66,28 +66,29 @@ class LinkController extends Controller
 
         return $this->redirect($link->url);
     }
-    
-    /**
-     * Método para registrar ganancias para el propietario del enlace y su referidor.
-     */
-    private function registerEarnings(Link $link)
+
+
+    private function registerEarnings($link)
     {
-        $user = $link->user;
+        // Obtener ganancias configuradas
+        $ownClickEarning = Yii::$app->settings->get('own_click_earning', 0.004);
+        $referralClickEarning = Yii::$app->settings->get('referral_click_earning', 0.002);
 
-        // Ganancia directa para el propietario del enlace.
+        $user = $link->user; // Usuario dueño del link
         if ($user) {
-            $this->addEarnings($user, 0.004, $user->id);
-
-            // Ganancia indirecta para el referidor, si existe.
-            if ($user->referrer_id) {
-                $referrer = User::findOne($user->referrer_id);
-                if ($referrer) {
-                    $this->addEarnings($referrer, 0.002, $user->id);
-                }
+            // Incrementar ganancias del usuario propietario del link
+            $this->addEarnings($user, $ownClickEarning, $user->id);
+            $user->save();
+            
+            // Si el usuario tiene un referido, incrementar ganancias del referido
+            if ($user->referrer) {
+                $referrer = $user->referrer;
+                $this->addEarnings($referrer, $referralClickEarning, $user->id);
+                $referrer->save();
+                
             }
         }
     }
-
     /**
      * Método para agregar ganancias a un usuario y registrar el log.
      */
