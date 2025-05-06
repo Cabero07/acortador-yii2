@@ -32,6 +32,7 @@
                     ['label' => 'Gestión de Noticias', 'url'=> ['news/index'] ,'iconStyle' => 'far'],
                     ['label' => 'Gestión de Usuarios', 'url'=> ['user/manage'] ,'iconStyle' => 'far'],
                     ['label' => 'Logs', 'url'=> ['user/logs'] ,'iconStyle' => 'far'],
+                    ['label' => 'Opciones', 'url'=> ['admin/options'] ,'iconStyle' => 'far'],
                     
                     
                     

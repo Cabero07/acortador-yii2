@@ -54,18 +54,19 @@ class LinkController extends Controller
             throw new NotFoundHttpException('El enlace no existe o está inactivo.');
         }
 
-        // Incrementar las estadísticas de clics.
-        $stats = LinkStats::findOne(['link_id' => $link->id]) ?? new LinkStats(['link_id' => $link->id]);
-        $stats->clicks += 1;
+        // Verificar si el conteo de clics está habilitado
+        if (Yii::$app->settings->get('click_tracking_enabled', true)) {
+            $stats = LinkStats::findOne(['link_id' => $link->id]) ?? new LinkStats(['link_id' => $link->id]);
+            $stats->clicks += 1;
 
-        if ($stats->save()) {
-            $this->registerEarnings($link);
+            if ($stats->save()) {
+                $this->registerEarnings($link);
+            }
         }
 
-        // Redirigir a la URL original.
         return $this->redirect($link->url);
     }
-
+    
     /**
      * Método para registrar ganancias para el propietario del enlace y su referidor.
      */

@@ -12,7 +12,9 @@ return [
         'authManager' => [
             'class' => 'yii\rbac\DbManager', // Usa la base de datos para almacenar roles y permisos
         ],
-
+        'settings' => [
+            'class' => 'common\components\SettingsComponent', // Componente para manejar configuraciones
+        ],
         
     ],
 ];
