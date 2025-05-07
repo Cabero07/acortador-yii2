@@ -19,7 +19,7 @@ $this->title = 'Acortador de Enlaces';
     <!-- Features Section -->
     <div class="container mb-5">
         <div class="row text-center">
-            <div class="col-lg-4">
+            <div class="col-lg-4 mb-4">
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <h3 class="fw-bold"><i class="fas fa-compress-arrows-alt text-success"></i> Acorta Enlaces</h3>
@@ -27,7 +27,7 @@ $this->title = 'Acortador de Enlaces';
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-4 mb-4">
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <h3 class="fw-bold"><i class="fas fa-chart-line text-info"></i> Rastrea Clics</h3>
@@ -35,7 +35,7 @@ $this->title = 'Acortador de Enlaces';
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4">
+            <div class="col-lg-4 mb-4">
                 <div class="card shadow-sm">
                     <div class="card-body">
                         <h3 class="fw-bold"><i class="fas fa-share-alt text-warning"></i> Organiza y Comparte</h3>

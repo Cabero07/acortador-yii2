@@ -105,7 +105,7 @@ $this->title = 'Gestión de Enlaces';
                                     return Html::a('<i class="fas fa-trash-alt"></i>', $url, [
                                         'title' => 'Eliminar',
                                         'class' => 'btn btn-sm btn-outline-danger',
-                                        'data-confirm' => '¿Estás seguro de eliminar este enlace?',
+                                        'data-confirm' => '¿Estás seguro de eliminar este enlace? Si lo haces, no podrás recuperarlo y las vistas se perderán, aun así conservarás el balance actual.',
                                         'data-method' => 'post',
                                     ]);
                                 },
