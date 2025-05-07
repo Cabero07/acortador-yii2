@@ -119,7 +119,10 @@ AppAsset::register($this);
 
     <footer class="footer mt-auto bg-dark text-light py-3">
         <div class="container">
-            <p class="float-start">Copyright &copy; <?php echo (date('Y')) ?> CaberoTech</p>
+            <p class="float-start">&copy; <?php echo (date('Y')) ?> CaberoTech</p>
+        </div>
+        <div class="text-end">
+            <b>Versión:</b> 1.1.0
         </div>
     </footer>
 
