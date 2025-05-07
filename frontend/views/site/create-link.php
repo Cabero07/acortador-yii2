@@ -22,13 +22,12 @@ $this->title = 'Crear Enlace Acortado';
                     </div>
                     <div class="card-body">
                         <p class="text-muted">
-                            Ingrese la URL larga que desea acortar. Puede proporcionar un código personalizado opcional y previsualizar el ícono del sitio.
+                            Complete los campos para acortar y personalizar su enlace. Puede previsualizar cómo se verá antes de crearlo.
                         </p>
 
-                        <?php $form = ActiveForm::begin([
-                            'options' => ['class' => 'needs-validation'],
-                        ]); ?>
+                        <?php $form = ActiveForm::begin(['options' => ['class' => 'needs-validation']]); ?>
 
+                        <!-- Campo para URL -->
                         <div class="mb-3">
                             <?= $form->field($model, 'url', [
                                 'inputOptions' => [
@@ -38,6 +37,7 @@ $this->title = 'Crear Enlace Acortado';
                             ])->label('<i class="fas fa-globe"></i> URL Larga') ?>
                         </div>
 
+                        <!-- Campo para Código Corto -->
                         <div class="mb-3">
                             <?= $form->field($model, 'short_code', [
                                 'inputOptions' => [
@@ -47,9 +47,19 @@ $this->title = 'Crear Enlace Acortado';
                             ])->label('<i class="fas fa-code"></i> Código Corto (Opcional)') ?>
                         </div>
 
+                        <!-- Campo para Descripción -->
+                        <div class="mb-3">
+                            <?= $form->field($model, 'description', [
+                                'inputOptions' => [
+                                    'class' => 'form-control',
+                                    'placeholder' => 'Breve descripción del enlace (opcional)',
+                                ],
+                            ])->label('<i class="fas fa-pencil-alt"></i> Descripción') ?>
+                        </div>
+
                         <?php if ($favicon): ?>
                             <div class="mb-3 text-center">
-                                <h5>Ícono del Sitio</h5>
+                                <h5>Previsualización del ícono del sitio</h5>
                                 <img src="<?= Html::encode($favicon) ?>" alt="Ícono del sitio" class="img-thumbnail" style="max-width: 64px;">
                             </div>
                         <?php endif; ?>

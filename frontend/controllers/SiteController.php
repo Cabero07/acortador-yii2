@@ -412,24 +412,21 @@ class SiteController extends Controller
             $model->url = $url;
         }
 
-        // Si se envía el formulario
         if ($model->load(Yii::$app->request->post())) {
             if (Yii::$app->request->post('preview')) {
                 // Obtener el favicon para previsualización
                 $favicon = \common\helpers\IconHelper::getFavicon($model->url);
             } else {
-                // Asignar el ID del usuario autenticado al modelo
+                // Asociar al usuario autenticado si es necesario
                 $model->user_id = Yii::$app->user->id;
+
                 // Generar un código único si no se proporciona uno
                 if (empty($model->short_code)) {
                     $model->short_code = Yii::$app->security->generateRandomString(6);
                 }
-                // Desactivar el enlace por defecto
-                $model->is_active = 0;
-
-                // Validar y guardar el modelo
+                $model->is_active = 0; // Marcar el enlace como activo
                 if ($model->save()) {
-                    Yii::$app->session->setFlash('success', 'Enlace acortado creado exitosamente.');
+                    Yii::$app->session->setFlash('success', '¡Enlace acortado creado exitosamente!');
                     return $this->redirect(['site/links']);
                 } else {
                     Yii::$app->session->setFlash('error', 'Hubo un problema al guardar tu enlace.');

@@ -31,8 +31,8 @@ $this->title = 'Gestión de Enlaces';
                             'value' => function ($model) {
                                 $parsedUrl = parse_url($model->url);
                                 $faviconUrl = isset($parsedUrl['host']) ? 'https://' . $parsedUrl['host'] . '/favicon.ico' : null;
-                                return $faviconUrl 
-                                    ? Html::img($faviconUrl, ['alt' => 'Ícono', 'style' => 'width: 32px; height: 32px;']) 
+                                return $faviconUrl
+                                    ? Html::img($faviconUrl, ['alt' => 'Ícono', 'style' => 'width: 32px; height: 32px;'])
                                     : '<span class="text-muted">No disponible</span>';
                             },
                             'contentOptions' => ['class' => 'text-center'],
@@ -63,6 +63,22 @@ $this->title = 'Gestión de Enlaces';
                             },
                         ],
                         [
+                            'attribute' => 'description',
+                            'label' => '<i class="fas fa-pencil-alt"></i> Descripción',
+                            'encodeLabel' => false,
+                            'format' => 'ntext',
+                            'value' => function ($model) {
+                                return $model->description ?: '';
+                            },
+                            'contentOptions' => ['class' => 'text-center'],
+                        ],
+                        [
+                            'attribute' => 'created_at',
+                            'label' => '<i class="fas fa-calendar-alt"></i> Fecha de Creación',
+                            'encodeLabel' => false,
+                            'format' => 'datetime',
+                        ],
+                        [
                             'attribute' => 'is_active',
                             'label' => '<i class="fas fa-toggle-on"></i> Estado',
                             'encodeLabel' => false,
@@ -73,24 +89,18 @@ $this->title = 'Gestión de Enlaces';
                             'contentOptions' => ['class' => 'text-center'],
                         ],
                         [
-                            'label' => '<i class="fas fa-mouse-pointer"></i> Clics',
-                            'encodeLabel' => false,
-                            'value' => function ($model) {
-                                return $model->stats->clicks ?? 0;
-                            },
-                            'contentOptions' => ['class' => 'text-center fw-bold'],
-                        ],
-                        [
-                            'attribute' => 'created_at',
-                            'label' => '<i class="fas fa-calendar-alt"></i> Fecha de Creación',
-                            'encodeLabel' => false,
-                            'format' => 'datetime',
-                        ],
-                        [
                             'class' => 'yii\grid\ActionColumn',
                             'header' => '<i class="fas fa-cogs"></i> Acciones',
-                            'template' => '{delete}',
+                            'template' => '{copy} {delete}',
                             'buttons' => [
+                                'copy' => function ($url, $model) {
+                                    return Html::button('<i class="fas fa-copy"></i>', [
+                                        'class' => 'btn btn-sm btn-outline-primary copy-btn',
+                                        'title' => 'Copiar al portapapeles',
+                                        'data-description' => $model->description ?: 'Sin descripción',
+                                        'data-link' => Yii::$app->request->hostInfo . '/' . $model->short_code,
+                                    ]);
+                                },
                                 'delete' => function ($url, $model) {
                                     return Html::a('<i class="fas fa-trash-alt"></i>', $url, [
                                         'title' => 'Eliminar',
@@ -107,8 +117,30 @@ $this->title = 'Gestión de Enlaces';
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.querySelectorAll('.copy-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const description = this.getAttribute('data-description')?.trim(); // Obtener y limpiar espacios de la descripción
+                const link = this.getAttribute('data-link');
+                const content = description ? `${description}\n${link}` : link; // Si hay descripción, incluirla; de lo contrario, solo el enlace
 
-<?php
-// Registrar el archivo JavaScript para manejar clics en los enlaces
-$this->registerJsFile('@web/js/registerClick.js', ['depends' => [\yii\web\JqueryAsset::class]]);
-?>
+                // Método alternativo para copiar al portapapeles
+                const textarea = document.createElement('textarea');
+                textarea.value = content;
+                document.body.appendChild(textarea);
+                textarea.select();
+
+                try {
+                    document.execCommand('copy');
+                    alert('¡Texto copiado al portapapeles!');
+                } catch (err) {
+                    alert('Error al copiar al portapapeles. Intenta nuevamente.');
+                    console.error('Error:', err);
+                }
+
+                document.body.removeChild(textarea); // Eliminar el elemento temporal
+            });
+        });
+    });
+</script>

@@ -14,13 +14,14 @@ class Link extends ActiveRecord
     {
         return '{{%links}}';
     }
-    
+
     public function rules()
     {
         return [
-            [['url'], 'required'],
-            [['url'], 'url', 'defaultScheme' => 'http'], // Permitir URLs sin esquema
-            [['short_code'], 'unique'], // Asegurar que el código sea único
+            [['url'], 'required'], // URL obligatoria
+            [['url'], 'url', 'defaultScheme' => 'http'], // Validar formato de URL
+            [['short_code'], 'unique'], // Código único
+            [['description'], 'string'], // Descripción opcional
         ];
     }
     /**
@@ -38,5 +39,4 @@ class Link extends ActiveRecord
     {
         return $this->hasOne(LinkStats::class, ['link_id' => 'id']);
     }
-    
 }
