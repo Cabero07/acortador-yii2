@@ -90,7 +90,6 @@ AppAsset::register($this);
             );
             echo Html::beginTag('ul', ['class' => 'dropdown-menu', 'aria-labelledby' => 'userMenu']);
             echo Html::tag('li', Html::a('Perfil', ['/user/profile'], ['class' => 'dropdown-item']));
-            echo Html::tag('li', Html::a('Cambiar Contraseña', ['/user/changePassword'], ['class' => 'dropdown-item']));
             echo Html::tag('li', Html::a('Actividad', ['/site/activity'], ['class' => 'dropdown-item']));
             echo Html::tag('li', Html::a('Retirar', ['/withdraw/create'], ['class' => 'dropdown-item']));
             echo Html::tag('li', Html::a('Estado de retiros', ['/withdraw/index'], ['class' => 'dropdown-item']));
