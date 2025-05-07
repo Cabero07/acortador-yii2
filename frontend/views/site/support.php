@@ -39,7 +39,7 @@ $this->title = 'Soporte';
                     <i class="fab fa-whatsapp fa-3x text-success mb-3"></i>
                     <h5 class="card-title">WhatsApp</h5>
                     <p class="card-text">También puedes contactarnos por WhatsApp si lo prefieres.</p>
-                    <?= Html::a('Abrir WhatsApp', 'https://wa.me/1234567890', ['class' => 'btn btn-success', 'target' => '_blank']) ?>
+                    <?= Html::a('Abrir WhatsApp', 'https://wa.me/54566901', ['class' => 'btn btn-success', 'target' => '_blank']) ?>
                 </div>
             </div>
         </div>

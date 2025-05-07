@@ -34,72 +34,75 @@ AppAsset::register($this);
 
     <header>
         <?php
+
         NavBar::begin([
+            'brandLabel' => Html::tag('i', '', ['class' => 'fas fa-link me-2']) . 'Acortador',
+            'brandUrl' => Yii::$app->homeUrl,
             'options' => [
-                'class' => 'navbar navbar-expand-md navbar-dark bg-dark ',
+                'class' => 'navbar navbar-expand-lg navbar-dark bg-dark',
             ],
         ]);
+
         $menuItems = [
-            ['label' => 'Inicio', 'url' => ['/site/index']],
-            // Dropdown: Links
+            // Sección Inicio
+            ['label' => Html::tag('i', '', ['class' => 'fas fa-home me-2']) . 'Inicio', 'url' => ['/site/index'], 'encode' => false],
+            // Sección Ranking
+            ['label' => Html::tag('i', '', ['class' => 'fas fa-trophy me-2']) . 'Ranking', 'url' => ['/site/ranking'], 'encode' => false],
+            // Sección Links (Dropdown)
             [
-                'label' => '<i class="fas fa-link"></i> Links',
+                'label' => Html::tag('i', '', ['class' => 'fas fa-link me-2']) . 'Links',
                 'url' => '#',
                 'items' => [
-                    ['label' => 'Crear Nuevo Enlace', 'url' => ['/site/create-link']],
-                    ['label' => 'Mis Enlaces', 'url' => ['/site/links']],
-                    ['label' => 'Estadísticas', 'url' => ['/site/linkStats']],
-                    ['label' => 'Recomendaciones', 'url' => ['/site/recomends']],
+                    ['label' => Html::tag('i', '', ['class' => 'fas fa-plus me-2']) . 'Agregar Link', 'url' => ['/site/create-link'], 'encode' => false],
+                    ['label' => Html::tag('i', '', ['class' => 'fas fa-list me-2']) . 'Gestionar Links', 'url' => ['/site/links'], 'encode' => false],
+                    ['label' => Html::tag('i', '', ['class' => 'fas fa-chart-bar me-2']) . 'Estadísticas', 'url' => ['/site/linkStats'], 'encode' => false],
+                    ['label' => Html::tag('i', '', ['class' => 'fas fa-thumbs-up me-2']) . 'Recomendaciones', 'url' => ['/site/recomends'], 'encode' => false],
                 ],
                 'encode' => false,
                 'dropDownOptions' => ['class' => 'dropdown-menu'],
             ],
-            ['label' => 'Ranking', 'url' => ['/site/ranking']],
-            // Dropdown: Ayuda
+            // Sección Ayuda (Dropdown)
             [
-                'label' => '<i class="fas fa-question-circle"></i> Ayuda',
+                'label' => Html::tag('i', '', ['class' => 'fas fa-question-circle me-2']) . 'Ayuda',
                 'url' => '#',
                 'items' => [
-                    ['label' => 'Acerca de', 'url' => ['/site/about']],
-                    ['label' => 'Soporte', 'url' => ['/site/support']],
-                    ['label' => 'FAQ', 'url' => ['/site/faq']],
+                    ['label' => Html::tag('i', '', ['class' => 'fas fa-info-circle me-2']) . 'Acerca de', 'url' => ['/site/about'], 'encode' => false],
+                    ['label' => Html::tag('i', '', ['class' => 'fas fa-life-ring me-2']) . 'Soporte', 'url' => ['/site/support'], 'encode' => false],
+                    ['label' => Html::tag('i', '', ['class' => 'fas fa-question me-2']) . 'FAQ', 'url' => ['/site/faq'], 'encode' => false],
                 ],
                 'encode' => false,
                 'dropDownOptions' => ['class' => 'dropdown-menu'],
             ],
         ];
 
+        if (Yii::$app->user->isGuest) {
+            // Botón de Iniciar Sesión
+            $menuItems[] = ['label' => Html::tag('i', '', ['class' => 'fas fa-sign-in-alt me-2']) . 'Iniciar Sesión', 'url' => ['/site/login'], 'encode' => false];
+        } else {
+            // Menú de Usuario (Dropdown)
+            $userMenu = [
+                ['label' => Html::tag('i', '', ['class' => 'fas fa-user me-2']) . 'Perfil', 'url' => ['/user/profile'], 'encode' => false],
+                ['label' => Html::tag('i', '', ['class' => 'fas fa-list me-2']) . 'Actividad', 'url' => ['/site/activity'], 'encode' => false],
+                ['label' => Html::tag('i', '', ['class' => 'fas fa-hand-holding-usd me-2']) . 'Retirar', 'url' => ['/withdraw/create'], 'encode' => false],
+                ['label' => Html::tag('i', '', ['class' => 'fas fa-wallet me-2']) . 'Estado de Retiros', 'url' => ['/withdraw/index'], 'encode' => false],
+                ['label' => Html::tag('i', '', ['class' => 'fas fa-newspaper me-2']) . 'Noticias', 'url' => ['/news/index'], 'encode' => false],
+                ['label' => Html::tag('i', '', ['class' => 'fas fa-sign-out-alt me-2']) . 'Salir', 'url' => ['/site/logout'], 'linkOptions' => ['data-method' => 'post'], 'encode' => false],
+            ];
+
+            $menuItems[] = [
+                'label' => Html::tag('i', '', ['class' => 'fas fa-user-circle me-2']) . 'Usuario',
+                'encode' => false,
+                'items' => $userMenu,
+                'dropDownOptions' => ['class' => 'dropdown-menu dropdown-menu-end'],
+            ];
+        }
+
+        // Renderizar la barra de navegación
         echo Nav::widget([
-            'options' => ['class' => 'navbar-nav me-auto mb-2 mb-md-0'],
+            'options' => ['class' => 'navbar-nav ms-auto'],
             'items' => $menuItems,
         ]);
-        if (Yii::$app->user->isGuest) {
-            echo Html::tag('div', Html::a('Crear Cuenta', ['/site/signup'], ['class' => ['btn btn-link login text-decoration-none']]), ['class' => ['d-flex']]);
-            echo Html::tag('div', Html::a('Acceder', ['/site/login'], ['class' => ['btn btn-link login text-decoration-none']]), ['class' => ['d-flex']]);
-        } else {
-            echo Html::beginTag('div', ['class' => 'dropdown']);
-            echo Html::button(
-                'Usuario (' . Yii::$app->user->identity->username . ') <span class="caret"></span>',
-                [
-                    'class' => 'btn btn-secondary dropdown-toggle',
-                    'type' => 'button',
-                    'id' => 'userMenu',
-                    'data-bs-toggle' => 'dropdown',
-                    'aria-expanded' => 'false',
-                ]
-            );
-            echo Html::beginTag('ul', ['class' => 'dropdown-menu', 'aria-labelledby' => 'userMenu']);
-            echo Html::tag('li', Html::a('Perfil', ['/user/profile'], ['class' => 'dropdown-item']));
-            echo Html::tag('li', Html::a('Actividad', ['/site/activity'], ['class' => 'dropdown-item']));
-            echo Html::tag('li', Html::a('Retirar', ['/withdraw/create'], ['class' => 'dropdown-item']));
-            echo Html::tag('li', Html::a('Estado de retiros', ['/withdraw/index'], ['class' => 'dropdown-item']));
-            echo Html::tag('li', Html::a('Noticias', ['/news/index'], ['class' => 'dropdown-item']));
-            echo Html::tag('li', Html::beginForm(['/site/logout'], 'post', ['class' => 'bg-danger'])
-                . Html::submitButton('Salir', ['class' => 'dropdown-item'])
-                . Html::endForm());
-            echo Html::endTag('ul');
-            echo Html::endTag('div');
-        }
+
         NavBar::end();
         ?>
     </header>
