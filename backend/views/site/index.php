@@ -38,7 +38,7 @@ $this->title = 'Panel de Administración';
                 <div class="card-header"><i class="fas fa-cogs"></i> Configuración</div>
                 <div class="card-body">
                     <p class="card-text">Ajusta la configuración general de la aplicación.</p>
-                    <?= Html::a('Ir a Configuración <i class="fas fa-arrow-right"></i>', ['site/settings'], ['class' => 'btn btn-light']) ?>
+                    <?= Html::a('Ir a Configuración <i class="fas fa-arrow-right"></i>', ['admin/options'], ['class' => 'btn btn-light']) ?>
                 </div>
             </div>
         </div>
