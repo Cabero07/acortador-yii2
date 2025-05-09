@@ -44,4 +44,19 @@ class SettingsComponent extends Component
 
         $this->cache[$key] = $value;
     }
+
+    public function getExchangeRate($method)
+    {
+        switch ($method) {
+            case 'CUP':
+                return $this->get('exchange_rate_cup', 24.0);
+
+            case 'MLC':
+                return $this->get('exchange_rate_mlc', 1.0);
+
+            case 'QVAPAY':
+            default:
+                return 1.0;
+        }
+    }
 }

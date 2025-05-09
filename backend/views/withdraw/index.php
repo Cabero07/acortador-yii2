@@ -47,10 +47,25 @@ $this->title = 'Gestión de Retiros';
                         'contentOptions' => ['class' => 'text-center'],
                     ],
                     [
-                        'label' => 'Monto en la moneda elegida',
+                        'label' => 'Monto en Moneda Local',
                         'value' => function ($model) {
-                            $conversionRate = $model->getConversionRate();
-                            return number_format($model->amount * $conversionRate, 2) . ' ' . $model->payment_method;
+                            $exchangeRate = 1.0; 
+
+                            switch ($model->payment_method) {
+                                case 'CUP':
+                                    $exchangeRate = Yii::$app->settings->get('exchange_rate_cup', 24.0);
+                                    break;
+
+                                case 'MLC':
+                                    $exchangeRate = Yii::$app->settings->get('exchange_rate_mlc', 1.0);
+                                    break;
+
+                                case 'QVAPAY':
+                                    $exchangeRate = 1.0;
+                                    break;
+                            }
+
+                            return number_format($model->amount * $exchangeRate, 2) . ' ' . $model->payment_method;
                         },
                         'headerOptions' => ['class' => 'text-center'],
                         'contentOptions' => ['class' => 'text-center text-primary font-weight-bold'],

@@ -1,4 +1,5 @@
 <?php
+
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
@@ -53,7 +54,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     'options' => ['class' => ''],
                 ])->textInput(['type' => 'number', 'step' => '0.0001', 'class' => 'form-control'])->label(false) ?>
             </div>
+            <div class="form-group">
+                <label for="exchange_rate_cup"><i class="fas fa-exchange-alt"></i> Tasa de Cambio (USD a CUP)</label>
+                <?= $form->field($model, 'exchange_rate_cup', [
+                    'template' => '{input}{error}',
+                    'options' => ['class' => ''],
+                ])->textInput(['type' => 'number', 'step' => '0.01', 'class' => 'form-control', 'placeholder' => 'Ejemplo: 24.0'])->label(false) ?>
+            </div>
 
+            <div class="form-group">
+                <label for="exchange_rate_mlc"><i class="fas fa-exchange-alt"></i> Tasa de Cambio (USD a MLC)</label>
+                <?= $form->field($model, 'exchange_rate_mlc', [
+                    'template' => '{input}{error}',
+                    'options' => ['class' => ''],
+                ])->textInput(['type' => 'number', 'step' => '0.01', 'class' => 'form-control', 'placeholder' => 'Ejemplo: 1.0'])->label(false) ?>
+            </div>
             <div class="text-right">
                 <?= Html::submitButton('<i class="fas fa-save"></i> Guardar', ['class' => 'btn btn-success']) ?>
             </div>
