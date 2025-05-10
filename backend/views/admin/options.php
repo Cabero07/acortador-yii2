@@ -25,8 +25,24 @@ $this->params['breadcrumbs'][] = $this->title;
             </div>
 
             <div class="form-group">
-                <label for="adskeeper_code"><i class="fas fa-code"></i> Código de Integración de AdsKeeper</label>
+                <label for="adskeeper_code"><i class="fas fa-code"></i> Código de Integración del Primer Anuncio</label>
                 <?= $form->field($model, 'adskeeper_code', [
+                    'template' => '{input}{error}',
+                    'options' => ['class' => ''],
+                ])->textarea(['rows' => 4, 'class' => 'form-control'])->label(false) ?>
+            </div>
+
+            <div class="form-group">
+                <label for="ad_code_2"><i class="fas fa-code"></i> Código de Integración del Segundo Anuncio</label>
+                <?= $form->field($model, 'ad_code_2', [
+                    'template' => '{input}{error}',
+                    'options' => ['class' => ''],
+                ])->textarea(['rows' => 4, 'class' => 'form-control'])->label(false) ?>
+            </div>
+
+            <div class="form-group">
+                <label for="ad_code_3"><i class="fas fa-code"></i> Código de Integración del Tercer Anuncio</label>
+                <?= $form->field($model, 'ad_code_3', [
                     'template' => '{input}{error}',
                     'options' => ['class' => ''],
                 ])->textarea(['rows' => 4, 'class' => 'form-control'])->label(false) ?>
