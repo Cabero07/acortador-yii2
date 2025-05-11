@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1:3306
--- Tiempo de generación: 10-05-2025 a las 00:57:41
+-- Tiempo de generación: 10-05-2025 a las 21:55:07
 -- Versión del servidor: 9.1.0
 -- Versión de PHP: 8.2.26
 
@@ -107,7 +107,7 @@ CREATE TABLE IF NOT EXISTS `links` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `short_code` (`short_code`),
   KEY `idx-links-user_id` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -125,20 +125,7 @@ CREATE TABLE IF NOT EXISTS `link_stats` (
   PRIMARY KEY (`id`),
   KEY `link_id` (`link_id`),
   KEY `idx-link_stats-link_id` (`link_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `migration`
---
-
-DROP TABLE IF EXISTS `migration`;
-CREATE TABLE IF NOT EXISTS `migration` (
-  `version` varchar(180) NOT NULL,
-  `apply_time` int DEFAULT NULL,
-  PRIMARY KEY (`version`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -170,7 +157,7 @@ CREATE TABLE IF NOT EXISTS `settings` (
   `value` text COLLATE utf8mb4_unicode_ci NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `key` (`key`)
-) ENGINE=InnoDB AUTO_INCREMENT=212 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- --------------------------------------------------------
 
@@ -200,20 +187,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   UNIQUE KEY `username` (`username`),
   UNIQUE KEY `email` (`email`),
   KEY `fk-user-referrer_id` (`referrer_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
---
--- Volcado de datos para la tabla `user`
---
-
-INSERT INTO `user` (`id`, `referrer_id`, `username`, `email`, `password_hash`, `auth_key`, `access_token`, `status`, `created_links_count`, `balance`, `role`, `profile_picture`, `created_at`, `updated_at`, `verification_token`, `phone_number`) VALUES
-(1, NULL, 'cabero', 'correo@ejemplo.com', '$2y$13$yBlPLEMxasSrkfX5yiKfM.qjUNLgpPQAvYKfDWtvKpEgj4N8RqRKK', '6F3Y9gi3ydnmHJ2df9FbHtF6UQRuVq9-', NULL, 10, 0, 0.0200, 'admin', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL, '+5641531534'),
-(2, 1, 'demo', 'demon@gmail.com', '$2y$13$XwkEHMcUkDnETJbS/I2/Ke14EFpSGyHpTZD8sOXGpxcgqmmGtnF4u', 'hgGVmZSoko-pUcnjwGo3LXU3Qz0mTrt2', NULL, 10, 0, 0.0160, 'user', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL, '+535376543568'),
-(3, 1, 'demo12', 'demown@gmail.com', '$2y$13$NZ1q5dHUxvdyZbIK7ZlTv..69lvwIMOl6R0Nl5oFuTdNJgHF7UQey', 'v25yUuXrssfwdJIjiWXYz6W9FBKUuo5C', NULL, 10, 0, 0.0000, 'user', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL, '+5353765435683'),
-(4, NULL, 'demo4', 'demown4@gmail.com', '$2y$13$8/hzK.BQoM8DqRygB9oyV.jHaYgfOJflhBxXVwMIDFAHYRArZoNcq', 'j6jqgjV1gGYQJwQnt2YpI8uCbXNJ5hza', NULL, 10, 0, 60.0900, 'user', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL, '+5353765435'),
-(5, 4, 'demo11', 'deasmndfsa@gmail.com', '$2y$13$pC9r3YeeYwM2YWzKwvF2DO6PciuCJ759FEnatFfmhibJyuRtEz1s6', 'cDN0VIzILvyhdixMCLhJjmYvhiQq90i3', NULL, 10, 0, 0.0040, 'user', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL, '+5354537432'),
-(6, NULL, 'Jajs', 'Hssjdk@gmail.com', '$2y$13$To86Wv.iNq6ZAMIE7FhgUO7Fn1gjR7JeW2bY9j16IiP4cC19VdkCK', 'x2HKq9G-ZaCD_9OzLRe_6f5K9ueNMGcR', NULL, 0, 0, 0.0000, 'user', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL, '+38749273'),
-(7, NULL, 'Noerlyn ', 'noerlynchaviano2@gmail.com', '$2y$13$lS0aGhCPANsTqDjFCnfXJeOFFFtiHnGNQ4a1681VVKrgPXxVTObPG', 'cKPmSSC5t-MW2NYD63Lc-k6AJAw0uPPr', NULL, 10, 0, 0.0000, 'user', NULL, '0000-00-00 00:00:00', '0000-00-00 00:00:00', NULL, '54566901');
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -235,7 +209,7 @@ CREATE TABLE IF NOT EXISTS `user_log` (
   KEY `fk-user_log-user_id` (`user_id`),
   KEY `fk-user_log-performed_by` (`performed_by`),
   KEY `idx-user_log-performed_by` (`performed_by`)
-) ENGINE=InnoDB AUTO_INCREMENT=39 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -255,7 +229,7 @@ CREATE TABLE IF NOT EXISTS `withdraw_requests` (
   `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Restricciones para tablas volcadas

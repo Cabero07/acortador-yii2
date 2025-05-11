@@ -43,9 +43,15 @@ class User extends ActiveRecord implements IdentityInterface
     public function behaviors()
     {
         return [
-            TimestampBehavior::class,
+            [
+                'class' => \yii\behaviors\TimestampBehavior::class,
+                'createdAtAttribute' => 'created_at',
+                'updatedAtAttribute' => 'updated_at',
+                'value' => new \yii\db\Expression('CURRENT_TIMESTAMP()'),
+            ],
         ];
     }
+
 
     /**
      * {@inheritdoc}
